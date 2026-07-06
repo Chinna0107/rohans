@@ -343,7 +343,7 @@
 }
 
 /* ── Wishlist ── */
-.product-grid-4 {
+.ud-wishlist-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.5rem;
@@ -424,6 +424,11 @@
   .ud-form-row.split {
     flex-direction: column;
     gap: 1.5rem;
+  }
+  
+  .ud-wishlist-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 }
 

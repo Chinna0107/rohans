@@ -290,7 +290,7 @@ const UserDashboard = () => {
               {wishlist.length === 0 ? (
                 <p>Your wishlist is empty.</p>
               ) : (
-                <div className="product-grid-4">
+                <div className="ud-wishlist-grid">
                   {wishlist.map(product => {
                     const pid = product.id || product._id;
                     const slug = (product.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
