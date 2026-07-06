@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import config from '../config';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuth } from '../context/UserAuthContext';
 import { FcGoogle } from 'react-icons/fc';
@@ -23,7 +24,7 @@ const CustomerLogin = () => {
     e.preventDefault();
     setLoading(true); setError('');
     try {
-      const res = await fetch('http://localhost:3000/api/auth/send-otp', {
+      const res = await fetch(`${config.API_URL}/api/auth/send-otp`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email })
       });
@@ -41,7 +42,7 @@ const CustomerLogin = () => {
     e.preventDefault();
     setLoading(true); setError('');
     try {
-      const res = await fetch('http://localhost:3000/api/auth/verify-otp', {
+      const res = await fetch(`${config.API_URL}/api/auth/verify-otp`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, otp: formData.otp })
       });
@@ -61,7 +62,7 @@ const CustomerLogin = () => {
     e.preventDefault();
     setLoading(true); setError('');
     try {
-      const res = await fetch('http://localhost:3000/api/auth/login', {
+      const res = await fetch(`${config.API_URL}/api/auth/login`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, password: formData.password })
       });
@@ -81,7 +82,7 @@ const CustomerLogin = () => {
     e.preventDefault();
     setLoading(true); setError('');
     try {
-      const res = await fetch('http://localhost:3000/api/auth/send-signup-otp', {
+      const res = await fetch(`${config.API_URL}/api/auth/send-signup-otp`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: formData.name, email: formData.email, phone: formData.phone })
       });
@@ -99,7 +100,7 @@ const CustomerLogin = () => {
     e.preventDefault();
     setLoading(true); setError('');
     try {
-      const res = await fetch('http://localhost:3000/api/auth/register', {
+      const res = await fetch(`${config.API_URL}/api/auth/register`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, password: formData.password, otp: formData.otp })
       });
@@ -119,7 +120,7 @@ const CustomerLogin = () => {
     e.preventDefault();
     setLoading(true); setError('');
     try {
-      const res = await fetch('http://localhost:3000/api/auth/reset-password', {
+      const res = await fetch(`${config.API_URL}/api/auth/reset-password`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, otp: formData.otp, newPassword: formData.password })
       });
@@ -143,7 +144,7 @@ const CustomerLogin = () => {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
         }).then(res => res.json());
 
-        const res = await fetch('http://localhost:3000/api/auth/google', {
+        const res = await fetch(`${config.API_URL}/api/auth/google`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: userInfo.email, name: userInfo.name, googleId: userInfo.sub })
         });

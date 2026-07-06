@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import config from '../config';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserAuth } from '../context/UserAuthContext';
 import { useCart } from '../context/CartContext';
@@ -50,7 +51,7 @@ const UserDashboard = () => {
   const fetchOrders = async () => {
     setLoadingOrders(true);
     try {
-      const res = await fetch('http://localhost:3000/api/customer/orders', {
+      const res = await fetch(`${config.API_URL}/api/customer/orders`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -68,7 +69,7 @@ const UserDashboard = () => {
     const reason = prompt(`Enter reason for ${action}:`);
     if (!reason) return;
     try {
-      const res = await fetch(`http://localhost:3000/api/customer/orders/${orderId}/${action}`, {
+      const res = await fetch(`${config.API_URL}/api/customer/orders/${orderId}/${action}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ reason })

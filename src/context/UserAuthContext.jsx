@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import config from '../config';
 
 const UserAuthContext = createContext();
 
@@ -18,7 +19,7 @@ export const UserAuthProvider = ({ children }) => {
     const initAuth = async () => {
       if (token) {
         try {
-          const res = await fetch('http://localhost:3000/api/customer/profile', {
+          const res = await fetch(`${config.API_URL}/api/customer/profile`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           if (res.ok) {
@@ -53,7 +54,7 @@ export const UserAuthProvider = ({ children }) => {
 
   const updateProfile = async (updates) => {
     try {
-      const res = await fetch('http://localhost:3000/api/customer/profile', {
+      const res = await fetch(`${config.API_URL}/api/customer/profile`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -76,7 +77,7 @@ export const UserAuthProvider = ({ children }) => {
 
   const updateAddresses = async (addresses) => {
     try {
-      const res = await fetch('http://localhost:3000/api/customer/addresses', {
+      const res = await fetch(`${config.API_URL}/api/customer/addresses`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
