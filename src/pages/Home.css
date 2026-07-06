@@ -336,7 +336,11 @@
 
 @media (max-width: 480px) {
   .hero-content h1 { font-size: 2.5rem; }
-  .product-grid-4 { grid-template-columns: 1fr; }
+  .product-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .product-info { padding: 0.5rem; }
+  .product-title { font-size: 0.85rem; }
+  .price-row { font-size: 0.8rem; }
+  .quick-add-btn { font-size: 0.7rem; padding: 0.5rem; }
 }
 
 /* ----------------------------------------------------

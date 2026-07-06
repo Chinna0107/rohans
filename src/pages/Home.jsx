@@ -93,6 +93,7 @@ const Home = () => {
   const displayNew = newArrivals.length > 0 ? newArrivals : products.slice(0, 4);
   const displayBest = bestSellers.length > 0 ? bestSellers : products.slice(4, 8);
   const displayTrending = trending.length > 0 ? trending : products.slice(8, 12);
+  const displayFestive = products.filter(p => p.festiveSeason).slice(0, 4);
 
   return (
     <div className="luxury-home">
@@ -200,18 +201,27 @@ const Home = () => {
       {/* Festival Collection */}
       <motion.section 
         className="luxury-section"
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6 }}
       >
-        <div className="festival-banner" onClick={() => navigate('/products')}>
-          <div className="festival-content">
-            <h2>The Festival Collection</h2>
-            <p>Celebrate in style with our curated festive edit.</p>
-            <button className="luxury-btn">Shop Collection</button>
+        <h2 className="section-heading">Festive Season Collection</h2>
+        {displayFestive.length > 0 ? (
+          <div className="product-grid-4">
+            {displayFestive.map(product => (
+              <ProductCard key={product.id || product._id} product={product} addToCart={addToCart} navigate={navigate} />
+            ))}
           </div>
-        </div>
+        ) : (
+          <div className="festival-banner" onClick={() => navigate('/products')}>
+            <div className="festival-content">
+              <h2>The Festival Collection</h2>
+              <p>Celebrate in style with our curated festive edit.</p>
+              <button className="luxury-btn">Shop Collection</button>
+            </div>
+          </div>
+        )}
       </motion.section>
 
       {/* Customer Reviews */}

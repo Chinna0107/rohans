@@ -23,6 +23,7 @@ const INIT_FORM = {
   grams: [], prices: {}, originalPrices: {},
   description: '', washingInstructions: '', tag: '',
   colors: [{ ...EMPTY_COLOR }],
+  festiveSeason: false,
 };
 
 const AdminProducts = () => {
@@ -144,7 +145,7 @@ const AdminProducts = () => {
       gender: product.gender || '', styleTags: product.styleTags || [],
       grams: product.grams || [], prices: product.prices || {},
       originalPrices: product.originalPrices || {},
-      description: product.description, washingInstructions: product.washing_instructions || '', tag: product.tag || '', stock: product.stock ?? '',
+      description: product.description, washingInstructions: product.washing_instructions || '', tag: product.tag || '', stock: product.stock ?? '', festiveSeason: product.festiveSeason || false,
       colors: product.colors?.length
         ? product.colors.map(c => ({ name: c.name || '', hex: c.hex || '#ffffff', images: c.images || ['','',''], stock: c.stock || {} }))
         : [{ name: '', hex: '#ffffff', images: product.images || ['','',''], stock: {} }],
@@ -510,6 +511,14 @@ const AdminProducts = () => {
               <div className="form-field full-width">
                 <label>Washing Instructions</label>
                 <textarea value={formData.washingInstructions} onChange={e => setFormData({ ...formData, washingInstructions: e.target.value })} placeholder="e.g., Dry clean only, Do not bleach..." />
+              </div>
+
+              {/* Festive Season */}
+              <div className="form-field">
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                  <input type="checkbox" checked={formData.festiveSeason} onChange={e => setFormData({ ...formData, festiveSeason: e.target.checked })} />
+                  <span>Mark as Festive Season Collection</span>
+                </label>
               </div>
 
               {/* Style Tags */}
@@ -894,6 +903,13 @@ const AdminProducts = () => {
                             <div className="form-field full-width">
                               <label>Washing Instructions</label>
                               <textarea value={formData.washingInstructions} onChange={e => setFormData({ ...formData, washingInstructions: e.target.value })} placeholder="e.g., Dry clean only, Do not bleach..." />
+                            </div>
+
+                            <div className="form-field">
+                              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                                <input type="checkbox" checked={formData.festiveSeason} onChange={e => setFormData({ ...formData, festiveSeason: e.target.checked })} />
+                                <span>Mark as Festive Season Collection</span>
+                              </label>
                             </div>
 
                             <div className="form-field">
