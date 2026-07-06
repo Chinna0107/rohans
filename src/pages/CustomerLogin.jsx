@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import config from '../config';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserAuth } from '../context/UserAuthContext';
 import { FcGoogle } from 'react-icons/fc';
 import { useGoogleLogin } from '@react-oauth/google';
@@ -17,6 +17,8 @@ const CustomerLogin = () => {
   
   const { loginCustomer } = useUserAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectUrl = location.state?.from || '/';
 
   const handleInput = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -49,7 +51,7 @@ const CustomerLogin = () => {
       const data = await res.json();
       if (res.ok) {
         loginCustomer(data.user, data.token);
-        navigate('/');
+        navigate(redirectUrl);
       } else setError(data.error);
     } catch (err) {
       setError('Failed to verify OTP.');
@@ -69,7 +71,7 @@ const CustomerLogin = () => {
       const data = await res.json();
       if (res.ok) {
         loginCustomer(data.user, data.token);
-        navigate('/');
+        navigate(redirectUrl);
       } else setError(data.error);
     } catch (err) {
       setError('Login failed.');
@@ -107,7 +109,7 @@ const CustomerLogin = () => {
       const data = await res.json();
       if (res.ok) {
         loginCustomer(data.user, data.token);
-        navigate('/');
+        navigate(redirectUrl);
       } else setError(data.error);
     } catch (err) {
       setError('Signup failed.');
@@ -151,7 +153,7 @@ const CustomerLogin = () => {
         const data = await res.json();
         if (res.ok) {
           loginCustomer(data.user, data.token);
-          navigate('/');
+          navigate(redirectUrl);
         } else setError(data.error);
       } catch (err) {
         setError('Google login failed.');

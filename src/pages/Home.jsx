@@ -1,4 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import config from '../config';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { MdStar, MdVerified, MdLocalShipping, MdPayment, MdPhone, MdOutlineAssignmentReturn } from 'react-icons/md';
@@ -84,6 +89,34 @@ const Home = () => {
   const { products } = useProducts();
   const { addToCart } = useCart();
   const navigate = useNavigate();
+  const [sliders, setSliders] = useState([]);
+
+  useEffect(() => {
+    const fetchSliders = async () => {
+      try {
+        const res = await axios.get(`${config.API_URL}/api/sliders`);
+        if (res.data.success) {
+          setSliders(res.data.sliders);
+        }
+      } catch (err) {
+        console.error("Failed to fetch sliders", err);
+      }
+    };
+    fetchSliders();
+  }, []);
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 800,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    fade: true,
+    arrows: false,
+    pauseOnHover: false
+  };
 
   const newArrivals = products.filter(p => p.styleTags?.includes('new')).slice(0, 4);
   const bestSellers = products.filter(p => p.styleTags?.includes('bestseller')).slice(0, 4);
@@ -99,34 +132,92 @@ const Home = () => {
     <div className="luxury-home">
       
       {/* Hero Section */}
-      <section className="luxury-hero">
-        <div className="hero-content">
-          <h1>Summer Sale</h1>
-          <div className="hero-typewriter">
-            <Typewriter
-              options={{
-                strings: [
-                  'Up to 60% off on trending styles.',
-                  'Redefine your wardrobe.',
-                  'Step into luxury today.'
-                ],
-                autoStart: true,
-                loop: true,
-                delay: 50,
-                deleteSpeed: 30,
-              }}
-            />
+      {sliders.length > 0 ? (
+        <section className="luxury-slider-hero">
+          <Slider {...sliderSettings}>
+            {sliders.map((slider) => (
+              <div key={slider.id} className="hero-slide">
+                <picture>
+                  <source media="(max-width: 768px)" srcSet={slider.mobile || slider.imageUrl} />
+                  <img src={slider.desktop || slider.imageUrl} alt={slider.title || 'Banner'} className="hero-slide-bg" />
+                </picture>
+                <div className="hero-slide-overlay"></div>
+                <div className="hero-content">
+                  {slider.tag && (
+                    <motion.span 
+                      className="hero-tag"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      {slider.tag}
+                    </motion.span>
+                  )}
+                  <motion.h1
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                  >
+                    {slider.heading || slider.title || 'House of Ramya'}
+                  </motion.h1>
+                  
+                  {slider.desc || slider.description ? (
+                    <motion.p 
+                      className="hero-desc"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ duration: 0.6, delay: 0.4 }}
+                    >
+                      {slider.desc || slider.description}
+                    </motion.p>
+                  ) : null}
+
+                  <motion.button 
+                    className="luxury-btn" 
+                    onClick={() => navigate(slider.productSlug ? `/products/${slider.productSlug}` : '/products')}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ duration: 0.5, delay: 0.6 }}
+                  >
+                    Explore Deals
+                  </motion.button>
+                </div>
+              </div>
+            ))}
+          </Slider>
+        </section>
+      ) : (
+        <section className="luxury-hero">
+          <div className="hero-content">
+            <h1>Summer Sale</h1>
+            <div className="hero-typewriter">
+              <Typewriter
+                options={{
+                  strings: [
+                    'Up to 60% off on trending styles.',
+                    'Redefine your wardrobe.',
+                    'Step into luxury today.'
+                  ],
+                  autoStart: true,
+                  loop: true,
+                  delay: 50,
+                  deleteSpeed: 30,
+                }}
+              />
+            </div>
+            <motion.button 
+              className="luxury-btn" 
+              onClick={() => navigate('/products')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Explore Deals
+            </motion.button>
           </div>
-          <motion.button 
-            className="luxury-btn" 
-            onClick={() => navigate('/products')}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Explore Deals
-          </motion.button>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Category Grid */}
       <motion.section 

@@ -3,11 +3,7 @@ import { useCart } from '../context/CartContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MdFilterList, MdClose, MdSearch } from 'react-icons/md';
 import { TbFlipFlops } from 'react-icons/tb';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import useProducts from '../hooks/useProducts';
-import useSliders from '../hooks/useSliders';
 import './Products.css';
 
 const CATEGORY_ICONS = { All: '🛍️', Sandals: '👡', Shoes: '👟', 'Flip Flops': null, Slides: '🩴', 'T-Shirts': '👕', 'Track Pants': '🏃' };
@@ -18,22 +14,7 @@ const TAG_LABELS = {
   trending: '📈 Trending', limited: '⏳ Limited',
 };
 
-const STYLE_TAGS = [
-  { value: 'sports', label: '🏃 Sports' },
-  { value: 'ethnic', label: '🪡 Ethnic' },
-  { value: 'casual', label: '👕 Casual' },
-  { value: 'formal', label: '👔 Formal' },
-  { value: 'party',  label: '🎉 Party' },
-];
 
-const CATEGORY_STYLES = {
-  'T-Shirts':    ['Casual Wear','Streetwear','Graphic Tees','Oversized Fit','Minimal / Plain','Trendy / Fashion','Party Wear','Sports / Active','Summer Collection','Premium / Branded'],
-  'Track Pants': ['Casual Comfort','Gym / Fitness','Athleisure','Slim Fit','Joggers','Sports Performance','Travel Wear','Winter Wear','Relaxed Fit','Trendy Street Style'],
-  'Shoes':       ['Casual Shoes','Formal Shoes','Sports / Running','Sneakers','Party Wear','Office Wear','Luxury / Premium','Outdoor / Trekking','Training / Gym','Trendy Fashion'],
-  'Sandals':     ['Casual Sandals','Ethnic Wear','Party Wear','Office Wear','Comfort Wear','Summer Collection','Outdoor Use','Stylish / Trendy','Flat Sandals','Heeled Sandals'],
-  'Flip Flops':  ['Casual Everyday','Beach Wear','Home Comfort','Lightweight','Travel Essentials','Summer Special','Budget Friendly','Trendy Prints','Waterproof','Quick Wear'],
-  'Slides':      ['Casual Everyday','Beach Wear','Home Comfort','Lightweight','Travel Essentials','Summer Special','Sports / Active','Trendy Prints','Waterproof','Quick Wear'],
-};
 
 const SORT_OPTIONS = [
   { value: 'default',    label: 'Default' },
@@ -57,7 +38,6 @@ const getMinPrice = (product) => {
 
 const Products = () => {
   const { products, loading, error } = useProducts();
-  const { sliders } = useSliders();
   const { addToCart, updateQuantity, getCartCount, isInCart, getCartQuantity } = useCart();
   const location = useLocation();
   const navigate = useNavigate();
@@ -77,6 +57,9 @@ const Products = () => {
   const filterRef = useRef(null);
 
   const categories = useMemo(() => ['All', ...new Set(products.map(p => p.category))], [products]);
+  const dynamicGenders = useMemo(() => ['All', ...new Set(products.map(p => p.gender).filter(Boolean))], [products]);
+  const dynamicStyles = useMemo(() => [...new Set(products.flatMap(p => p.styleTags || []).filter(Boolean))], [products]);
+  const dynamicTags = useMemo(() => [...new Set(products.map(p => p.tag).filter(Boolean))], [products]);
 
   const maxPrice = useMemo(() => {
     const prices = products.flatMap(p => p.prices ? Object.values(p.prices).map(Number) : [p.price || 0]);
@@ -153,23 +136,6 @@ const Products = () => {
   return (
     <div className="products-page">
 
-      {sliders.length > 0 && (
-        <div className="products-banner-slider">
-          <Slider dots={false} infinite autoplay autoplaySpeed={4500} speed={600} slidesToShow={1} slidesToScroll={1} arrows={false}>
-            {sliders.map(s => (
-              <div key={s.id}
-                style={{ cursor: s.productSlug ? 'pointer' : 'default' }}
-                onClick={() => s.productSlug && navigate(`/products/${s.productSlug}`)}>
-                <picture>
-                  <source media="(max-width: 480px)" srcSet={s.mobile || s.desktop || s.imageUrl} />
-                  <img src={s.desktop || s.imageUrl} alt={s.title || ''} className="products-banner-img" />
-                </picture>
-              </div>
-            ))}
-          </Slider>
-        </div>
-      )}
-
       {/* Top Bar */}
       <div className="products-topbar">
         <div className={`search-wrap ${searchOpen ? 'search-open' : ''}`}>
@@ -206,11 +172,11 @@ const Products = () => {
           <div className="filter-section">
             <h4>Gender</h4>
             <div className="filter-tags">
-              {['All', 'Men', 'Women', 'Children'].map(g => (
+              {dynamicGenders.map(g => (
                 <button key={g}
                   className={`filter-tag-btn ${selectedGender === g ? 'active' : ''}`}
                   onClick={() => setSelectedGender(g)}>
-                  {g === 'All' ? '🛍️' : g === 'Men' ? '👨' : g === 'Women' ? '👩' : '👦'} {g}
+                  {g === 'All' ? '🛍️ All' : g}
                 </button>
               ))}
             </div>
@@ -219,17 +185,12 @@ const Products = () => {
           <div className="filter-section">
             <h4>Style <span style={{color:'rgba(255,255,255,0.4)',fontWeight:400,fontSize:'0.8rem'}}>(select multiple)</span></h4>
             <div className="filter-tags">
-              {STYLE_TAGS.map(s => (
-                <button key={s.value}
-                  className={`filter-tag-btn ${selectedStyles.includes(s.value) ? 'active' : ''}`}
-                  onClick={() => toggleStyle(s.value)}>
-                  {s.label}
-                </button>
-              ))}
-              {selectedCategory !== 'All' && CATEGORY_STYLES[selectedCategory]?.map(s => (
+              {dynamicStyles.map(s => (
                 <button key={s}
                   className={`filter-tag-btn ${selectedStyles.includes(s) ? 'active' : ''}`}
-                  onClick={() => toggleStyle(s)}>{s}</button>
+                  onClick={() => toggleStyle(s)}>
+                  {s}
+                </button>
               ))}
             </div>
           </div>
@@ -237,11 +198,11 @@ const Products = () => {
           <div className="filter-section">
             <h4>Tags</h4>
             <div className="filter-tags">
-              {Object.entries(TAG_LABELS).map(([val, label]) => (
+              {dynamicTags.map(val => (
                 <button key={val}
                   className={`filter-tag-btn ${selectedTags.includes(val) ? 'active' : ''}`}
                   onClick={() => toggleTag(val)}>
-                  {label}
+                  {TAG_LABELS[val.toLowerCase()] || val}
                 </button>
               ))}
             </div>

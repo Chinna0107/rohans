@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { CartProvider } from './context/CartContext'
 import { UserAuthProvider } from './context/UserAuthContext'
 import Header from './components/Header'
@@ -102,6 +104,7 @@ function App() {
       <CartProvider>
         <UserAuthProvider>
           <AppContent />
+          <ToastContainer position="top-right" autoClose={2000} />
         </UserAuthProvider>
       </CartProvider>
     </Router>

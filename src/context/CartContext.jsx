@@ -1,4 +1,7 @@
 import { createContext, useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CartContext = createContext();
 
@@ -15,10 +18,17 @@ const findProduct = (id) => _products.find(p => String(p.id) === String(id));
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({});
+  const navigate = useNavigate();
 
   const cacheProducts = (list) => setProductsList(list);
 
   const addToCart = (productId, weight, color = null) => {
+    const token = localStorage.getItem('az_token');
+    if (!token) {
+      toast.error('Please login to add items to your cart.');
+      navigate('/customer-login', { state: { from: window.location.pathname } });
+      return;
+    }
     const colorKey = color ? `${color.name || color.hex}` : '';
     const cartKey = `${productId}-${weight}${colorKey ? `-${colorKey}` : ''}`;
     const safeColor = color ? { name: color.name || '', hex: color.hex || '' } : null;
