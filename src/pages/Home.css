@@ -196,10 +196,16 @@
   flex-direction: column;
   cursor: pointer;
   transition: transform 0.3s ease;
+  min-width: 0;
 }
 
 .luxury-product-card:hover {
   transform: translateY(-5px);
+}
+
+.card-content {
+  min-width: 0;
+  width: 100%;
 }
 
 .card-image-wrap {
