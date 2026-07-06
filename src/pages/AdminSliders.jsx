@@ -120,6 +120,26 @@ const AdminSliders = () => {
     setShowForm(false);
   };
 
+  const handleFileUpload = async (e, field) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const token = localStorage.getItem('token');
+    const uploadData = new FormData();
+    uploadData.append('image', file);
+    try {
+      const res = await axios.post(`${config.API_URL}/api/upload`, uploadData, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
+      });
+      if (res.data.url) {
+        setFormData(prev => ({ ...prev, [field]: res.data.url }));
+        toast.success('Image uploaded successfully!', { autoClose: 1500 });
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to upload image.', { autoClose: 2000 });
+    }
+  };
+
   return (
     <>
       <AdminHeader />
@@ -152,21 +172,33 @@ const AdminSliders = () => {
               </div>
               <div className="form-field">
                 <label>Desktop Image URL *</label>
-                <input type="url" value={formData.desktop}
-                  onChange={e => setFormData({ ...formData, desktop: e.target.value })}
-                  placeholder="https://..." required />
+                <div style={{ display: 'flex', gap: '0.5rem', width: '100%' }}>
+                  <input type="url" value={formData.desktop}
+                    onChange={e => setFormData({ ...formData, desktop: e.target.value })}
+                    placeholder="https://..." required style={{ flex: 1 }} />
+                  <label className="admin-btn" style={{ padding: '0 1rem', cursor: 'pointer', margin: 0, height: '40px' }}>
+                    Upload
+                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleFileUpload(e, 'desktop')} />
+                  </label>
+                </div>
               </div>
               <div className="form-field">
                 <label>Mobile Image URL</label>
-                <input type="url" value={formData.mobile}
-                  onChange={e => setFormData({ ...formData, mobile: e.target.value })}
-                  placeholder="https://... (optional, falls back to desktop)" />
+                <div style={{ display: 'flex', gap: '0.5rem', width: '100%' }}>
+                  <input type="url" value={formData.mobile}
+                    onChange={e => setFormData({ ...formData, mobile: e.target.value })}
+                    placeholder="https://... (optional)" style={{ flex: 1 }} />
+                  <label className="admin-btn" style={{ padding: '0 1rem', cursor: 'pointer', margin: 0, height: '40px' }}>
+                    Upload
+                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleFileUpload(e, 'mobile')} />
+                  </label>
+                </div>
               </div>
               <div className="form-field">
                 <label>Heading</label>
                 <input type="text" value={formData.heading}
                   onChange={e => setFormData({ ...formData, heading: e.target.value })}
-                  placeholder="e.g. Welcome to TheAlphaZone" />
+                  placeholder="e.g. Welcome to House of Ramya" />
               </div>
               <div className="form-field">
                 <label>Description</label>

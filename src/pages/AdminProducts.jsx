@@ -7,12 +7,6 @@ import config from '../config';
 import AdminHeader from '../components/AdminHeader';
 import './AdminProducts.css';
 
-const CATEGORIES  = ['Sandals', 'Shoes', 'Flip Flops', 'Slides', 'T-Shirts', 'Track Pants'];
-const FOOTWEAR_CATS = ['Sandals', 'Shoes', 'Flip Flops', 'Slides'];
-const APPAREL_CATS  = ['T-Shirts', 'Track Pants'];
-const FOOTWEAR_SIZES = ['UK 4','UK 5','UK 6','UK 7','UK 8','UK 9','UK 10','UK 11','UK 12'];
-const APPAREL_SIZES  = ['S','M','L','XL','XXL','XXXL'];
-
 const TAGS = [
   { value: 'bestseller',    label: '🔥 Best Seller' },
   { value: 'popular',       label: '⭐ Popular' },
@@ -22,26 +16,18 @@ const TAGS = [
   { value: 'limited',       label: '⏳ Limited Edition' },
 ];
 
-const CATEGORY_STYLES = {
-  'T-Shirts':    ['Casual Wear','Streetwear','Graphic Tees','Oversized Fit','Minimal / Plain','Trendy / Fashion','Party Wear','Sports / Active','Summer Collection','Premium / Branded'],
-  'Track Pants': ['Casual Comfort','Gym / Fitness','Athleisure','Slim Fit','Joggers','Sports Performance','Travel Wear','Winter Wear','Relaxed Fit','Trendy Street Style'],
-  'Shoes':       ['Casual Shoes','Formal Shoes','Sports / Running','Sneakers','Party Wear','Office Wear','Luxury / Premium','Outdoor / Trekking','Training / Gym','Trendy Fashion'],
-  'Sandals':     ['Casual Sandals','Ethnic Wear','Party Wear','Office Wear','Comfort Wear','Summer Collection','Outdoor Use','Stylish / Trendy','Flat Sandals','Heeled Sandals'],
-  'Flip Flops':  ['Casual Everyday','Beach Wear','Home Comfort','Lightweight','Travel Essentials','Summer Special','Budget Friendly','Trendy Prints','Waterproof','Quick Wear'],
-  'Slides':      ['Casual Everyday','Beach Wear','Home Comfort','Lightweight','Travel Essentials','Summer Special','Sports / Active','Trendy Prints','Waterproof','Quick Wear'],
-};
-
 const EMPTY_COLOR = { name: '', hex: '#ffffff', images: ['', '', ''], stock: {} };
 
 const INIT_FORM = {
   name: '', category: '', gender: '', styleTags: [],
   grams: [], prices: {}, originalPrices: {},
-  description: '', tag: '',
+  description: '', washingInstructions: '', tag: '',
   colors: [{ ...EMPTY_COLOR }],
 };
 
 const AdminProducts = () => {
   const [products, setProducts]       = useState([]);
+  const [categories, setCategories]   = useState([]);
   const [showForm, setShowForm]       = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [inlineEditId, setInlineEditId]     = useState(null);
@@ -62,11 +48,25 @@ const AdminProducts = () => {
   const inlineFormRef = useRef(null);
   const navigate = useNavigate();
 
-  const weightOptions = FOOTWEAR_CATS.includes(formData.category)
-    ? FOOTWEAR_SIZES
-    : APPAREL_CATS.includes(formData.category) ? APPAREL_SIZES : [];
+  const activeCategoryObj = categories.find(c => c.name === formData.category);
+  const weightOptions = activeCategoryObj?.sizes || [];
+  const styleOptions = activeCategoryObj?.styles || [];
 
-  useEffect(() => { verifyToken(); }, [navigate]);
+  useEffect(() => { 
+    verifyToken(); 
+    fetchCategories();
+  }, [navigate]);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(`${config.API_URL}/api/categories`);
+      if (res.data.success) {
+        setCategories(res.data.categories);
+      }
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+    }
+  };
 
   const verifyToken = async () => {
     const token = localStorage.getItem('token');
@@ -100,7 +100,6 @@ const AdminProducts = () => {
       Object.keys(formData.prices).forEach(k => { numericPrices[k] = Number(formData.prices[k]); });
       Object.keys(formData.originalPrices).forEach(k => { numericOriginalPrices[k] = Number(formData.originalPrices[k]); });
 
-      // Keep backward-compat images field = first color's images
       const productData = {
         ...formData,
         prices: numericPrices,
@@ -145,7 +144,7 @@ const AdminProducts = () => {
       gender: product.gender || '', styleTags: product.styleTags || [],
       grams: product.grams || [], prices: product.prices || {},
       originalPrices: product.originalPrices || {},
-      description: product.description, tag: product.tag || '', stock: product.stock ?? '',
+      description: product.description, washingInstructions: product.washing_instructions || '', tag: product.tag || '', stock: product.stock ?? '',
       colors: product.colors?.length
         ? product.colors.map(c => ({ name: c.name || '', hex: c.hex || '#ffffff', images: c.images || ['','',''], stock: c.stock || {} }))
         : [{ name: '', hex: '#ffffff', images: product.images || ['','',''], stock: {} }],
@@ -179,7 +178,6 @@ const AdminProducts = () => {
     });
   };
 
-  // ── Color helpers ──
   const addColor = () => setFormData(prev => ({ ...prev, colors: [...prev.colors, { ...EMPTY_COLOR }] }));
 
   const removeColor = (ci) => setFormData(prev => ({ ...prev, colors: prev.colors.filter((_, i) => i !== ci) }));
@@ -198,6 +196,26 @@ const AdminProducts = () => {
       return { ...c, images: imgs };
     }),
   }));
+
+  const handleFileUpload = async (e, ci, imgIdx) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const token = localStorage.getItem('token');
+    const uploadData = new FormData();
+    uploadData.append('image', file);
+    try {
+      const res = await axios.post(`${config.API_URL}/api/upload`, uploadData, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
+      });
+      if (res.data.url) {
+        updateColorImage(ci, imgIdx, res.data.url);
+        toast.success('Image uploaded successfully!', { autoClose: 1500 });
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to upload image.', { autoClose: 2000 });
+    }
+  };
 
   const updateColorStock = (ci, size, value) => setFormData(prev => ({
     ...prev,
@@ -341,7 +359,7 @@ const AdminProducts = () => {
               <div className="toolbar-field">
                 <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
                   <option value="">All Categories</option>
-                  {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                  {categories.map(c => <option key={c.id || c.name} value={c.name}>{c.name}</option>)}
                 </select>
               </div>
               <div className="toolbar-field">
@@ -399,7 +417,7 @@ const AdminProducts = () => {
                 <label>Category *</label>
                 <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value, styleTags: [], grams: [], prices: {} })} required>
                   <option value="">Select category</option>
-                  {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                  {categories.map(c => <option key={c.id || c.name} value={c.name}>{c.name}</option>)}
                 </select>
               </div>
 
@@ -419,21 +437,21 @@ const AdminProducts = () => {
               {/* Style Tags - multi select */}
               <div className="form-field full-width">
                 <label>Style <span style={{color:'rgba(255,255,255,0.4)',fontWeight:400,textTransform:'none',letterSpacing:0}}>(select multiple)</span></label>
-                {!formData.category || !CATEGORY_STYLES[formData.category]
-                  ? <div className="size-hint">Select a category first</div>
+                {!formData.category || styleOptions.length === 0
+                  ? <div className="size-hint">Select a category with styles defined first</div>
                   : (
                     <div className="style-tag-options">
-                      {CATEGORY_STYLES[formData.category].map(s => (
+                      {styleOptions.map(s => (
                         <button type="button" key={s}
                           className={`style-tag-btn ${formData.styleTags.includes(s) ? 'active' : ''}`}
-                          onClick={() => setFormData(prev => ({
-                            ...prev,
-                            styleTags: prev.styleTags.includes(s)
-                              ? prev.styleTags.filter(t => t !== s)
-                              : [...prev.styleTags, s]
-                          }))}>
-                          {s}
-                        </button>
+                          onClick={() => {
+                            if (formData.styleTags.includes(s)) {
+                              setFormData({ ...formData, styleTags: formData.styleTags.filter(t => t !== s) });
+                            } else {
+                              setFormData({ ...formData, styleTags: [...formData.styleTags, s] });
+                            }
+                          }}
+                        >{s}</button>
                       ))}
                     </div>
                   )
@@ -442,8 +460,8 @@ const AdminProducts = () => {
 
               {/* Sizes */}
               <div className="form-field">
-                <label>{FOOTWEAR_CATS.includes(formData.category) ? 'Sizes (UK) *' : 'Sizes *'}</label>
-                {!formData.category ? <div className="size-hint">Select a category first</div> : (
+                <label>Sizes *</label>
+                {!formData.category || weightOptions.length === 0 ? <div className="size-hint">Select a category with sizes defined first</div> : (
                   <div className="custom-dropdown">
                     <div className="dropdown-header" onClick={() => setShowWeightDropdown(!showWeightDropdown)}>
                       {formData.grams.length > 0 ? formData.grams.join(', ') : `Select sizes`}
@@ -488,13 +506,32 @@ const AdminProducts = () => {
                 <textarea value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} required />
               </div>
 
-              {/* Tag */}
+              {/* Washing Instructions */}
+              <div className="form-field full-width">
+                <label>Washing Instructions</label>
+                <textarea value={formData.washingInstructions} onChange={e => setFormData({ ...formData, washingInstructions: e.target.value })} placeholder="e.g., Dry clean only, Do not bleach..." />
+              </div>
+
+              {/* Style Tags */}
               <div className="form-field">
-                <label>Badge Tag</label>
-                <select value={formData.tag} onChange={e => setFormData({ ...formData, tag: e.target.value })}>
-                  <option value="">— No Tag —</option>
-                  {TAGS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-                </select>
+                <label>Style Tags</label>
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                  {[{ value: 'new', label: 'New Arrival' }, { value: 'trending', label: 'Trending' }, { value: 'bestseller', label: 'Best Seller' }].map(t => (
+                    <label key={t.value} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer' }}>
+                      <input
+                        type="checkbox"
+                        checked={formData.styleTags.includes(t.value)}
+                        onChange={(e) => {
+                          const updatedTags = e.target.checked
+                            ? [...formData.styleTags, t.value]
+                            : formData.styleTags.filter(tag => tag !== t.value);
+                          setFormData({ ...formData, styleTags: updatedTags });
+                        }}
+                      />
+                      {t.label}
+                    </label>
+                  ))}
+                </div>
               </div>
 
               {/* Stock */}
@@ -533,14 +570,20 @@ const AdminProducts = () => {
                       </div>
                       <div className="color-images">
                         {[0, 1, 2].map(imgIdx => (
-                          <input
-                            key={imgIdx}
-                            type="url"
-                            placeholder={`Image ${imgIdx + 1} URL`}
-                            value={color.images[imgIdx] || ''}
-                            onChange={e => updateColorImage(ci, imgIdx, e.target.value)}
-                            required={imgIdx === 0}
-                          />
+                          <div key={imgIdx} className="image-upload-wrapper" style={{ display: 'flex', gap: '0.5rem', width: '100%' }}>
+                            <input
+                              type="url"
+                              placeholder={`Image ${imgIdx + 1} URL`}
+                              value={color.images[imgIdx] || ''}
+                              onChange={e => updateColorImage(ci, imgIdx, e.target.value)}
+                              required={imgIdx === 0}
+                              style={{ flex: 1 }}
+                            />
+                            <label className="admin-btn" style={{ padding: '0 1rem', cursor: 'pointer', margin: 0, height: '40px' }}>
+                              Upload
+                              <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleFileUpload(e, ci, imgIdx)} />
+                            </label>
+                          </div>
                         ))}
                       </div>
                       {/* Stock per size */}
@@ -730,6 +773,11 @@ const AdminProducts = () => {
                             <div className="preview-label">Description</div>
                             <div className="preview-value preview-desc">{product.description || '—'}</div>
                           </div>
+                          
+                          <div className="preview-section">
+                            <div className="preview-label">Washing Instructions</div>
+                            <div className="preview-value preview-desc">{product.washing_instructions || '—'}</div>
+                          </div>
 
                           <div className="preview-section">
                             <div className="preview-label">Images</div>
@@ -759,7 +807,7 @@ const AdminProducts = () => {
                               <label>Category *</label>
                               <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value, styleTags: [], grams: [], prices: {} })} required>
                                 <option value="">Select category</option>
-                                {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                                {categories.map(c => <option key={c.id || c.name} value={c.name}>{c.name}</option>)}
                               </select>
                             </div>
 
@@ -777,19 +825,21 @@ const AdminProducts = () => {
 
                             <div className="form-field full-width">
                               <label>Style</label>
-                              {!formData.category || !CATEGORY_STYLES[formData.category]
-                                ? <div className="size-hint">Select a category first</div>
+                              {!formData.category || styleOptions.length === 0
+                                ? <div className="size-hint">Select a category with styles defined first</div>
                                 : (
                                   <div className="style-tag-options">
-                                    {CATEGORY_STYLES[formData.category].map(s => (
+                                    {styleOptions.map(s => (
                                       <button type="button" key={s}
                                         className={`style-tag-btn ${formData.styleTags.includes(s) ? 'active' : ''}`}
-                                        onClick={() => setFormData(prev => ({
-                                          ...prev,
-                                          styleTags: prev.styleTags.includes(s) ? prev.styleTags.filter(t => t !== s) : [...prev.styleTags, s]
-                                        }))}>
-                                        {s}
-                                      </button>
+                                        onClick={() => {
+                                          if (formData.styleTags.includes(s)) {
+                                            setFormData({ ...formData, styleTags: formData.styleTags.filter(t => t !== s) });
+                                          } else {
+                                            setFormData({ ...formData, styleTags: [...formData.styleTags, s] });
+                                          }
+                                        }}
+                                      >{s}</button>
                                     ))}
                                   </div>
                                 )
@@ -797,8 +847,8 @@ const AdminProducts = () => {
                             </div>
 
                             <div className="form-field">
-                              <label>{FOOTWEAR_CATS.includes(formData.category) ? 'Sizes (UK) *' : 'Sizes *'}</label>
-                              {!formData.category ? <div className="size-hint">Select a category first</div> : (
+                              <label>Sizes *</label>
+                              {!formData.category || weightOptions.length === 0 ? <div className="size-hint">Select a category with sizes defined first</div> : (
                                 <div className="custom-dropdown">
                                   <div className="dropdown-header" onClick={() => setShowWeightDropdown(!showWeightDropdown)}>
                                     {formData.grams.length > 0 ? formData.grams.join(', ') : 'Select sizes'}
@@ -841,12 +891,30 @@ const AdminProducts = () => {
                               <textarea value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} required />
                             </div>
 
+                            <div className="form-field full-width">
+                              <label>Washing Instructions</label>
+                              <textarea value={formData.washingInstructions} onChange={e => setFormData({ ...formData, washingInstructions: e.target.value })} placeholder="e.g., Dry clean only, Do not bleach..." />
+                            </div>
+
                             <div className="form-field">
-                              <label>Badge Tag</label>
-                              <select value={formData.tag} onChange={e => setFormData({ ...formData, tag: e.target.value })}>
-                                <option value="">— No Tag —</option>
-                                {TAGS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-                              </select>
+                              <label>Style Tags</label>
+                              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                {[{ value: 'new', label: 'New Arrival' }, { value: 'trending', label: 'Trending' }, { value: 'bestseller', label: 'Best Seller' }].map(t => (
+                                  <label key={t.value} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer' }}>
+                                    <input
+                                      type="checkbox"
+                                      checked={formData.styleTags.includes(t.value)}
+                                      onChange={(e) => {
+                                        const updatedTags = e.target.checked
+                                          ? [...formData.styleTags, t.value]
+                                          : formData.styleTags.filter(tag => tag !== t.value);
+                                        setFormData({ ...formData, styleTags: updatedTags });
+                                      }}
+                                    />
+                                    {t.label}
+                                  </label>
+                                ))}
+                              </div>
                             </div>
 
                             <div className="form-field full-width">
@@ -869,7 +937,13 @@ const AdminProducts = () => {
                                     </div>
                                     <div className="color-images">
                                       {[0, 1, 2].map(imgIdx => (
-                                        <input key={imgIdx} type="url" placeholder={`Image ${imgIdx + 1} URL`} value={color.images[imgIdx] || ''} onChange={e => updateColorImage(ci, imgIdx, e.target.value)} required={imgIdx === 0} />
+                                        <div key={imgIdx} className="image-upload-wrapper" style={{ display: 'flex', gap: '0.5rem', width: '100%' }}>
+                                          <input type="url" placeholder={`Image ${imgIdx + 1} URL`} value={color.images[imgIdx] || ''} onChange={e => updateColorImage(ci, imgIdx, e.target.value)} required={imgIdx === 0} style={{ flex: 1 }} />
+                                          <label className="admin-btn" style={{ padding: '0 1rem', cursor: 'pointer', margin: 0, height: '40px' }}>
+                                            Upload
+                                            <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleFileUpload(e, ci, imgIdx)} />
+                                          </label>
+                                        </div>
                                       ))}
                                     </div>
                                     {formData.grams.length > 0 && (

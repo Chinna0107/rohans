@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import logo from '../assets/logo3.png';
+import logo from '../assets/logo.jpeg';
 import config from '../config';
 import './Login.css';
 
@@ -47,11 +47,11 @@ const Login = () => {
         {/* Left panel */}
         <div className="login-left">
           <div className="login-left-content">
-            <img src={logo} alt="TheAlphaZone" className="login-logo" />
-            <h1><span className="l-alpha">TheAlpha</span><span className="l-zone">Zone</span></h1>
+            <img src={logo} alt="House of Ramya" className="login-logo" />
+            <h1><span className="l-alpha">House of</span> <span className="l-zone">Ramya</span></h1>
             <p>Your premium fashion destination for sandals, shoes, flip flops, tshirts & night pants.</p>
             <div className="login-features">
-              <div className="lf-item"><span>👟</span> Premium Footwear</div>
+              <div className="lf-item"><span>🥻</span> Premium Sarees</div>
               <div className="lf-item"><span>👕</span> Trendy Apparel</div>
               <div className="lf-item"><span>🚚</span> Fast Delivery</div>
               <div className="lf-item"><span>✅</span> Quality Assured</div>
@@ -76,7 +76,7 @@ const Login = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="admin@thealphazone.com"
+                    placeholder="admin@houseoframya.com"
                     required
                     autoComplete="email"
                   />
@@ -116,7 +116,7 @@ const Login = () => {
             </form>
 
             <div className="login-footer">
-              <span>TheAlphaZone Admin Panel</span>
+              <span>House of Ramya Admin Panel</span>
             </div>
           </div>
         </div>

@@ -1,0 +1,154 @@
+/* ── Categories Layout ── */
+.category-page {
+  font-family: 'Jost', var(--font-sans);
+}
+
+.cat-layout {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+@media (max-width: 900px) {
+  .cat-layout {
+    flex-direction: column;
+  }
+}
+
+/* ── Common Card Style ── */
+.cat-form-card, .cat-list-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  padding: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+}
+
+.cat-form-card { flex: 1; }
+.cat-list-card { flex: 2; }
+
+.cat-form-card h3, .cat-list-card h3 {
+  font-family: 'Cinzel', var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--text-dark);
+  margin: 0 0 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  letter-spacing: 0.1em;
+}
+
+/* ── Form Elements ── */
+.cat-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.form-group input, .form-group textarea {
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--text-dark);
+  border-radius: 8px;
+  background: rgba(0,0,0,0.02);
+  font-size: 1rem;
+  color: var(--text-dark);
+  font-family: 'Jost', var(--font-sans);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus, .form-group textarea:focus {
+  border-color: var(--text-dark);
+  background: rgba(0,0,0,0.05);
+  box-shadow: 0 0 0 2px var(--text-dark);
+}
+
+.submit-btn {
+  background: var(--text-dark);
+  color: var(--bg);
+  border: 1px solid var(--text-dark);
+  padding: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+  margin-top: 1rem;
+}
+.submit-btn:hover {
+  background: var(--bg);
+  color: var(--text-dark);
+}
+
+/* ── Grid ── */
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.cat-item {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cat-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.cat-info h4 {
+  font-family: 'Cinzel', var(--font-serif);
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+  color: var(--text-dark);
+  letter-spacing: 1px;
+}
+
+.cat-info p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+}
+
+.del-btn {
+  align-self: flex-start;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+.del-btn:hover {
+  color: #d32f2f;
+}
+
+.no-data {
+  color: var(--text-muted);
+  font-style: italic;
+}

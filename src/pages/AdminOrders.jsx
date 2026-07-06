@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {
+  MdCheckCircle, MdCancel, MdLocalShipping, MdPendingActions,
+  MdPrint, MdOutlineAssignmentTurnedIn, MdClose
+} from 'react-icons/md';
+import { generateInvoiceHtml } from '../utils/invoiceGenerator';
 import config from '../config';
 import AdminHeader from '../components/AdminHeader';
 import './AdminOrders.css';
@@ -292,7 +297,18 @@ const AdminOrders = () => {
                 <h2>Order Details</h2>
                 <span className="ao-modal-date">{formatDate(selectedOrder)}</span>
               </div>
-              <button className="ao-print-btn" onClick={() => window.print()} title="Print Order">🖨️ Print</button>
+              <button 
+                className="ao-print-btn" 
+                onClick={() => {
+                  const invoiceWindow = window.open("", "_blank");
+                  if (invoiceWindow) {
+                    invoiceWindow.document.open();
+                    invoiceWindow.document.write(generateInvoiceHtml(selectedOrder));
+                    invoiceWindow.document.close();
+                  }
+                }} 
+                title="Print Order"
+              >🖨️ Print Invoice</button>
             </div>
 
             {/* Status Pipeline */}
@@ -326,7 +342,11 @@ const AdminOrders = () => {
                 <p><span>Name</span><strong>{selectedOrder.customer?.name}</strong></p>
                 <p><span>Phone</span><strong>{selectedOrder.customer?.phone}</strong></p>
                 <p><span>Email</span><strong>{selectedOrder.customer?.email}</strong></p>
-                <p><span>Address</span><strong>{selectedOrder.customer?.address}</strong></p>
+                <p><span>Address</span><strong>{
+                  typeof selectedOrder.customer?.address === 'object' && selectedOrder.customer?.address !== null
+                    ? Object.values(selectedOrder.customer.address).filter(Boolean).join(', ')
+                    : selectedOrder.customer?.address || '—'
+                }</strong></p>
               </div>
 
               {/* Payment */}
@@ -360,8 +380,8 @@ const AdminOrders = () => {
                     <span>{item.category} · Size: {item.size}</span>
                   </div>
                   <div className="ao-modal-item-right">
-                    <span>×{item.quantity}</span>
-                    <strong>₹{item.total || item.price * item.quantity}</strong>
+                    <span>×{item.quantity || item.qty || 1}</span>
+                    <strong>₹{item.total || item.price * (item.quantity || item.qty || 1)}</strong>
                   </div>
                 </div>
               ))}

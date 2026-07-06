@@ -7,6 +7,9 @@ import {
   MdZoomIn, MdCheckCircle, MdSwapHoriz
 } from 'react-icons/md';
 import useProducts from '../hooks/useProducts';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import config from '../config';
 import './ProductDetail.css';
 
 const TAG_LABELS = {
@@ -100,6 +103,17 @@ const ProductDetail = () => {
       setSelectedSize(sortedSizes[0] || '');
       setActiveColorIdx(0);
       setActiveImg(0);
+      setTab('desc');
+
+      const token = localStorage.getItem('token');
+      if (token) {
+        axios.get(`${config.API_URL}/api/customer`, { headers: { Authorization: `Bearer ${token}` } })
+          .then(res => {
+            const userWishlist = res.data.user.wishlist || [];
+            setWishlisted(userWishlist.some(item => String(item.id) === String(found.id)));
+          })
+          .catch(() => {});
+      }
     }
   }, [allProducts, id]);
 
@@ -112,10 +126,61 @@ const ProductDetail = () => {
     });
   };
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleWishlist = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.info('Please log in to save to your wishlist.');
+      return;
+    }
+    
+    // Optimistic update
+    setWishlisted(w => !w);
+    
+    try {
+      const userRes = await axios.get(`${config.API_URL}/api/customer`, { headers: { Authorization: `Bearer ${token}` } });
+      const currentWishlist = userRes.data.user.wishlist || [];
+      const isCurrentlyWishlisted = currentWishlist.some(item => String(item.id) === String(product.id));
+      
+      let newWishlist;
+      if (isCurrentlyWishlisted) {
+        newWishlist = currentWishlist.filter(item => String(item.id) !== String(product.id));
+      } else {
+        newWishlist = [...currentWishlist, product];
+      }
+      
+      await axios.put(`${config.API_URL}/api/customer/wishlist`, { wishlist: newWishlist }, { headers: { Authorization: `Bearer ${token}` } });
+      toast.success(isCurrentlyWishlisted ? 'Removed from wishlist' : 'Added to wishlist');
+    } catch (err) {
+      console.error('Error updating wishlist', err);
+      setWishlisted(w => !w); // Revert
+      toast.error('Failed to update wishlist');
+    }
+  };
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: product.name, url });
+        return;
+      } catch (err) { /* ignore */ }
+    }
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy', err);
+    }
   };
 
   if (loading) return (
@@ -222,7 +287,7 @@ const ProductDetail = () => {
                 <MdArrowBack /> Back
               </button>
               <div className="pd-action-btns">
-                <button className={`pd-icon-btn ${wishlisted ? 'wishlisted' : ''}`} onClick={() => setWishlisted(w => !w)} title="Wishlist">
+                <button className={`pd-icon-btn ${wishlisted ? 'wishlisted' : ''}`} onClick={handleWishlist} title="Wishlist">
                   {wishlisted ? <MdFavorite /> : <MdFavoriteBorder />}
                 </button>
                 <button className="pd-icon-btn" onClick={handleShare} title="Share">
@@ -361,7 +426,7 @@ const ProductDetail = () => {
             <div className="pd-tabs">
               <button className={`pd-tab ${tab === 'desc' ? 'active' : ''}`} onClick={() => setTab('desc')}>Description</button>
               <button className={`pd-tab ${tab === 'details' ? 'active' : ''}`} onClick={() => setTab('details')}>Details</button>
-              <button className={`pd-tab ${tab === 'sizechart' ? 'active' : ''}`} onClick={() => setTab('sizechart')}>📏 Size Chart</button>
+              <button className={`pd-tab ${tab === 'washing' ? 'active' : ''}`} onClick={() => setTab('washing')}>🧺 Washing Instructions</button>
             </div>
             <div className="pd-tab-content">
               {tab === 'desc' && (
@@ -378,82 +443,12 @@ const ProductDetail = () => {
                   <div className="pd-detail-row"><span>SKU</span><span>AZ-{String(product.id).padStart(4, '0')}</span></div>
                 </div>
               )}
-              {tab === 'sizechart' && (
-                <div className="pd-size-chart">
-                  {['Sandals', 'Shoes', 'Flip Flops'].includes(product.category) ? (
-                    <>
-                      <p className="pd-size-chart-note">📌 Measure your foot length and match with the UK size below.</p>
-                      <div className="pd-sc-table-wrap">
-                        <table className="pd-sc-table">
-                          <thead>
-                            <tr>
-                              <th>UK Size</th><th>EU Size</th><th>US Size</th><th>Foot Length (cm)</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {[
-                              ['UK 4', 'EU 37', 'US 5',   '22.5 cm'],
-                              ['UK 5', 'EU 38', 'US 6',   '23.5 cm'],
-                              ['UK 6', 'EU 39', 'US 7',   '24.5 cm'],
-                              ['UK 7', 'EU 40', 'US 8',   '25.5 cm'],
-                              ['UK 8', 'EU 41', 'US 9',   '26.5 cm'],
-                              ['UK 9', 'EU 42', 'US 10',  '27.5 cm'],
-                              ['UK 10','EU 43', 'US 11',  '28.5 cm'],
-                              ['UK 11','EU 44', 'US 12',  '29.5 cm'],
-                              ['UK 12','EU 45', 'US 13',  '30.5 cm'],
-                            ].map(([uk, eu, us, cm]) => (
-                              <tr key={uk} className={selectedSize === uk ? 'sc-active' : ''}>
-                                <td><strong>{uk}</strong></td><td>{eu}</td><td>{us}</td><td>{cm}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      <div className="pd-sc-tips">
-                        <h4>How to measure</h4>
-                        <ul>
-                          <li>Stand on a flat surface and trace your foot on paper.</li>
-                          <li>Measure the longest distance from heel to toe.</li>
-                          <li>If between sizes, go one size up.</li>
-                        </ul>
-                      </div>
-                    </>
+              {tab === 'washing' && (
+                <div className="pd-washing-instructions">
+                  {product.washing_instructions ? (
+                    <p className="pd-desc">{product.washing_instructions}</p>
                   ) : (
-                    <>
-                      <p className="pd-size-chart-note">📌 Refer to chest/waist measurements to find your perfect fit.</p>
-                      <div className="pd-sc-table-wrap">
-                        <table className="pd-sc-table">
-                          <thead>
-                            <tr>
-                              <th>Size</th><th>Chest (in)</th><th>Waist (in)</th><th>Hip (in)</th><th>Height (cm)</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {[
-                              ['S',    '34–36', '28–30', '36–38', '155–160'],
-                              ['M',    '38–40', '32–34', '40–42', '160–165'],
-                              ['L',    '42–44', '36–38', '44–46', '165–170'],
-                              ['XL',   '46–48', '40–42', '48–50', '170–175'],
-                              ['XXL',  '50–52', '44–46', '52–54', '175–180'],
-                              ['XXXL', '54–56', '48–50', '56–58', '180–185'],
-                            ].map(([size, chest, waist, hip, height]) => (
-                              <tr key={size} className={selectedSize === size ? 'sc-active' : ''}>
-                                <td><strong>{size}</strong></td><td>{chest}</td><td>{waist}</td><td>{hip}</td><td>{height}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      <div className="pd-sc-tips">
-                        <h4>How to measure</h4>
-                        <ul>
-                          <li><strong>Chest:</strong> Measure around the fullest part of your chest.</li>
-                          <li><strong>Waist:</strong> Measure around your natural waistline.</li>
-                          <li><strong>Hip:</strong> Measure around the fullest part of your hips.</li>
-                          <li>If between sizes, go one size up for a relaxed fit.</li>
-                        </ul>
-                      </div>
-                    </>
+                    <p className="pd-desc" style={{ opacity: 0.6 }}>No washing instructions provided for this item.</p>
                   )}
                 </div>
               )}

@@ -28,7 +28,7 @@ const POLICIES = {
       },
       {
         heading: 'Contact Us',
-        content: 'If you have any questions about this Privacy Policy, please contact us at thealphazone007@gmail.com or call +91 8885553249.',
+        content: 'If you have any questions about this Privacy Policy, please contact us at support@houseoframya.com or call +91 8885553249.',
       },
     ],
   },
@@ -91,7 +91,7 @@ const POLICIES = {
       },
       {
         heading: 'How to Initiate a Return',
-        content: 'Contact us on WhatsApp at +91 8885553249 or email thealphazone007@gmail.com with your order number, item details, and reason for return. Our team will guide you through the process.',
+        content: 'Contact us on WhatsApp at +91 8885553249 or email support@houseoframya.com with your order number, item details, and reason for return. Our team will guide you through the process.',
       },
     ],
   },
@@ -101,7 +101,7 @@ const POLICIES = {
     sections: [
       {
         heading: 'Acceptance of Terms',
-        content: 'By accessing or using TheAlphaZone website and services, you agree to be bound by these Terms & Conditions. If you do not agree, please do not use our services.',
+        content: 'By accessing or using the House of Ramya website and services, you agree to be bound by these Terms & Conditions. If you do not agree, please do not use our services.',
       },
       {
         heading: 'Products & Pricing',
@@ -117,11 +117,11 @@ const POLICIES = {
       },
       {
         heading: 'Intellectual Property',
-        content: 'All content on this website — including logos, images, text, and design — is the property of TheAlphaZone and may not be reproduced or used without written permission.',
+        content: 'All content on this website — including logos, images, text, and design — is the property of House of Ramya and may not be reproduced or used without written permission.',
       },
       {
         heading: 'Limitation of Liability',
-        content: 'TheAlphaZone shall not be liable for any indirect, incidental, or consequential damages arising from the use of our products or services. Our liability is limited to the value of the order placed.',
+        content: 'House of Ramya shall not be liable for any indirect, incidental, or consequential damages arising from the use of our products or services. Our liability is limited to the value of the order placed.',
       },
       {
         heading: 'Governing Law',

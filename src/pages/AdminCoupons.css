@@ -14,22 +14,24 @@
 
 /* ── Table ── */
 .ac-table-wrap {
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(18px);
-  border: 1px solid rgba(255,200,160,0.12);
-  border-radius: 18px; overflow: hidden;
-  box-shadow: 0 8px 32px rgba(180,30,30,0.12);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.8);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+  padding: 1.5rem;
+  overflow-x: auto;
 }
 
 .ac-code-cell { display: flex; flex-direction: column; gap: 0.2rem; }
 
 .ac-code {
   font-size: 0.95rem; font-weight: 800;
-  color: #e1782d; letter-spacing: 1.5px;
+  color: var(--text-dark); letter-spacing: 1.5px;
   font-family: monospace;
 }
 
-.ac-desc { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+.ac-desc { font-size: 0.75rem; color: var(--text-muted); }
 
 .ac-type-badge {
   display: inline-block; padding: 0.25rem 0.7rem;
@@ -80,15 +82,15 @@
 .ac-toggle-btn.active {
   background: rgba(74,222,128,0.12) !important;
   border: 1px solid rgba(74,222,128,0.3) !important;
-  color: #4ade80 !important;
+  color: #22c55e !important;
 }
 .ac-toggle-btn.active:hover { background: rgba(74,222,128,0.25) !important; }
 .ac-toggle-btn.inactive {
-  background: rgba(255,255,255,0.06) !important;
-  border: 1px solid rgba(255,255,255,0.12) !important;
-  color: rgba(255,255,255,0.4) !important;
+  background: rgba(0,0,0,0.06) !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+  color: var(--text-muted) !important;
 }
-.ac-toggle-btn.inactive:hover { background: rgba(225,120,45,0.12) !important; color: #fff !important; }
+.ac-toggle-btn.inactive:hover { background: rgba(0,0,0,0.12) !important; color: var(--text-dark) !important; }
 .ac-toggle-btn:disabled {
   background: rgba(248,113,113,0.08) !important;
   border: 1px solid rgba(248,113,113,0.2) !important;

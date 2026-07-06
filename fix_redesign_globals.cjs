@@ -1,4 +1,14 @@
+const fs = require('fs');
 
+// Update index.html for fonts
+let indexHtml = fs.readFileSync('index.html', 'utf8');
+if (!indexHtml.includes('family=Inter:wght@400;500;600;700')) {
+    indexHtml = indexHtml.replace('</head>', '  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">\n  </head>');
+    fs.writeFileSync('index.html', indexHtml);
+}
+
+// Update index.css
+const cssContent = `
 :root {
   --primary: #000000;
   --primary-light: #333333;
@@ -11,8 +21,8 @@
   --text-muted: #737373;
   --border-subtle: #e5e5e5;
   
-  --font-serif: 'Cinzel', serif;
-  --font-sans: 'Jost', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   
   --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.05);
   --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.08);
@@ -76,3 +86,7 @@ button {
   background: var(--primary-light);
   transform: translateY(-2px);
 }
+`;
+fs.writeFileSync('src/index.css', cssContent);
+
+console.log('Global CSS updated');

@@ -1,129 +1,320 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuth } from '../context/UserAuthContext';
-import axios from 'axios';
-import config from '../config';
-import logo from '../assets/logo3.png';
+import { FcGoogle } from 'react-icons/fc';
+import { useGoogleLogin } from '@react-oauth/google';
+import { motion, AnimatePresence } from 'framer-motion';
+import logo from '../assets/logo.jpeg';
 import './CustomerLogin.css';
 
 const CustomerLogin = () => {
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [error, setError] = useState('');
-  const [noOrders, setNoOrders] = useState(false);
+  const [mode, setMode] = useState('otp'); // 'otp', 'password', 'signup', 'forgot'
+  const [step, setStep] = useState(1); // 1 = enter email, 2 = enter otp/new password
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '', otp: '' });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  
   const { loginCustomer } = useUserAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleInput = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleSendOtp = async (e) => {
     e.preventDefault();
-    setError(''); setNoOrders(false);
-    if (!email || !phone) { setError('Please fill in all fields.'); return; }
-    if (!/^\d{10}$/.test(phone)) { setError('Enter a valid 10-digit phone number.'); return; }
-    setLoading(true);
+    setLoading(true); setError('');
     try {
-      const res = await axios.post(`${config.API_URL}/api/orders/customer/verify`, { email, phone });
-      if (res.data.success) {
-        loginCustomer(res.data.customer);
-        navigate('/dashboard');
-      } else if (res.data.message === 'no_orders') {
-        setNoOrders(true);
-      } else {
-        setError('Something went wrong. Please try again.');
-      }
-    } catch {
-      setError('Unable to connect. Please try again.');
+      const res = await fetch('http://localhost:3000/api/auth/send-otp', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email })
+      });
+      const data = await res.json();
+      if (res.ok) setStep(2);
+      else setError(data.error);
+    } catch (err) {
+      setError('Failed to send OTP. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    setLoading(true); setError('');
+    try {
+      const res = await fetch('http://localhost:3000/api/auth/verify-otp', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, otp: formData.otp })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        loginCustomer(data.user, data.token);
+        navigate('/');
+      } else setError(data.error);
+    } catch (err) {
+      setError('Failed to verify OTP.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePasswordLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true); setError('');
+    try {
+      const res = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, password: formData.password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        loginCustomer(data.user, data.token);
+        navigate('/');
+      } else setError(data.error);
+    } catch (err) {
+      setError('Login failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendSignupOtp = async (e) => {
+    e.preventDefault();
+    setLoading(true); setError('');
+    try {
+      const res = await fetch('http://localhost:3000/api/auth/send-signup-otp', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: formData.name, email: formData.email, phone: formData.phone })
+      });
+      const data = await res.json();
+      if (res.ok) setStep(2);
+      else setError(data.error);
+    } catch (err) {
+      setError('Failed to send OTP.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setLoading(true); setError('');
+    try {
+      const res = await fetch('http://localhost:3000/api/auth/register', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, password: formData.password, otp: formData.otp })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        loginCustomer(data.user, data.token);
+        navigate('/');
+      } else setError(data.error);
+    } catch (err) {
+      setError('Signup failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setLoading(true); setError('');
+    try {
+      const res = await fetch('http://localhost:3000/api/auth/reset-password', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, otp: formData.otp, newPassword: formData.password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMode('password');
+        setStep(1);
+        alert('Password reset successful! Please login.');
+      } else setError(data.error);
+    } catch (err) {
+      setError('Failed to reset password.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const userInfo = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        }).then(res => res.json());
+
+        const res = await fetch('http://localhost:3000/api/auth/google', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: userInfo.email, name: userInfo.name, googleId: userInfo.sub })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          loginCustomer(data.user, data.token);
+          navigate('/');
+        } else setError(data.error);
+      } catch (err) {
+        setError('Google login failed.');
+      }
+    },
+    onError: () => setError('Google login failed.')
+  });
+
   return (
-    <div className="cl-page">
-      <div className="cl-orb cl-orb-1" />
-      <div className="cl-orb cl-orb-2" />
-      <div className="cl-orb cl-orb-3" />
-
-      <div className="orb orb-1" />
-      <div className="orb orb-2" />
-      <div className="orb orb-3" />
-
-      <div className="login-card">
-        {/* Left panel */}
-        <div className="login-left">
-          <div className="login-left-content">
-            <img src={logo} alt="TheAlphaZone" className="login-logo" />
-            <h1><span className="l-alpha">TheAlpha</span><span className="l-zone">Zone</span></h1>
-            <p>Your premium fashion destination for sandals, shoes, flip flops, tshirts & night pants.</p>
-            <div className="login-features">
-              <div className="lf-item"><span>👟</span> Premium Footwear</div>
-              <div className="lf-item"><span>👕</span> Trendy Apparel</div>
-              <div className="lf-item"><span>🚚</span> Fast Delivery</div>
-              <div className="lf-item"><span>✅</span> Quality Assured</div>
-            </div>
+    <div className="auth-page-centered">
+      <motion.div 
+        className="auth-cards-wrapper"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        {/* Left Card - Branding */}
+        <div className="auth-left-card">
+          <div className="auth-brand-content">
+            <img src={logo} alt="House of Ramya" className="auth-logo-img" />
+            <h1><span className="l-alpha">House of</span> <span className="l-zone">Ramya</span></h1>
+            <p>Your premium luxury fashion destination.</p>
           </div>
         </div>
-        <div className="cl-right">
-          <div className="cl-form-wrap">
-            <div className="cl-header">
-              <h2>Customer Login</h2>
-              <p>Enter your email & phone to continue</p>
+
+        {/* Right Card - Form */}
+        <div className="auth-right-card">
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={mode + step}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+              className="auth-form-inner"
+            >
+        <h2 className="auth-title">
+          {mode === 'signup' ? 'Create Account' : mode === 'forgot' ? 'Reset Password' : 'Welcome Back'}
+        </h2>
+        <p className="auth-subtitle">
+          {mode === 'signup' ? 'Join House of Ramya for exclusive benefits.' : mode === 'forgot' ? 'Enter your email to receive a reset code.' : 'Sign in to access your luxury shopping experience.'}
+        </p>
+
+        {error && <div className="auth-error">{error}</div>}
+
+        <div className="auth-tabs">
+          {mode !== 'signup' && (
+            <>
+              <button className={mode === 'otp' ? 'active' : ''} onClick={() => { setMode('otp'); setStep(1); }}>OTP Login</button>
+              <button className={mode === 'password' ? 'active' : ''} onClick={() => setMode('password')}>Password</button>
+            </>
+          )}
+        </div>
+
+        {mode === 'otp' && (
+          <form className="auth-form" onSubmit={step === 1 ? handleSendOtp : handleVerifyOtp}>
+            <div className="input-group">
+              <label>Email Address</label>
+              <input type="email" name="email" value={formData.email} onChange={handleInput} required disabled={step === 2} />
             </div>
-
-            {error && <div className="cl-error">{error}</div>}
-
-            {noOrders && (
-              <div className="cl-no-orders">
-                <span>🛍️</span>
-                <p>You haven't ordered anything till now, but no worries —</p>
-                <strong>Order now to be a valued customer!</strong>
-                <button className="cl-shop-btn" onClick={() => navigate('/products')}>Shop Now →</button>
+            {step === 2 && (
+              <div className="input-group">
+                <label>Enter OTP sent to email</label>
+                <input type="text" name="otp" value={formData.otp} onChange={handleInput} required />
               </div>
             )}
+            <button type="submit" className="luxury-btn auth-submit" disabled={loading}>
+              {loading ? 'Processing...' : step === 1 ? 'Send OTP' : 'Verify & Login'}
+            </button>
+            {step === 2 && <button type="button" className="auth-link" onClick={() => setStep(1)}>Use a different email</button>}
+          </form>
+        )}
 
-            <form onSubmit={handleSubmit} className="cl-form">
-              <div className="cl-field">
-                <label>Email Address</label>
-                <div className="cl-input-wrap">
-                  <span>✉️</span>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="cl-field">
-                <label>Phone Number</label>
-                <div className="cl-input-wrap">
-                  <span>📱</span>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={e => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                    placeholder="10-digit mobile number"
-                    required
-                  />
-                </div>
-              </div>
-
-              <button type="submit" className="cl-btn" disabled={loading}>
-                {loading ? <><span className="cl-spinner" /> Signing in...</> : <><span>🔑</span> Sign In</>}
-              </button>
-            </form>
-
-            <div className="cl-divider"><span>secure login</span></div>
-
-            <div className="cl-footer">
-              <span>TheAlphaZone Customer Portal</span>
-              <span className="cl-footer-badge">Your data is safe with us</span>
+        {mode === 'password' && (
+          <form className="auth-form" onSubmit={handlePasswordLogin}>
+            <div className="input-group">
+              <label>Email Address</label>
+              <input type="email" name="email" value={formData.email} onChange={handleInput} required />
             </div>
-          </div>
+            <div className="input-group">
+              <label>Password</label>
+              <input type="password" name="password" value={formData.password} onChange={handleInput} required />
+            </div>
+            <button type="button" className="auth-link forgot-btn" onClick={() => { setMode('forgot'); setStep(1); }}>Forgot Password?</button>
+            <button type="submit" className="luxury-btn auth-submit" disabled={loading}>
+              {loading ? 'Signing In...' : 'Sign In'}
+            </button>
+          </form>
+        )}
+
+        {mode === 'forgot' && (
+          <form className="auth-form" onSubmit={step === 1 ? handleSendOtp : handleResetPassword}>
+            <div className="input-group">
+              <label>Email Address</label>
+              <input type="email" name="email" value={formData.email} onChange={handleInput} required disabled={step === 2} />
+            </div>
+            {step === 2 && (
+              <>
+                <div className="input-group">
+                  <label>Enter OTP sent to email</label>
+                  <input type="text" name="otp" value={formData.otp} onChange={handleInput} required />
+                </div>
+                <div className="input-group">
+                  <label>New Password</label>
+                  <input type="password" name="password" value={formData.password} onChange={handleInput} required />
+                </div>
+              </>
+            )}
+            <button type="submit" className="luxury-btn auth-submit" disabled={loading}>
+              {loading ? 'Processing...' : step === 1 ? 'Send Reset OTP' : 'Reset Password'}
+            </button>
+            <button type="button" className="auth-link" style={{ textAlign: 'center' }} onClick={() => setMode('password')}>Back to Login</button>
+          </form>
+        )}
+
+        {mode === 'signup' && (
+          <form className="auth-form" onSubmit={step === 1 ? handleSendSignupOtp : handleSignup}>
+            <div className="input-group">
+              <label>Full Name</label>
+              <input type="text" name="name" value={formData.name} onChange={handleInput} required disabled={step === 2} />
+            </div>
+            <div className="input-group">
+              <label>Email Address</label>
+              <input type="email" name="email" value={formData.email} onChange={handleInput} required disabled={step === 2} />
+            </div>
+            <div className="input-group">
+              <label>Phone Number</label>
+              <input type="text" name="phone" value={formData.phone} onChange={handleInput} required disabled={step === 2} />
+            </div>
+            {step === 2 && (
+              <>
+                <div className="input-group">
+                  <label>Enter OTP sent to email</label>
+                  <input type="text" name="otp" value={formData.otp} onChange={handleInput} required />
+                </div>
+                <div className="input-group">
+                  <label>Password</label>
+                  <input type="password" name="password" value={formData.password} onChange={handleInput} required />
+                </div>
+              </>
+            )}
+            <button type="submit" className="luxury-btn auth-submit" disabled={loading}>
+              {loading ? 'Processing...' : step === 1 ? 'Send OTP' : 'Create Account'}
+            </button>
+            {step === 2 && <button type="button" className="auth-link" style={{ textAlign: 'center', width: '100%' }} onClick={() => setStep(1)}>Back</button>}
+          </form>
+        )}
+
+        <div className="auth-divider"><span>OR</span></div>
+        <button className="google-btn" onClick={() => googleLogin()}>
+          <FcGoogle size={20} /> Continue with Google
+        </button>
+
+        <div className="auth-footer-toggle">
+          {mode === 'signup' ? (
+            <p>Already have an account? <span onClick={() => { setMode('otp'); setStep(1); }}>Log In</span></p>
+          ) : (
+            <p>Don't have an account? <span onClick={() => setMode('signup')}>Sign Up</span></p>
+          )}
         </div>
-      </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </motion.div>
     </div>
   );
 };

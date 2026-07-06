@@ -1,59 +1,62 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useUserAuth } from '../context/UserAuthContext';
-import config from '../config';
+import { useCart } from '../context/CartContext';
 import './UserDashboard.css';
+import { toast, ToastContainer } from 'react-toastify';
+import { generateInvoiceHtml } from '../utils/invoiceGenerator';
 
 const TABS = [
-  { key: 'orders',  label: 'My Orders',  icon: '📦' },
-  { key: 'profile', label: 'Profile',     icon: '👤' },
-  { key: 'products',label: 'Products',    icon: '🛍️' },
+  { key: 'profile', label: 'My Profile', icon: '👤' },
+  { key: 'orders',  label: 'Orders', icon: '📦' },
+  { key: 'wishlist',label: 'Wishlist', icon: '❤️' },
+  { key: 'addresses',label: 'Addresses', icon: '📍' },
 ];
 
 const STATUS_COLORS = {
-  pending:    '#f0a54b',
-  confirmed:  '#4ade80',
-  dispatched: '#60a5fa',
-  delivered:  '#a78bfa',
-  cancelled:  '#f87171',
+  pending: '#f0a54b', confirmed: '#4ade80', dispatched: '#60a5fa', delivered: '#a78bfa', cancelled: '#f87171',
 };
 
 const UserDashboard = () => {
-  const { customer, logoutCustomer } = useUserAuth();
+  const { customer, token, loading, logoutCustomer, updateProfile, updateAddresses } = useUserAuth();
+  const { addToCart } = useCart();
   const navigate = useNavigate();
-  const [tab, setTab] = useState('orders');
+  const location = useLocation();
+  const [tab, setTab] = useState('profile');
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [loadingProducts, setLoadingProducts] = useState(false);
+  const [addresses, setAddresses] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [newAddress, setNewAddress] = useState({ type: 'Home', street: '', city: '', state: '', zip: '' });
 
   useEffect(() => {
-    if (!customer) { navigate('/customer-login'); return; }
-    if (tab === 'orders') fetchOrders();
-    if (tab === 'products') { navigate('/products'); return; }
-  }, [tab, customer]);
+    // If routing from /dashboard/:tab
+    const path = location.pathname.split('/');
+    if (path.length === 3 && TABS.some(t => t.key === path[2])) {
+      setTab(path[2]);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    if (!loading && !customer) { navigate('/customer-login'); return; }
+    if (customer) {
+      setAddresses(customer.addresses || []);
+      setWishlist(customer.wishlist || []);
+      if (tab === 'orders') fetchOrders();
+    }
+  }, [tab, customer, loading]);
 
   const fetchOrders = async () => {
     setLoadingOrders(true);
     try {
-      const res = await axios.post(`${config.API_URL}/api/orders/customer/orders`, {
-        email: customer.email,
-        phone: customer.phone,
+      const res = await fetch('http://localhost:3000/api/customer/orders', {
+        headers: { Authorization: `Bearer ${token}` }
       });
-      const orders = res.data.success ? res.data.orders : [];
-      setOrders(orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+      const data = await res.json();
+      setOrders(data || []);
     } catch { setOrders([]); }
     finally { setLoadingOrders(false); }
-  };
-
-  const fetchProducts = async () => {
-    setLoadingProducts(true);
-    try {
-      const res = await axios.get(`${config.API_URL}/api/products`);
-      setProducts(res.data.products || res.data || []);
-    } catch { setProducts([]); }
-    finally { setLoadingProducts(false); }
   };
 
   const handleLogout = () => {
@@ -61,39 +64,58 @@ const UserDashboard = () => {
     navigate('/');
   };
 
-  const formatDate = (o) => {
-    if (o.createdAt) return new Date(o.createdAt).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' });
-    return o.date || '—';
+  const handleAction = async (orderId, action) => {
+    const reason = prompt(`Enter reason for ${action}:`);
+    if (!reason) return;
+    try {
+      const res = await fetch(`http://localhost:3000/api/customer/orders/${orderId}/${action}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ reason })
+      });
+      if (res.ok) fetchOrders();
+    } catch (err) {
+      alert(`Failed to ${action} order`);
+    }
   };
+
+  const handleReorder = (order) => {
+    order.items.forEach(item => addToCart(item));
+    navigate('/checkout');
+  };
+
+  const handleDownloadInvoice = (order) => {
+    const invoiceWindow = window.open("", "_blank");
+    if (invoiceWindow) {
+      invoiceWindow.document.open();
+      invoiceWindow.document.write(generateInvoiceHtml(order));
+      invoiceWindow.document.close();
+    }
+  };
+
+  const handleAddAddress = async (e) => {
+    e.preventDefault();
+    if (!newAddress.street || !newAddress.city || !newAddress.state || !newAddress.zip) {
+      toast.error('Please fill out all address fields.');
+      return;
+    }
+    const updatedAddresses = [...addresses, newAddress];
+    const success = await updateAddresses(updatedAddresses);
+    if (success) {
+      setAddresses(updatedAddresses);
+      setShowAddressForm(false);
+      setNewAddress({ type: 'Home', street: '', city: '', state: '', zip: '' });
+      toast.success('Address added successfully!');
+    } else {
+      toast.error('Failed to add address.');
+    }
+  };
+
+  if (loading) return <div className="ud-page"><div className="ud-container">Loading...</div></div>;
 
   return (
     <div className="ud-page">
       <div className="ud-container">
-
-        {/* Sidebar */}
-        <aside className="ud-sidebar">
-          <div className="ud-profile-card">
-            <div className="ud-avatar">{customer?.name?.[0]?.toUpperCase() || '?'}</div>
-            <h3>{customer?.name}</h3>
-            <p>{customer?.email}</p>
-            <span className="ud-phone">📱 {customer?.phone}</span>
-          </div>
-
-          <nav className="ud-nav">
-            {TABS.map(t => (
-              <button
-                key={t.key}
-                className={`ud-nav-btn ${tab === t.key ? 'active' : ''}`}
-                onClick={() => setTab(t.key)}
-              >
-                <span>{t.icon}</span> {t.label}
-              </button>
-            ))}
-            <button className="ud-nav-btn ud-logout" onClick={handleLogout}>
-              <span>🚪</span> Logout
-            </button>
-          </nav>
-        </aside>
 
         {/* Main Content */}
         <main className="ud-main">
@@ -103,43 +125,47 @@ const UserDashboard = () => {
             <div className="ud-section">
               <h2>📦 My Orders</h2>
               {loadingOrders ? (
-                <div className="ud-loading"><div className="ud-spinner" /></div>
+                <div className="ud-loading">Loading...</div>
               ) : orders.length === 0 ? (
                 <div className="ud-empty">
-                  <span>🛒</span>
                   <p>No orders found for your account.</p>
-                  <button onClick={() => navigate('/products')}>Start Shopping →</button>
+                  <button onClick={() => navigate('/products')} className="luxury-btn">Start Shopping</button>
                 </div>
               ) : (
                 <div className="ud-orders-list">
                   {orders.map((o, i) => {
-                    const status = o.orderStatus || 'pending';
+                    const status = o.order_status || 'pending';
                     return (
-                      <div key={o._id || i} className="ud-order-card">
+                      <div key={o.id} className="ud-order-card">
                         <div className="ud-order-top">
                           <div>
-                            <span className="ud-order-num">Order #{String(i + 1).padStart(3, '0')}</span>
-                            <span className="ud-order-date">{formatDate(o)}</span>
+                            <span className="ud-order-num">Order #{o.id}</span>
+                            <span className="ud-order-date">{new Date(o.created_at).toLocaleDateString()}</span>
                           </div>
                           <span className="ud-status-badge" style={{ color: STATUS_COLORS[status] || '#f0a54b' }}>
-                            {status.charAt(0).toUpperCase() + status.slice(1)}
+                            {status.toUpperCase()}
                           </span>
                         </div>
                         <div className="ud-order-items">
                           {(o.items || []).map((item, j) => (
                             <div key={j} className="ud-order-item">
-                              <img src={item.image} alt={item.name} />
+                              <img src={item.image || item.images?.[0]} alt={item.name} style={{width: 50, height: 50, objectFit: 'cover'}} />
                               <div>
                                 <strong>{item.name}</strong>
-                                <span>{item.size || item.selectedWeight} × {item.quantity}</span>
+                                <span>Qty: {item.quantity}</span>
                               </div>
-                              <strong>₹{item.total || item.price * item.quantity}</strong>
                             </div>
                           ))}
                         </div>
-                        <div className="ud-order-footer">
-                          <span>Payment: <strong style={{ color: o.paymentStatus === 'paid' ? '#4ade80' : '#f0a54b' }}>{o.paymentStatus === 'paid' ? '✅ Paid' : '⏳ Pending'}</strong></span>
-                          <span className="ud-order-total">Total: <strong>₹{Number(o.subtotal || 0).toLocaleString()}</strong></span>
+                        <div className="ud-order-footer" style={{ borderTop: '1px solid #eee', paddingTop: '1rem', marginTop: '1rem' }}>
+                          <span className="ud-order-total">Total: <strong>₹{o.final_total || o.subtotal}</strong></span>
+                        </div>
+                        <div className="ud-order-actions" style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', flexWrap: 'wrap' }}>
+                          <button onClick={() => handleDownloadInvoice(o)} className="luxury-btn-outline">Download Invoice</button>
+                          <button onClick={() => handleReorder(o)} className="luxury-btn-outline">Reorder</button>
+                          {status === 'pending' && <button onClick={() => handleAction(o.id, 'cancel')} className="luxury-btn-outline" style={{borderColor: 'red', color: 'red'}}>Cancel</button>}
+                          {status === 'delivered' && o.return_status !== 'requested' && <button onClick={() => handleAction(o.id, 'return')} className="luxury-btn-outline">Return Request</button>}
+                          {o.tracking_url && <a href={o.tracking_url} target="_blank" rel="noreferrer" className="luxury-btn-outline">Track Order</a>}
                         </div>
                       </div>
                     );
@@ -151,14 +177,17 @@ const UserDashboard = () => {
 
           {/* ── Profile ── */}
           {tab === 'profile' && (
-            <div className="ud-section">
-              <h2>👤 My Profile</h2>
+            <div className="ud-section profile-section">
+              <div className="profile-header">
+                <h2>THE ACCOUNT PROFILE</h2>
+                <p>Manage your House of Ramya credentials and preferences.</p>
+              </div>
+              
               <div className="ud-profile-detail">
-                <div className="ud-profile-avatar-lg">{customer?.name?.[0]?.toUpperCase() || '?'}</div>
                 <div className="ud-profile-fields">
                   <div className="ud-field">
                     <label>Name</label>
-                    <div className="ud-field-val">{customer?.name}</div>
+                    <div className="ud-field-val">{customer?.name || 'Not provided'}</div>
                   </div>
                   <div className="ud-field">
                     <label>Email Address</label>
@@ -166,51 +195,103 @@ const UserDashboard = () => {
                   </div>
                   <div className="ud-field">
                     <label>Phone Number</label>
-                    <div className="ud-field-val">📱 {customer?.phone}</div>
+                    <div className="ud-field-val">{customer?.phone || 'Not provided'}</div>
                   </div>
-                  <div className="ud-field">
-                    <label>Account Type</label>
-                    <div className="ud-field-val">🛍️ Customer</div>
-                  </div>
+                </div>
+                
+                <div className="profile-actions">
+                  <button className="edit-profile-btn" onClick={() => alert('Edit Profile functionality coming soon.')}>
+                    Update Profile
+                  </button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* ── Products ── */}
-          {tab === 'products' && (
-            <div className="ud-section">
-              <h2>🛍️ Products</h2>
-              {loadingProducts ? (
-                <div className="ud-loading"><div className="ud-spinner" /></div>
-              ) : (
-                <div className="ud-products-grid">
-                  {products.map((p, i) => {
-                    const firstWeight = Array.isArray(p.grams) ? p.grams[0] : p.grams;
-                    const price = p.prices?.[firstWeight] || p.price || 0;
-                    const origPrice = p.originalPrices?.[firstWeight];
-                    const disc = origPrice && Number(origPrice) > Number(price)
-                      ? Math.round(((Number(origPrice) - Number(price)) / Number(origPrice)) * 100)
-                      : null;
-                    return (
-                      <div key={p._id || i} className="ud-product-card" onClick={() => navigate(`/products/${p.slug || p._id}`)}>
-                        <div className="ud-product-img-wrap">
-                          <img src={p.images?.[0] || p.image} alt={p.name} />
-                          {disc && <span className="ud-disc-badge">-{disc}%</span>}
-                        </div>
-                        <div className="ud-product-info">
-                          <span className="ud-product-cat">{p.category}</span>
-                          <h4>{p.name}</h4>
-                          <div className="ud-product-price">
-                            {origPrice && Number(origPrice) > Number(price) && (
-                              <span className="ud-orig-price">₹{origPrice}</span>
-                            )}
-                            <span className="ud-price">₹{price}</span>
+          {/* ── Addresses ── */}
+          {tab === 'addresses' && (
+            <div className="ud-section profile-section">
+              <div className="profile-header">
+                <h2>ADDRESS BOOK</h2>
+                <p>Manage your saved shipping and billing addresses.</p>
+              </div>
+
+              {!showAddressForm ? (
+                <div className="ud-address-container">
+                  {addresses.length === 0 ? (
+                    <div className="ud-empty">
+                      <p>No saved addresses yet.</p>
+                      <button className="edit-profile-btn" onClick={() => setShowAddressForm(true)}>+ ADD NEW ADDRESS</button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="ud-address-grid">
+                        {addresses.map((addr, idx) => (
+                          <div key={idx} className="ud-address-card">
+                            <div className="address-type">{addr.type || 'Home'}</div>
+                            <p>{addr.street}</p>
+                            <p>{addr.city}, {addr.state} {addr.zip}</p>
                           </div>
-                        </div>
+                        ))}
                       </div>
-                    );
-                  })}
+                      <div className="profile-actions">
+                        <button className="edit-profile-btn" onClick={() => setShowAddressForm(true)}>
+                          + Add New Address
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div className="ud-address-form-wrap">
+                  <form className="ud-address-form" onSubmit={handleAddAddress}>
+                    <div className="ud-form-row">
+                      <label>Address Type</label>
+                      <select value={newAddress.type} onChange={e => setNewAddress({...newAddress, type: e.target.value})}>
+                        <option value="Home">Home</option>
+                        <option value="Work">Work</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div className="ud-form-row">
+                      <label>Street Address</label>
+                      <input type="text" placeholder="123 Luxury Lane" value={newAddress.street} onChange={e => setNewAddress({...newAddress, street: e.target.value})} />
+                    </div>
+                    <div className="ud-form-row split">
+                      <div className="ud-form-col">
+                        <label>City</label>
+                        <input type="text" placeholder="Mumbai" value={newAddress.city} onChange={e => setNewAddress({...newAddress, city: e.target.value})} />
+                      </div>
+                      <div className="ud-form-col">
+                        <label>State</label>
+                        <input type="text" placeholder="Maharashtra" value={newAddress.state} onChange={e => setNewAddress({...newAddress, state: e.target.value})} />
+                      </div>
+                    </div>
+                    <div className="ud-form-row">
+                      <label>ZIP / Postal Code</label>
+                      <input type="text" placeholder="400001" value={newAddress.zip} onChange={e => setNewAddress({...newAddress, zip: e.target.value})} />
+                    </div>
+                    
+                    <div className="form-actions">
+                      <button type="button" className="cancel-btn" onClick={() => setShowAddressForm(false)}>Cancel</button>
+                      <button type="submit" className="save-btn">Save Address</button>
+                    </div>
+                  </form>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── Wishlist ── */}
+          {tab === 'wishlist' && (
+            <div className="ud-section">
+              <h2>❤️ My Wishlist</h2>
+              {wishlist.length === 0 ? (
+                <p>Your wishlist is empty.</p>
+              ) : (
+                <div className="product-grid-4">
+                  {/* Map wishlist products here */}
+                  <p>Wishlist items would render here.</p>
                 </div>
               )}
             </div>

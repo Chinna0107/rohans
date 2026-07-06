@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useUserAuth } from '../context/UserAuthContext';
 import axios from 'axios';
 import { MdArrowBack, MdLocalShipping, MdVerified, MdLock, MdDelete, MdCheckCircle } from 'react-icons/md';
 import config from '../config';
@@ -20,6 +21,7 @@ const loadRazorpay = () =>
 
 const Checkout = () => {
   const { cart, updateQuantity, clearCart, productsCache, cacheProducts } = useCart();
+  const { customer, token: customerToken } = useUserAuth();
   const navigate = useNavigate();
   const [allProducts, setAllProducts]   = useState(productsCache);
   const [step, setStep]                 = useState(0);
@@ -28,6 +30,23 @@ const Checkout = () => {
   const [orderDone, setOrderDone]       = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
   const [locating, setLocating]         = useState(false);
+
+  // Auto-fill from logged-in customer profile
+  useEffect(() => {
+    if (customer) {
+      const savedAddress = Array.isArray(customer.addresses) && customer.addresses.length > 0
+        ? customer.addresses[0]
+        : '';
+      setFormData(prev => ({
+        name:    prev.name    || customer.name  || '',
+        phone:   prev.phone   || customer.phone || '',
+        email:   prev.email   || customer.email || '',
+        address: prev.address || (typeof savedAddress === 'object' 
+          ? [savedAddress.line1, savedAddress.city, savedAddress.state, savedAddress.pincode].filter(Boolean).join(', ')
+          : savedAddress) || '',
+      }));
+    }
+  }, [customer]);
 
   const getLocation = () => {
     if (!navigator.geolocation) { alert('Geolocation not supported by your browser.'); return; }
@@ -200,7 +219,7 @@ const Checkout = () => {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: data.order.amount,
         currency: 'INR',
-        name: 'TheAlphaZone',
+        name: 'House of Ramya',
         description: `Order of ${cartItems.length} item(s)`,
         order_id: data.order.id,
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
@@ -429,6 +448,11 @@ const Checkout = () => {
           <div className="co-step-content co-details-grid">
             <div className="co-form-card glass">
               <h2>Delivery Details</h2>
+              {customer && (
+                <div style={{ fontSize: '0.8rem', color: '#16a34a', background: 'rgba(22,163,74,0.07)', border: '1px solid rgba(22,163,74,0.2)', borderRadius: '8px', padding: '0.5rem 0.85rem', marginBottom: '1rem' }}>
+                  ✓ Auto-filled from your profile. You can edit below.
+                </div>
+              )}
               <div className="co-form">
                 {[
                   { key: 'name',    label: 'Full Name',       type: 'text',  icon: '👤', placeholder: 'Enter your name' },
@@ -450,6 +474,31 @@ const Checkout = () => {
                       {locating ? <><span className="co-spinner" /> Locating...</> : '📍 Use My Location'}
                     </button>
                   </label>
+                  {/* Saved Addresses Selector */}
+                  {customer && Array.isArray(customer.addresses) && customer.addresses.length > 0 && (
+                    <div style={{ marginBottom: '0.6rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#888', fontWeight: 600 }}>Saved Addresses:</span>
+                      {customer.addresses.map((addr, idx) => {
+                        const addrStr = typeof addr === 'object'
+                          ? [addr.line1, addr.city, addr.state, addr.pincode].filter(Boolean).join(', ')
+                          : addr;
+                        return (
+                          <button key={idx} type="button"
+                            onClick={() => setFormData({ ...formData, address: addrStr })}
+                            style={{
+                              textAlign: 'left', background: formData.address === addrStr ? '#111' : 'rgba(0,0,0,0.04)',
+                              border: `1px solid ${formData.address === addrStr ? '#111' : 'rgba(0,0,0,0.12)'}`,
+                              color: formData.address === addrStr ? '#fff' : '#333',
+                              borderRadius: '10px', padding: '0.5rem 0.8rem',
+                              fontSize: '0.82rem', cursor: 'pointer', fontFamily: 'inherit',
+                              transition: 'all 0.2s ease',
+                            }}>
+                            📍 {addrStr}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                   <div className="co-input-wrap">
                     <span className="co-input-icon" style={{ top: '0.9rem' }}>📍</span>
                     <textarea placeholder="House no, Street, City, Pincode" value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} rows={3} />

@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import logo from '../assets/logo2.jpeg';
+import logo from '../assets/logo.jpeg';
 import './AdminHeader.css';
 
 const AdminHeader = () => {
@@ -18,9 +18,9 @@ const AdminHeader = () => {
   return (
     <header className="admin-header">
       <div className="admin-header-left">
-        <img src={logo} alt="TheAlphaZone" className="admin-logo" />
+        <img src={logo} alt="House of Ramya" className="admin-logo" />
         <div className="admin-brand">
-          <span className="ab-alpha">TheAlpha</span><span className="ab-zone">Zone</span>
+          <span className="ab-alpha">House of</span> <span className="ab-zone">Ramya</span>
           <span className="ab-tag">Admin</span>
         </div>
       </div>
@@ -43,6 +43,12 @@ const AdminHeader = () => {
           onClick={() => navigate('/admin/coupons')}
         >
           🏷️ Coupons
+        </button>
+        <button
+          className={`admin-nav-btn ${isActive('/admin/categories') ? 'active' : ''}`}
+          onClick={() => navigate('/admin/categories')}
+        >
+          🗂️ Categories
         </button>
         <button
           className={`admin-nav-btn ${isActive('/admin/sliders') ? 'active' : ''}`}
