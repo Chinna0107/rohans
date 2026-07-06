@@ -453,4 +453,21 @@
     text-align: center;
   }
   .cancel-btn { padding: 0.8rem; border: 1px solid var(--border-subtle); }
+
+  .ud-wishlist-grid {
+    gap: 0.5rem;
+  }
+  .ud-wishlist-info {
+    padding: 0.5rem;
+  }
+  .ud-wishlist-info h4 {
+    font-size: 0.85rem;
+  }
+  .ud-wishlist-info p {
+    font-size: 0.95rem;
+  }
+  .ud-wishlist-remove {
+    padding: 0.6rem;
+    font-size: 0.75rem;
+  }
 }
