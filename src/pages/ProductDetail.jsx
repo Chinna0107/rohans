@@ -6,10 +6,12 @@ import {
   MdArrowBack, MdShare, MdFavorite, MdFavoriteBorder,
   MdZoomIn, MdCheckCircle, MdSwapHoriz
 } from 'react-icons/md';
+import { FaWhatsapp } from 'react-icons/fa';
 import useProducts from '../hooks/useProducts';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import config from '../config';
+import { useUserAuth } from '../context/UserAuthContext';
 import './ProductDetail.css';
 
 const TAG_LABELS = {
@@ -79,6 +81,7 @@ const ProductDetail = () => {
   const id = slug?.split('-').pop();
 
   const { products: allProducts, loading } = useProducts();
+  const { customer, toggleWishlist } = useUserAuth();
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [activeColorIdx, setActiveColorIdx] = useState(0);
@@ -104,18 +107,17 @@ const ProductDetail = () => {
       setActiveColorIdx(0);
       setActiveImg(0);
       setTab('desc');
-
-      const token = localStorage.getItem('token');
-      if (token) {
-        axios.get(`${config.API_URL}/api/customer`, { headers: { Authorization: `Bearer ${token}` } })
-          .then(res => {
-            const userWishlist = res.data.user.wishlist || [];
-            setWishlisted(userWishlist.some(item => String(item.id) === String(found.id)));
-          })
-          .catch(() => {});
-      }
     }
   }, [allProducts, id]);
+
+  useEffect(() => {
+    if (product && customer) {
+      const userWishlist = customer.wishlist || [];
+      setWishlisted(userWishlist.some(item => String(item.id) === String(product.id)));
+    } else {
+      setWishlisted(false);
+    }
+  }, [product, customer]);
 
   const handleMouseMove = (e) => {
     if (!imgRef.current) return;
@@ -127,8 +129,7 @@ const ProductDetail = () => {
   };
 
   const handleWishlist = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
+    if (!customer) {
       toast.info('Please log in to save to your wishlist.');
       return;
     }
@@ -136,22 +137,11 @@ const ProductDetail = () => {
     // Optimistic update
     setWishlisted(w => !w);
     
-    try {
-      const userRes = await axios.get(`${config.API_URL}/api/customer`, { headers: { Authorization: `Bearer ${token}` } });
-      const currentWishlist = userRes.data.user.wishlist || [];
-      const isCurrentlyWishlisted = currentWishlist.some(item => String(item.id) === String(product.id));
-      
-      let newWishlist;
-      if (isCurrentlyWishlisted) {
-        newWishlist = currentWishlist.filter(item => String(item.id) !== String(product.id));
-      } else {
-        newWishlist = [...currentWishlist, product];
-      }
-      
-      await axios.put(`${config.API_URL}/api/customer/wishlist`, { wishlist: newWishlist }, { headers: { Authorization: `Bearer ${token}` } });
-      toast.success(isCurrentlyWishlisted ? 'Removed from wishlist' : 'Added to wishlist');
-    } catch (err) {
-      console.error('Error updating wishlist', err);
+    const res = await toggleWishlist(product);
+    if (res.success) {
+      toast.success(res.isWishlisted ? 'Added to wishlist' : 'Removed from wishlist');
+      setWishlisted(res.isWishlisted);
+    } else {
       setWishlisted(w => !w); // Revert
       toast.error('Failed to update wishlist');
     }
@@ -405,6 +395,13 @@ const ProductDetail = () => {
                 ⚡ Buy Now
               </button>
             </div>
+            
+            <button 
+              className="pd-whatsapp-customization-btn" 
+              onClick={() => window.open(`https://wa.me/918897030909?text=Hi, I would like to discuss customizations for ${product.name}`, '_blank')}
+            >
+              <FaWhatsapp style={{ fontSize: '1.2rem' }} /> Discuss customizations on WhatsApp here
+            </button>
 
             {/* Delivery info strip */}
             <div className="pd-delivery-strip">

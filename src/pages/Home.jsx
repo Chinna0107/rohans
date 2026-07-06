@@ -12,6 +12,8 @@ import { motion } from 'framer-motion';
 import Typewriter from 'typewriter-effect';
 import CountUp from 'react-countup';
 import useProducts from '../hooks/useProducts';
+import { useUserAuth } from '../context/UserAuthContext';
+import { toast } from 'react-toastify';
 import './Home.css';
 
 const CATEGORIES = [
@@ -21,8 +23,8 @@ const CATEGORIES = [
 ];
 
 const ProductCard = ({ product, addToCart, navigate }) => {
+  const { customer, toggleWishlist } = useUserAuth();
   const [isHovered, setIsHovered] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   
   const pid = product.id || product._id;
   const imgUrl = product.images?.[0] || product.image;
@@ -32,6 +34,22 @@ const ProductCard = ({ product, addToCart, navigate }) => {
   const calcDisc = (o, c) => Math.round(((o - c) / o) * 100);
   const disc = origPrice > currentPrice ? calcDisc(origPrice, currentPrice) : null;
   const slug = product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+  const isWishlisted = customer?.wishlist?.some(item => String(item.id) === String(pid));
+
+  const handleWishlistClick = async (e) => {
+    e.stopPropagation();
+    if (!customer) {
+      toast.info('Please log in to save to your wishlist.');
+      return;
+    }
+    const res = await toggleWishlist(product);
+    if (res.success) {
+      toast.success(res.isWishlisted ? 'Added to wishlist' : 'Removed from wishlist');
+    } else {
+      toast.error('Failed to update wishlist');
+    }
+  };
 
   return (
     <div 
@@ -46,7 +64,7 @@ const ProductCard = ({ product, addToCart, navigate }) => {
           {disc && <span className="badge sale-badge">{disc}% OFF</span>}
         </div>
         
-        <button className="wishlist-btn" onClick={(e) => { e.stopPropagation(); setIsWishlisted(!isWishlisted); }}>
+        <button className="wishlist-btn" onClick={handleWishlistClick}>
           {isWishlisted ? <FaHeart color="#FF4747" /> : <FaRegHeart />}
         </button>
 

@@ -19,7 +19,7 @@ const STATUS_COLORS = {
 };
 
 const UserDashboard = () => {
-  const { customer, token, loading, logoutCustomer, updateProfile, updateAddresses } = useUserAuth();
+  const { customer, token, loading, logoutCustomer, updateProfile, updateAddresses, toggleWishlist } = useUserAuth();
   const { addToCart } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
@@ -291,8 +291,28 @@ const UserDashboard = () => {
                 <p>Your wishlist is empty.</p>
               ) : (
                 <div className="product-grid-4">
-                  {/* Map wishlist products here */}
-                  <p>Wishlist items would render here.</p>
+                  {wishlist.map(product => {
+                    const pid = product.id || product._id;
+                    const slug = (product.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                    const currentPrice = product.prices?.[product.grams?.[0] || product.grams] || product.price || 0;
+                    return (
+                      <div key={pid} className="ud-wishlist-item" onClick={() => navigate(`/products/${slug}-${pid}`)}>
+                        <img src={product.images?.[0] || product.image} alt={product.name} />
+                        <div className="ud-wishlist-info">
+                          <h4>{product.name}</h4>
+                          <p>₹{currentPrice}</p>
+                        </div>
+                        <button className="ud-wishlist-remove" onClick={async (e) => {
+                          e.stopPropagation();
+                          const res = await toggleWishlist(product);
+                          if (res.success) toast.success('Removed from wishlist');
+                          else toast.error('Failed to remove');
+                        }}>
+                          Remove
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>

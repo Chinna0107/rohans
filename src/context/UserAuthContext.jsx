@@ -99,8 +99,43 @@ export const UserAuthProvider = ({ children }) => {
     }
   };
 
+  const toggleWishlist = async (product) => {
+    if (!customer || !token) return { success: false };
+    try {
+      const currentWishlist = customer.wishlist || [];
+      const pid = product.id || product._id;
+      const isCurrentlyWishlisted = currentWishlist.some(item => String(item.id) === String(pid));
+      
+      let newWishlist;
+      if (isCurrentlyWishlisted) {
+        newWishlist = currentWishlist.filter(item => String(item.id) !== String(pid));
+      } else {
+        newWishlist = [...currentWishlist, product];
+      }
+      
+      const res = await fetch(`${config.API_URL}/api/customer/wishlist`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify({ wishlist: newWishlist })
+      });
+      if (res.ok) {
+        const updatedCustomer = { ...customer, wishlist: newWishlist };
+        setCustomer(updatedCustomer);
+        localStorage.setItem('az_customer', JSON.stringify(updatedCustomer));
+        return { success: true, isWishlisted: !isCurrentlyWishlisted };
+      }
+      return { success: false };
+    } catch (err) {
+      console.error(err);
+      return { success: false };
+    }
+  };
+
   return (
-    <UserAuthContext.Provider value={{ customer, token, loading, loginCustomer, logoutCustomer, updateProfile, updateAddresses }}>
+    <UserAuthContext.Provider value={{ customer, token, loading, loginCustomer, logoutCustomer, updateProfile, updateAddresses, toggleWishlist }}>
       {children}
     </UserAuthContext.Provider>
   );

@@ -3,7 +3,10 @@ import { useCart } from '../context/CartContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MdFilterList, MdClose, MdSearch } from 'react-icons/md';
 import { TbFlipFlops } from 'react-icons/tb';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import useProducts from '../hooks/useProducts';
+import { useUserAuth } from '../context/UserAuthContext';
+import { toast } from 'react-toastify';
 import './Products.css';
 
 const CATEGORY_ICONS = { All: '🛍️', Sandals: '👡', Shoes: '👟', 'Flip Flops': null, Slides: '🩴', 'T-Shirts': '👕', 'Track Pants': '🏃' };
@@ -39,6 +42,7 @@ const getMinPrice = (product) => {
 const Products = () => {
   const { products, loading, error } = useProducts();
   const { addToCart, updateQuantity, getCartCount, isInCart, getCartQuantity } = useCart();
+  const { customer, toggleWishlist } = useUserAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -277,6 +281,21 @@ const Products = () => {
                   return s === undefined ? Infinity : Number(s);
                 };
                 const activeStock = getStock(activeColorIdx, currentWeight);
+                
+                const isWishlisted = customer?.wishlist?.some(item => String(item.id) === String(pid));
+                const handleWishlistClick = async (e) => {
+                  e.stopPropagation();
+                  if (!customer) {
+                    toast.info('Please log in to save to your wishlist.');
+                    return;
+                  }
+                  const res = await toggleWishlist(product);
+                  if (res.success) {
+                    toast.success(res.isWishlisted ? 'Added to wishlist' : 'Removed from wishlist');
+                  } else {
+                    toast.error('Failed to update wishlist');
+                  }
+                };
 
                 return (
                   <div key={pid} className="product-item"
@@ -287,6 +306,11 @@ const Products = () => {
                     <div className="product-image-container">
                       {product.tag && <span className={`product-badge ${product.tag}`}>{TAG_LABELS[product.tag] || product.tag}</span>}
                       {disc && <span className="product-disc-badge">-{disc}%</span>}
+                      
+                      <button className="wishlist-btn-products" onClick={handleWishlistClick}>
+                        {isWishlisted ? <FaHeart color="#FF4747" /> : <FaRegHeart />}
+                      </button>
+
                       <img src={activeImages[0]} alt={product.name} onError={e => { e.target.style.display = 'none'; }} />
                       <div className="quick-view-overlay">
                         <button className="quick-view-btn">View Details</button>

@@ -311,6 +311,31 @@
 .pd-qty-control button:hover { transform: scale(1.05); }
 .pd-qty-control span { flex: 1; text-align: center; font-size: 1.2rem; font-weight: 800; color: var(--text-dark); }
 
+.pd-whatsapp-customization-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem;
+  background: #25D366;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+  margin-top: -0.2rem;
+}
+.pd-whatsapp-customization-btn:hover {
+  background: #1ebc5a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+}
+
 /* Delivery strip */
 .pd-delivery-strip {
   display: flex; gap: 0; flex-wrap: wrap;
