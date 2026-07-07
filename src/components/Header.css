@@ -2,13 +2,14 @@
    Luxury Header CSS
 ---------------------------------------------------- */
 .header {
-  position: sticky;
+  position: fixed;
+  width: 100%;
   top: 0;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.4s ease;
+  transition: background-color 0.4s ease, box-shadow 0.4s ease;
   font-family: 'Jost', var(--font-sans);
   overflow: visible;
 }
@@ -371,12 +372,40 @@
 }
 
 @media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+
   .header-container {
     padding: 0.8rem 1.5rem;
+    position: relative;
+    justify-content: center;
+  }
+
+  .header-left {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+  }
+
+  .header-right {
+    position: static;
   }
 
   .menu-toggle {
     display: flex;
+    position: absolute;
+    left: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .header-right > .cart-link {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .header-center {
@@ -396,7 +425,7 @@
     opacity: 0;
     visibility: hidden;
     clip-path: inset(0 0 100% 0);
-    transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: opacity 0.5s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.5s, clip-path 0.5s cubic-bezier(0.77, 0, 0.175, 1);
     z-index: 999;
   }
 
@@ -459,8 +488,8 @@
     transform: translateY(-50%);
   }
 
-  .brand-logo-circle { width: 80px; height: 80px; margin: -10px 0; }
-  .brand-logo-img { height: 80px; width: 80px; }
+  .brand-logo-circle { width: 100px; height: 100px; margin: 0 0 -15px 0; }
+  .brand-logo-img { height: 100px; width: 100px; }
 }
 
 .user-avatar-wrapper {

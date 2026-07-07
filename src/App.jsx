@@ -7,6 +7,7 @@ import { CartProvider } from './context/CartContext'
 import { UserAuthProvider } from './context/UserAuthContext'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import BottomNav from './components/BottomNav'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import CustomerLogin from './pages/CustomerLogin'
@@ -24,6 +25,7 @@ import Contact from './pages/Contact'
 import FAQ from './pages/FAQ'
 import About from './pages/About'
 import Policies from './pages/Policies'
+import Search from './pages/Search'
 import './App.css'
 
 // Clear old localStorage product cache
@@ -63,6 +65,7 @@ function AnimatedRoutes() {
         <Route path="/shipping-policy" element={<PageWrapper><Policies /></PageWrapper>} />
         <Route path="/refund-policy" element={<PageWrapper><Policies /></PageWrapper>} />
         <Route path="/terms" element={<PageWrapper><Policies /></PageWrapper>} />
+        <Route path="/search" element={<PageWrapper><Search /></PageWrapper>} />
         <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
       </Routes>
     </AnimatePresence>
@@ -94,6 +97,7 @@ function AppContent() {
       {!isAdminRoute && <Header />}
       <AnimatedRoutes />
       {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <BottomNav />}
     </>
   );
 }

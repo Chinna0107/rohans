@@ -17,9 +17,11 @@ import { toast } from 'react-toastify';
 import './Home.css';
 
 const CATEGORIES = [
-  { name: "Sarees", img: 'https://sutisancha.com/cdn/shop/files/Black_Yellow_White_Simple_Folded_Paper_Notes_Book_Description_Instagram_post_1587_x_2280_px_-_2025-08-10T110439.156.jpg?v=1755258981&width=1587', link: 'SAREES' },
-  { name: "Kurtis", img: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=600&auto=format&fit=crop', link: 'KURTIS' },
-  { name: "Others", img: 'https://images.unsplash.com/photo-1605763240000-7e93b172d754?q=80&w=600&auto=format&fit=crop', link: '' },
+  { name: "KURTIES", img: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=600&auto=format&fit=crop', link: 'KURTIES' },
+  { name: "SAREES", img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=600&auto=format&fit=crop', link: 'SAREES' },
+  { name: "DRESS MATERIALS", img: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=600&auto=format&fit=crop', link: 'DRESS MATERIALS' },
+  { name: "CUSTOM STITCHING", img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSc89EVoxCnoFRZYB97giFTjIQEtRRfVSyXjMPt1w4YSA&s=10', link: 'CUSTOM STITCHING' },
+  { name: "MAGGAM WORK", img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsQGk5k3Oy4-uWWk1AEr_BXAlPvGlLaolJ6v2NIbCcSg&s=10', link: 'MAGGAM WORK' },
 ];
 
 const ProductCard = ({ product, addToCart, navigate }) => {
@@ -160,46 +162,29 @@ const Home = () => {
                   <img src={slider.desktop || slider.imageUrl} alt={slider.title || 'Banner'} className="hero-slide-bg" />
                 </picture>
                 <div className="hero-slide-overlay"></div>
-                <div className="hero-content">
-                  {slider.tag && (
-                    <motion.span 
-                      className="hero-tag"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      {slider.tag}
-                    </motion.span>
-                  )}
-                  <motion.h1
-                    initial={{ opacity: 0, y: 30 }}
+                <div className="hero-content compact-hero">
+                  <motion.h2
+                    initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
+                    transition={{ duration: 0.5 }}
                   >
-                    {slider.heading || slider.title || 'House of Ramya'}
-                  </motion.h1>
-                  
-                  {slider.desc || slider.description ? (
-                    <motion.p 
-                      className="hero-desc"
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      transition={{ duration: 0.6, delay: 0.4 }}
-                    >
-                      {slider.desc || slider.description}
-                    </motion.p>
-                  ) : null}
-
+                    {slider.heading || slider.title || 'Exclusive Collection'}
+                  </motion.h2>
+                  <motion.p 
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                  >
+                    {slider.desc || slider.description || 'Discover our premium range of elegant styles tailored just for you.'}
+                  </motion.p>
                   <motion.button 
-                    className="luxury-btn" 
+                    className="luxury-btn solid-maroon-btn small-btn" 
                     onClick={() => navigate(slider.productSlug ? `/products/${slider.productSlug}` : '/products')}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ duration: 0.5, delay: 0.6 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
                   >
-                    Explore Deals
+                    Shop Now
                   </motion.button>
                 </div>
               </div>
@@ -207,32 +192,12 @@ const Home = () => {
           </Slider>
         </section>
       ) : (
-        <section className="luxury-hero">
-          <div className="hero-content">
-            <h1>Summer Sale</h1>
-            <div className="hero-typewriter">
-              <Typewriter
-                options={{
-                  strings: [
-                    'Up to 60% off on trending styles.',
-                    'Redefine your wardrobe.',
-                    'Step into luxury today.'
-                  ],
-                  autoStart: true,
-                  loop: true,
-                  delay: 50,
-                  deleteSpeed: 30,
-                }}
-              />
-            </div>
-            <motion.button 
-              className="luxury-btn" 
-              onClick={() => navigate('/products')}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Explore Deals
-            </motion.button>
+        <section className="luxury-slider-hero">
+          <div className="hero-slide fallback-slide">
+            <picture>
+              <source media="(max-width: 768px)" srcSet="/images/house-of-ramya-banner-mobile.png" />
+              <img src="/images/house-of-ramya-banner.png" alt="House of Ramya Banner" className="hero-slide-bg" />
+            </picture>
           </div>
         </section>
       )}
@@ -246,14 +211,13 @@ const Home = () => {
         transition={{ duration: 0.6 }}
       >
         <h2 className="section-heading">Shop by Category</h2>
-        <div className="category-grid-3">
+        <div className="category-row-scroll">
           {CATEGORIES.map(cat => (
-            <div key={cat.name} className="cat-card-luxury" onClick={() => navigate('/products', { state: { category: cat.link } })}>
-              <img src={cat.img} alt={cat.name} />
-              <div className="cat-overlay">
-                <h3>{cat.name}</h3>
-                <span className="cat-link">Shop Now &rarr;</span>
+            <div key={cat.name} className="cat-item-circle" onClick={() => navigate('/products', { state: { category: cat.link } })}>
+              <div className="cat-img-wrapper">
+                <img src={cat.img} alt={cat.name} />
               </div>
+              <h3>{cat.name}</h3>
             </div>
           ))}
         </div>
