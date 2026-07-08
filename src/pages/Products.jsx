@@ -242,11 +242,30 @@ const Products = () => {
             <aside className="categories-sidebar">
               <h3>Categories</h3>
               <ul>
-                {categories.map(cat => (
-                  <li key={cat} className={selectedCategory === cat ? 'active' : ''} onClick={() => setSelectedCategory(cat)}>
-                    <span>{cat === 'Flip Flops' ? <TbFlipFlops style={{color:'#e1782d',verticalAlign:'middle'}} /> : (CATEGORY_ICONS[cat] || '📦')}</span> {cat}
-                  </li>
-                ))}
+                {categories.map(cat => {
+                  const catImg = (() => {
+                    if (cat === 'All') return null;
+                    const prod = products.find(p => p.category === cat);
+                    if (prod) {
+                      if (prod.images && prod.images.length > 0) return prod.images[0];
+                      if (prod.colors && prod.colors[0] && prod.colors[0].images && prod.colors[0].images.length > 0) return prod.colors[0].images[0];
+                    }
+                    return null;
+                  })();
+
+                  return (
+                    <li key={cat} className={selectedCategory === cat ? 'active' : ''} onClick={() => setSelectedCategory(cat)}>
+                      {catImg ? (
+                        <img src={catImg} alt={cat} className="category-img" />
+                      ) : (
+                        <div className="category-icon-fallback">
+                          {cat === 'All' ? '🛍️' : cat === 'Flip Flops' ? <TbFlipFlops style={{color:'#e1782d'}} /> : (CATEGORY_ICONS[cat] || '📦')}
+                        </div>
+                      )}
+                      <span>{cat}</span>
+                    </li>
+                  );
+                })}
               </ul>
               <div className="sidebar-results">
                 <span>{filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''}</span>

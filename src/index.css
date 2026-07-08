@@ -20,6 +20,11 @@
   --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
+html {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   margin: 0;
   padding: 0;

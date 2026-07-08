@@ -250,6 +250,21 @@ const ProductDetail = () => {
 
             {/* Main image */}
             <div className="pd-main-wrap">
+              {/* Floating Actions */}
+              <div className="pd-top-actions">
+                <button className="pd-back-btn" onClick={() => navigate('/products')}>
+                  <MdArrowBack /> Back
+                </button>
+                <div className="pd-action-btns">
+                  <button className={`pd-icon-btn ${wishlisted ? 'wishlisted' : ''}`} onClick={handleWishlist} title="Wishlist">
+                    {wishlisted ? <MdFavorite /> : <MdFavoriteBorder />}
+                  </button>
+                  <button className="pd-icon-btn" onClick={handleShare} title="Share">
+                    {copied ? <MdCheckCircle style={{ color: '#4ade80' }} /> : <MdShare />}
+                  </button>
+                </div>
+              </div>
+
               {product.tag && <span className="pd-tag-badge">{TAG_LABELS[product.tag] || product.tag}</span>}
               {discount && <span className="pd-discount-badge">-{discount}%</span>}
               <div
@@ -275,23 +290,6 @@ const ProductDetail = () => {
 
           {/* ── Right: Info ── */}
           <div className="pd-info">
-
-            {/* Top actions */}
-            <div className="pd-top-actions">
-              <button className="pd-back-btn" onClick={() => navigate('/products')}>
-                <MdArrowBack /> Back
-              </button>
-              <div className="pd-action-btns">
-                <button className={`pd-icon-btn ${wishlisted ? 'wishlisted' : ''}`} onClick={handleWishlist} title="Wishlist">
-                  {wishlisted ? <MdFavorite /> : <MdFavoriteBorder />}
-                </button>
-                <button className="pd-icon-btn" onClick={handleShare} title="Share">
-                  {copied ? <MdCheckCircle style={{ color: '#4ade80' }} /> : <MdShare />}
-                </button>
-              </div>
-            </div>
-
-            <span className="pd-category-pill">{product.category}</span>
             <h1 className="pd-name">{product.name}</h1>
             
             {reviewCount > 0 && (

@@ -538,8 +538,8 @@
   }
 
   .brand-logo-circle {
-    width: 45px;
-    height: 45px;
+    width: 55px;
+    height: 55px;
     margin: 0;
     border-width: 1px;
     box-shadow: none;
@@ -547,30 +547,34 @@
   }
 
   .brand-logo-img {
-    height: 45px;
-    width: 45px;
+    height: 55px;
+    width: 55px;
   }
 
   .brand-text {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-left: 0.5rem;
+    margin-left: 0.6rem;
     text-align: left;
   }
 
   .brand-title {
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
     color: var(--primary);
-    line-height: 1.1;
+    line-height: 1;
     letter-spacing: 0.5px;
   }
 
   .brand-subtitle {
-    font-size: 0.45rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 500;
     color: var(--text-muted);
-    letter-spacing: 0.2px;
+    letter-spacing: 0.3px;
+    margin-top: 2px;
   }
 }
 

@@ -44,7 +44,11 @@
 @media (max-width: 768px) {
   .whatsapp-float {
     bottom: 80px;
-    right: 10px;
-    padding: 0.4rem 0.8rem;
+    right: 15px;
+    padding: 0.6rem;
+    border-radius: 50%;
+  }
+  .wa-text {
+    display: none;
   }
 }
