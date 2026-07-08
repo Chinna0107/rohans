@@ -163,7 +163,7 @@ const Products = () => {
           </select>
           {getCartCount() > 0 && (
             <button className="checkout-btn-top" onClick={() => navigate('/checkout')}>
-              🛒 Checkout ({getCartCount()})
+              🛍️ Checkout ({getCartCount()})
             </button>
           )}
         </div>
@@ -353,7 +353,7 @@ const Products = () => {
                         {activeStock === 0 ? (
                           <button className="add-to-cart out-of-stock-btn" disabled>✕ Out of Stock Check for other sizes</button>
                         ) : !isInCart(pid, currentWeight, activeColor) ? (
-                          <button className="add-to-cart" onClick={() => addToCart(pid, currentWeight, activeColor)}>Add to Cart</button>
+                          <button className="add-to-cart" onClick={() => addToCart(pid, currentWeight, activeColor)}>Add to Bag</button>
                         ) : (
                           <div className="quantity-control">
                             <button onClick={() => updateQuantity(pid, currentWeight, -1, activeColor)}>−</button>

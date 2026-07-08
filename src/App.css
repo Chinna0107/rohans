@@ -4,6 +4,47 @@
 
 @media (max-width: 1024px) {
   #root {
-    padding-top: 70px;
+    padding-top: calc(72px + env(safe-area-inset-top, 0px));
+  }
+}
+
+@media (max-width: 768px) {
+  #root {
+    padding-top: calc(67px + env(safe-area-inset-top, 0px));
+  }
+}
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 80px;
+  /* Above bottom nav */
+  right: 20px;
+  background: var(--primary-hover);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.whatsapp-float:hover {
+  transform: translateY(-5px);
+}
+
+.wa-text {
+  font-size: 0.7rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .whatsapp-float {
+    bottom: 80px;
+    right: 10px;
+    padding: 0.4rem 0.8rem;
   }
 }

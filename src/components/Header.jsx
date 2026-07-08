@@ -42,12 +42,22 @@ const Header = () => {
   return (
     <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="header-container">
+        {/* Mobile Menu Toggle (Left) */}
+        <button className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menu">
+          <span className={isMenuOpen ? 'open' : ''} />
+          <span className={isMenuOpen ? 'open' : ''} />
+          <span className={isMenuOpen ? 'open' : ''} />
+        </button>
         
         {/* Left: Brand Logo */}
         <div className="header-left">
           <Link to="/" className="brand-logo">
             <div className="brand-logo-circle">
               <img src={logo} alt="House of Ramya" className="brand-logo-img" />
+            </div>
+            <div className="brand-text hide-on-desktop">
+              <span className="brand-title">HOUSE OF RAMYA</span>
+              <span className="brand-subtitle">TIMELESS FASHION, TAILORED FOR YOU</span>
             </div>
 
           </Link>
@@ -138,22 +148,23 @@ const Header = () => {
             {customer?.wishlist?.length > 0 && <span className="cart-badge">{customer.wishlist.length}</span>}
           </Link>
 
-          {/* Cart Icon */}
-          <a href="#" className="icon-link cart-link" onClick={handleCartClick} title="Cart">
+          {/* Mobile Search Icon */}
+          <a href="#" className="icon-link search-link hide-on-desktop" onClick={(e) => { e.preventDefault(); navigate('/search'); setIsMenuOpen(false); }} title="Search">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <circle cx="9" cy="21" r="1"></circle>
-              <circle cx="20" cy="21" r="1"></circle>
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </a>
+
+          {/* Bag Icon */}
+          <a href="#" className="icon-link cart-link" onClick={handleCartClick} title="Bag">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
             </svg>
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </a>
-
-          {/* Mobile Menu Toggle */}
-          <button className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menu">
-            <span className={isMenuOpen ? 'open' : ''} />
-            <span className={isMenuOpen ? 'open' : ''} />
-            <span className={isMenuOpen ? 'open' : ''} />
-          </button>
         </div>
 
       </div>

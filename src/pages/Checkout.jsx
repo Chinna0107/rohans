@@ -7,7 +7,7 @@ import { MdArrowBack, MdLocalShipping, MdVerified, MdLock, MdDelete, MdCheckCirc
 import config from '../config';
 import './Checkout.css';
 
-const STEPS = ['Confirm Cart', 'Your Details', 'Payment'];
+const STEPS = ['Confirm Bag', 'Your Details', 'Payment'];
 
 const loadRazorpay = () =>
   new Promise(resolve => {
@@ -335,7 +335,7 @@ const Checkout = () => {
   // ── Empty Cart ──
   if (cartItems.length === 0 && allProducts.length > 0) return (
     <div className="co-empty">
-      <span>🛒</span><h2>Your cart is empty</h2>
+      <span>🛍️</span><h2>Your bag is empty</h2>
       <p>Looks like you haven't added anything yet.</p>
       <button onClick={() => navigate('/products')}>← Continue Shopping</button>
     </div>

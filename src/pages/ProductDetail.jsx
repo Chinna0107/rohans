@@ -12,6 +12,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import config from '../config';
 import { useUserAuth } from '../context/UserAuthContext';
+import sizeGuideImg from '../assets/Sizes.jpeg';
 import './ProductDetail.css';
 
 const TAG_LABELS = {
@@ -210,6 +211,10 @@ const ProductDetail = () => {
     .filter(p => p.category === product.category && String(p.id) !== String(product.id))
     .slice(0, 4);
 
+  const reviews = product.reviews || [];
+  const reviewCount = reviews.length;
+  const avgRating = reviewCount > 0 ? (reviews.reduce((acc, r) => acc + (r.rating || 5), 0) / reviewCount).toFixed(1) : 0;
+
   return (
     <>
     <div className="pd-page">
@@ -288,6 +293,17 @@ const ProductDetail = () => {
 
             <span className="pd-category-pill">{product.category}</span>
             <h1 className="pd-name">{product.name}</h1>
+            
+            {reviewCount > 0 && (
+              <div className="pd-rating-row" style={{ marginTop: '-0.5rem', marginBottom: '0.5rem' }}>
+                <div className="pd-stars">
+                  {'★'.repeat(Math.round(avgRating))}{'☆'.repeat(5 - Math.round(avgRating))}
+                </div>
+                <span className="pd-rating-val">{avgRating}</span>
+                <span className="pd-rating-count">({reviewCount} reviews)</span>
+                <a href="#reviews" className="pd-read-reviews" style={{ fontSize: '0.85rem', color: '#e1782d', textDecoration: 'underline' }}>Read reviews</a>
+              </div>
+            )}
 
             {/* Color Swatches */}
             {colors && colors.length > 1 && (
@@ -378,7 +394,7 @@ const ProductDetail = () => {
                 </button>
               ) : !isInCart(product.id, selectedSize, activeColor) ? (
                 <button className="pd-add-btn" onClick={() => addToCart(product.id, selectedSize, activeColor)}>
-                  🛒 Add to Cart
+                  🛍️ Add to Bag
                 </button>
               ) : (
                 <div className="pd-qty-control">
@@ -453,6 +469,62 @@ const ProductDetail = () => {
           </div>
         </div>
 
+        {/* Customer Reviews */}
+        <section id="reviews" className="pd-reviews-section">
+          <h2 className="pd-related-title">Customer <span>Reviews</span></h2>
+          {reviews.length > 0 ? (
+            <div className="pd-reviews-grid">
+              {reviews.map((r, i) => (
+                <div key={i} className="pd-review-card">
+                  <div className="pd-rev-header">
+                    <div className="pd-rev-user">
+                      <div className="pd-rev-avatar">{r.user ? r.user.charAt(0).toUpperCase() : 'U'}</div>
+                      <div>
+                        <h4>{r.user}</h4>
+                        <span className="pd-rev-date">{new Date(r.date || Date.now()).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    <div className="pd-rev-stars">
+                      {'★'.repeat(r.rating || 5)}{'☆'.repeat(5 - (r.rating || 5))}
+                    </div>
+                  </div>
+                  <p className="pd-rev-text">{r.comment}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="pd-no-reviews">No reviews yet.</p>
+          )}
+        </section>
+
+        {/* Customer Reviews */}
+        <section id="reviews" className="pd-reviews-section">
+          <h2 className="pd-related-title">Customer <span>Reviews</span></h2>
+          {reviews.length > 0 ? (
+            <div className="pd-reviews-grid">
+              {reviews.map((r, i) => (
+                <div key={i} className="pd-review-card">
+                  <div className="pd-rev-header">
+                    <div className="pd-rev-user">
+                      <div className="pd-rev-avatar">{r.user ? r.user.charAt(0).toUpperCase() : 'U'}</div>
+                      <div>
+                        <h4>{r.user}</h4>
+                        <span className="pd-rev-date">{new Date(r.date || Date.now()).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    <div className="pd-rev-stars">
+                      {'★'.repeat(r.rating || 5)}{'☆'.repeat(5 - (r.rating || 5))}
+                    </div>
+                  </div>
+                  <p className="pd-rev-text">{r.comment}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="pd-no-reviews">No reviews yet.</p>
+          )}
+        </section>
+
         {/* Related Products */}
         {related.length > 0 && (
           <section className="pd-related">
@@ -493,80 +565,9 @@ const ProductDetail = () => {
             <button className="sg-close" onClick={() => setShowSizeGuide(false)}>✕</button>
             <h2 className="sg-title">📏 Size Guide — {product.category}</h2>
 
-            {['Sandals', 'Shoes', 'Flip Flops'].includes(product.category) ? (
-              <>
-                <p className="sg-note">Measure your foot on a flat surface for the best fit. If between sizes, size up.</p>
-                <div className="sg-table-wrap">
-                  <table className="sg-table">
-                    <thead>
-                      <tr><th>UK</th><th>EU</th><th>US (M)</th><th>US (W)</th><th>Foot Length</th><th>Foot Width</th></tr>
-                    </thead>
-                    <tbody>
-                      {[
-                        ['UK 4',  'EU 37', 'US 5',  'US 6',  '22.5 cm', '8.5 cm'],
-                        ['UK 5',  'EU 38', 'US 6',  'US 7',  '23.5 cm', '8.8 cm'],
-                        ['UK 6',  'EU 39', 'US 7',  'US 8',  '24.5 cm', '9.0 cm'],
-                        ['UK 7',  'EU 40', 'US 8',  'US 9',  '25.5 cm', '9.3 cm'],
-                        ['UK 8',  'EU 41', 'US 9',  'US 10', '26.5 cm', '9.6 cm'],
-                        ['UK 9',  'EU 42', 'US 10', 'US 11', '27.5 cm', '9.8 cm'],
-                        ['UK 10', 'EU 43', 'US 11', 'US 12', '28.5 cm', '10.1 cm'],
-                        ['UK 11', 'EU 44', 'US 12', 'US 13', '29.5 cm', '10.3 cm'],
-                        ['UK 12', 'EU 45', 'US 13', 'US 14', '30.5 cm', '10.6 cm'],
-                      ].map(([uk, eu, usm, usw, len, wid]) => (
-                        <tr key={uk} className={selectedSize === uk ? 'sg-active' : ''}>
-                          <td><strong>{uk}</strong></td><td>{eu}</td><td>{usm}</td><td>{usw}</td><td>{len}</td><td>{wid}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="sg-how">
-                  <h4>How to Measure Your Foot</h4>
-                  <div className="sg-steps">
-                    <div className="sg-step"><span>1</span><p>Place a sheet of paper on the floor and stand on it.</p></div>
-                    <div className="sg-step"><span>2</span><p>Trace the outline of your foot with a pencil.</p></div>
-                    <div className="sg-step"><span>3</span><p>Measure the <strong>length</strong> from heel to longest toe.</p></div>
-                    <div className="sg-step"><span>4</span><p>Measure the <strong>width</strong> at the widest part of the foot.</p></div>
-                    <div className="sg-step"><span>5</span><p>Match measurements to the table above. Size up if between sizes.</p></div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="sg-note">All measurements are in inches. For a relaxed fit, size up.</p>
-                <div className="sg-table-wrap">
-                  <table className="sg-table">
-                    <thead>
-                      <tr><th>Size</th><th>Chest</th><th>Shoulder</th><th>Length</th><th>Sleeve</th><th>Waist</th><th>Hip</th></tr>
-                    </thead>
-                    <tbody>
-                      {[
-                        ['S',    '34–36"', '16"',   '27"', '24"', '28–30"', '36–38"'],
-                        ['M',    '38–40"', '17"',   '28"', '25"', '32–34"', '40–42"'],
-                        ['L',    '42–44"', '18"',   '29"', '26"', '36–38"', '44–46"'],
-                        ['XL',   '46–48"', '19"',   '30"', '27"', '40–42"', '48–50"'],
-                        ['XXL',  '50–52"', '20"',   '31"', '28"', '44–46"', '52–54"'],
-                        ['XXXL', '54–56"', '21"',   '32"', '29"', '48–50"', '56–58"'],
-                      ].map(([size, chest, shoulder, length, sleeve, waist, hip]) => (
-                        <tr key={size} className={selectedSize === size ? 'sg-active' : ''}>
-                          <td><strong>{size}</strong></td><td>{chest}</td><td>{shoulder}</td><td>{length}</td><td>{sleeve}</td><td>{waist}</td><td>{hip}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="sg-how">
-                  <h4>How to Measure</h4>
-                  <div className="sg-steps">
-                    <div className="sg-step"><span>1</span><p><strong>Chest:</strong> Measure around the fullest part of your chest, keeping tape horizontal.</p></div>
-                    <div className="sg-step"><span>2</span><p><strong>Shoulder:</strong> Measure from one shoulder seam to the other across the back.</p></div>
-                    <div className="sg-step"><span>3</span><p><strong>Length:</strong> Measure from the highest point of the shoulder down to the hem.</p></div>
-                    <div className="sg-step"><span>4</span><p><strong>Sleeve:</strong> Measure from shoulder seam to wrist with arm slightly bent.</p></div>
-                    <div className="sg-step"><span>5</span><p><strong>Waist:</strong> Measure around your natural waistline, keeping tape comfortably loose.</p></div>
-                  </div>
-                </div>
-              </>
-            )}
+            <div className="sg-image-wrap" style={{ padding: '1rem', textAlign: 'center' }}>
+              <img src={sizeGuideImg} alt="Size Guide" style={{ width: '100%', maxWidth: '600px', height: 'auto', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }} />
+            </div>
 
             <div className="sg-tip-box">
               💡 <strong>Pro Tip:</strong> If you're between sizes, we recommend sizing up for a more comfortable fit.

@@ -26,6 +26,7 @@ import FAQ from './pages/FAQ'
 import About from './pages/About'
 import Policies from './pages/Policies'
 import Search from './pages/Search'
+import { FaWhatsapp } from 'react-icons/fa';
 import './App.css'
 
 // Clear old localStorage product cache
@@ -98,6 +99,17 @@ function AppContent() {
       <AnimatedRoutes />
       {!isAdminRoute && <Footer />}
       {!isAdminRoute && <BottomNav />}
+      {!isAdminRoute && (
+        <a 
+          href="https://wa.me/" 
+          className="whatsapp-float"
+          target="_blank" 
+          rel="noopener noreferrer"
+        >
+          <FaWhatsapp size={24} />
+          <span className="wa-text">Discuss Customizations<br/>on WhatsApp</span>
+        </a>
+      )}
     </>
   );
 }

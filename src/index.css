@@ -1,15 +1,17 @@
 
 :root {
-  --primary: #000000;
-  --primary-light: #333333;
-  --accent: #FF4747; /* Coral/Red */
-  --accent-light: #FFEBEB;
-  --bg: #ffffff;
-  --bg-off: #f8f8f8;
-  --text-dark: #1a1a1a;
+  --primary: #7A2230;
+  --primary-hover: #5B1723;
+  --primary-light: #5B1723;
+  --accent: #C8A165;
+  --accent-light: #E8D9C4;
+  --bg: #FFF8F0;
+  --bg-off: #F8F2EA;
+  --card-bg: #FCFAF7;
+  --text-dark: #3A2E2A;
   --text-light: #ffffff;
-  --text-muted: #737373;
-  --border-subtle: #e5e5e5;
+  --text-muted: #7A6D66;
+  --border-subtle: #E8D9C4;
   
   --font-serif: 'Cinzel', serif;
   --font-sans: 'Jost', system-ui, -apple-system, sans-serif;
@@ -24,6 +26,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden;
+  overscroll-behavior-y: none;
   background: var(--bg);
   color: var(--text-dark);
   font-family: var(--font-sans);

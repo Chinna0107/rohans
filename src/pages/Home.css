@@ -445,6 +445,18 @@
     margin-top: 0 !important;
   }
 
+  .cat-img-wrapper {
+    width: 70px !important;
+    height: 70px !important;
+  }
+  .cat-item-circle {
+    min-width: 70px !important;
+    gap: 0.5rem !important;
+  }
+  .cat-item-circle h3 {
+    font-size: 0.65rem !important;
+  }
+
   .hero-content h1 {
     font-size: 2.5rem;
   }

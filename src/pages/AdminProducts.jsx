@@ -24,6 +24,7 @@ const INIT_FORM = {
   description: '', washingInstructions: '', tag: '',
   colors: [{ ...EMPTY_COLOR }],
   festiveSeason: false,
+  reviews: [],
 };
 
 const AdminProducts = () => {
@@ -145,7 +146,7 @@ const AdminProducts = () => {
       gender: product.gender || '', styleTags: product.styleTags || [],
       grams: product.grams || [], prices: product.prices || {},
       originalPrices: product.originalPrices || {},
-      description: product.description, washingInstructions: product.washing_instructions || '', tag: product.tag || '', stock: product.stock ?? '', festiveSeason: product.festiveSeason || false,
+      description: product.description, washingInstructions: product.washing_instructions || '', tag: product.tag || '', stock: product.stock ?? '', festiveSeason: product.festiveSeason || false, reviews: product.reviews || [],
       colors: product.colors?.length
         ? product.colors.map(c => ({ name: c.name || '', hex: c.hex || '#ffffff', images: c.images || ['','',''], stock: c.stock || {} }))
         : [{ name: '', hex: '#ffffff', images: product.images || ['','',''], stock: {} }],
@@ -178,6 +179,13 @@ const AdminProducts = () => {
       return { ...prev, grams: newGrams, prices: newPrices, originalPrices: newOriginalPrices };
     });
   };
+
+  const handleReviewAdd = () => setFormData(prev => ({ ...prev, reviews: [...(prev.reviews || []), { user: '', rating: 5, comment: '', date: new Date().toISOString() }] }));
+  const handleReviewRemove = (i) => setFormData(prev => ({ ...prev, reviews: (prev.reviews || []).filter((_, idx) => idx !== i) }));
+  const handleReviewUpdate = (i, field, value) => setFormData(prev => ({
+    ...prev,
+    reviews: (prev.reviews || []).map((r, idx) => idx === i ? { ...r, [field]: value } : r)
+  }));
 
   const addColor = () => setFormData(prev => ({ ...prev, colors: [...prev.colors, { ...EMPTY_COLOR }] }));
 
@@ -398,6 +406,20 @@ const AdminProducts = () => {
               )}
             </div>
             <div className="toolbar-right">
+              <button type="button" className="btn btn-secondary" onClick={async () => {
+                const token = localStorage.getItem('token');
+                if(!token) return;
+                try {
+                  toast.info('Seeding reviews...');
+                  for(let p of products) {
+                    if(!p.reviews || p.reviews.length === 0) {
+                      const dummyReviews = [{ user: 'Anita S.', rating: 5, comment: 'Absolutely love this product! The quality is amazing.', date: new Date().toISOString() }, { user: 'Priya M.', rating: 4, comment: 'Very nice, fits perfectly.', date: new Date().toISOString() }];
+                      await axios.put(`${config.API_URL}/api/products/${p.id || p._id}`, { ...p, reviews: dummyReviews }, { headers: { Authorization: `Bearer ${token}` } });
+                    }
+                  }
+                  toast.success('Reviews seeded!'); fetchProducts();
+                } catch(e) { toast.error('Failed to seed reviews.'); }
+              }}>Seed Reviews</button>
               <div className="toolbar-count">
                 Showing <strong>{sortedProducts.length}</strong> of <strong>{products.length}</strong>
               </div>
@@ -517,8 +539,36 @@ const AdminProducts = () => {
               <div className="form-field">
                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
                   <input type="checkbox" checked={formData.festiveSeason} onChange={e => setFormData({ ...formData, festiveSeason: e.target.checked })} />
-                  <span>Mark as Festive Season Collection</span>
+                  <label>Festive Season Collection</label>
                 </label>
+              </div>
+
+              {/* Reviews Section */}
+              <div className="form-section">
+                <div className="section-header">
+                  <h3>Customer Reviews</h3>
+                  <button type="button" className="add-btn" onClick={handleReviewAdd}>+ Add Review</button>
+                </div>
+                {formData.reviews && formData.reviews.length > 0 ? (
+                  <div className="reviews-list">
+                    {formData.reviews.map((rev, i) => (
+                      <div key={i} className="review-edit-box">
+                        <div className="review-edit-row">
+                          <input type="text" placeholder="Reviewer Name" value={rev.user} onChange={e => handleReviewUpdate(i, 'user', e.target.value)} required />
+                          <select value={rev.rating} onChange={e => handleReviewUpdate(i, 'rating', Number(e.target.value))}>
+                            <option value={5}>5 Stars</option>
+                            <option value={4}>4 Stars</option>
+                            <option value={3}>3 Stars</option>
+                            <option value={2}>2 Stars</option>
+                            <option value={1}>1 Star</option>
+                          </select>
+                          <button type="button" className="del-btn" onClick={() => handleReviewRemove(i)}>✕</button>
+                        </div>
+                        <textarea placeholder="Review Comment" value={rev.comment} onChange={e => handleReviewUpdate(i, 'comment', e.target.value)} required rows="2" />
+                      </div>
+                    ))}
+                  </div>
+                ) : <p className="no-colors-msg">No reviews added yet.</p>}
               </div>
 
               {/* Style Tags */}
@@ -908,8 +958,36 @@ const AdminProducts = () => {
                             <div className="form-field">
                               <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
                                 <input type="checkbox" checked={formData.festiveSeason} onChange={e => setFormData({ ...formData, festiveSeason: e.target.checked })} />
-                                <span>Mark as Festive Season Collection</span>
+                                <label>Festive Season Collection</label>
                               </label>
+                            </div>
+                            
+                            {/* Inline Reviews */}
+                            <div className="form-section inline-reviews">
+                              <div className="section-header">
+                                <h3>Customer Reviews</h3>
+                                <button type="button" className="add-btn" onClick={handleReviewAdd}>+ Add Review</button>
+                              </div>
+                              {formData.reviews && formData.reviews.length > 0 && (
+                                <div className="reviews-list inline">
+                                  {formData.reviews.map((rev, i) => (
+                                    <div key={i} className="review-edit-box">
+                                      <div className="review-edit-row">
+                                        <input type="text" placeholder="Reviewer Name" value={rev.user} onChange={e => handleReviewUpdate(i, 'user', e.target.value)} required />
+                                        <select value={rev.rating} onChange={e => handleReviewUpdate(i, 'rating', Number(e.target.value))}>
+                                          <option value={5}>5 Stars</option>
+                                          <option value={4}>4 Stars</option>
+                                          <option value={3}>3 Stars</option>
+                                          <option value={2}>2 Stars</option>
+                                          <option value={1}>1 Star</option>
+                                        </select>
+                                        <button type="button" className="del-btn" onClick={() => handleReviewRemove(i)}>✕</button>
+                                      </div>
+                                      <textarea placeholder="Review Comment" value={rev.comment} onChange={e => handleReviewUpdate(i, 'comment', e.target.value)} required rows="2" />
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                             </div>
 
                             <div className="form-field">

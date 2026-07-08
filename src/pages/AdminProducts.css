@@ -823,3 +823,36 @@
 .ac-modal-size-btn.active { border-color: var(--text-dark) !important; color: #fff !important; background: rgba(225,120,45,0.15) !important; }
 .ac-modal-size-qty { font-size: 0.68rem; color: #4ade80; font-weight: 800; }
 .ac-modal-size-qty.low { color: #f87171; }
+
+/* Reviews Edit Box */
+.review-edit-box {
+  background: rgba(0,0,0,0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.review-edit-row {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+.review-edit-row input, .review-edit-row select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,0.8);
+}
+.review-edit-row input { flex: 1; }
+.review-edit-box textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  font-family: inherit;
+  background: rgba(255,255,255,0.8);
+  resize: vertical;
+}
