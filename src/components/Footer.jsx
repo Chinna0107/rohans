@@ -11,7 +11,7 @@ const Footer = () => (
       <div className="footer-col brand-col">
         <h3 className="footer-brand">House of Ramya</h3>
         <p className="brand-bio">
-          Your premium fashion destination for sandals, shoes, flip flops, and editorial styles. Style that moves with you.
+          Your premium destination for stunning ethnic wear, elegant sarees, custom stitching, and intricate Maggam work.
         </p>
         <div className="social-icons">
           <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
@@ -25,10 +25,10 @@ const Footer = () => (
         <h4>Shop</h4>
         <ul>
           <li><Link to="/products">All Collections</Link></li>
-          <li><Link to="/products" state={{ category: 'Men' }}>Men's Wear</Link></li>
-          <li><Link to="/products" state={{ category: 'Women' }}>Women's Wear</Link></li>
-          <li><Link to="/products" state={{ category: 'Accessories' }}>Accessories</Link></li>
-          <li><Link to="/products" state={{ category: 'Shoes' }}>Footwear</Link></li>
+          <li><Link to="/products" state={{ category: 'Sarees' }}>Premium Sarees</Link></li>
+          <li><Link to="/products" state={{ category: 'Kurties' }}>Designer Kurties</Link></li>
+          <li><Link to="/products" state={{ category: 'Maggam Work' }}>Maggam Work</Link></li>
+          <li><Link to="/products" state={{ category: 'Custom Stitching' }}>Custom Stitching</Link></li>
         </ul>
       </div>
 

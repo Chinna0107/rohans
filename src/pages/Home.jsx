@@ -309,12 +309,12 @@ const Home = () => {
         <div className="marquee-wrapper">
           <div className="testimonials-marquee">
             {[
-              { name: 'Rahul M.', text: '"House of Ramya has the best sandals! Super comfortable and stylish."' },
-              { name: 'Priya S.', text: '"Ordered tshirts and track pants — amazing quality and fast delivery."' },
-              { name: 'Arjun K.', text: '"Best shoes at this price range. Will definitely order again!"' },
-              { name: 'Rahul M.', text: '"House of Ramya has the best sandals! Super comfortable and stylish."' },
-              { name: 'Priya S.', text: '"Ordered tshirts and track pants — amazing quality and fast delivery."' },
-              { name: 'Arjun K.', text: '"Best shoes at this price range. Will definitely order again!"' },
+              { name: 'Anjali R.', text: 'The Maggam work on my blouse was incredibly detailed and perfect. Truly exquisite craftsmanship!' },
+              { name: 'Priya S.', text: 'I ordered a premium saree for a wedding, and the fabric quality is simply outstanding.' },
+              { name: 'Divya K.', text: 'The custom stitching for my kurti fit flawlessly. House of Ramya never disappoints!' },
+              { name: 'Anjali R.', text: 'The Maggam work on my blouse was incredibly detailed and perfect. Truly exquisite craftsmanship!' },
+              { name: 'Priya S.', text: 'I ordered a premium saree for a wedding, and the fabric quality is simply outstanding.' },
+              { name: 'Divya K.', text: 'The custom stitching for my kurti fit flawlessly. House of Ramya never disappoints!' },
             ].map((t, i) => (
               <div key={i} className="luxury-review-card">
                 <div className="stars">{[...Array(5)].map((_, j) => <MdStar key={j} />)}</div>

@@ -1,0 +1,32 @@
+.top-banner {
+  background-color: var(--primary);
+  color: var(--text-light);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 8px 0;
+  position: relative;
+  z-index: 1001;
+  width: 100%;
+}
+
+
+.top-banner-content {
+  display: inline-block;
+  animation: scroll-banner 20s linear infinite;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+@keyframes scroll-banner {
+  0% {
+    transform: translateX(100vw);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.top-banner:hover .top-banner-content {
+  animation-play-state: paused;
+}

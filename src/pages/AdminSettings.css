@@ -1,0 +1,63 @@
+.settings-container {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.settings-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.settings-form label {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.settings-form .form-control {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+}
+
+.settings-form .form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.settings-form .form-text {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.save-btn {
+  background: var(--primary);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.3s ease;
+}
+
+.save-btn:hover {
+  background: var(--primary-hover);
+}
+
+.save-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

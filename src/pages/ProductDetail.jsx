@@ -4,9 +4,10 @@ import { useCart } from '../context/CartContext';
 import {
   MdStar, MdStarHalf, MdLocalShipping, MdVerified,
   MdArrowBack, MdShare, MdFavorite, MdFavoriteBorder,
-  MdZoomIn, MdCheckCircle, MdSwapHoriz
+  MdZoomIn, MdCheckCircle, MdSwapHoriz,
+  MdKeyboardArrowDown, MdKeyboardArrowUp
 } from 'react-icons/md';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import useProducts from '../hooks/useProducts';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -91,7 +92,7 @@ const ProductDetail = () => {
   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
   const [wishlisted, setWishlisted] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [tab, setTab] = useState('desc');
+  const [openSection, setOpenSection] = useState('desc'); // Accordion state
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const imgRef = useRef(null);
 
@@ -107,7 +108,7 @@ const ProductDetail = () => {
       setSelectedSize(sortedSizes[0] || '');
       setActiveColorIdx(0);
       setActiveImg(0);
-      setTab('desc');
+      setOpenSection('desc');
     }
   }, [allProducts, id]);
 
@@ -410,12 +411,38 @@ const ProductDetail = () => {
               </button>
             </div>
             
-            <button 
-              className="pd-whatsapp-customization-btn" 
-              onClick={() => window.open(`https://wa.me/918897030909?text=Hi, I would like to discuss customizations for ${product.name}`, '_blank')}
-            >
-              <FaWhatsapp style={{ fontSize: '1.2rem' }} /> Discuss customizations on WhatsApp here
-            </button>
+            <div className="pd-customizations">
+              <div className="pd-custom-header">
+                <span className="pd-custom-ornament">✦</span>
+                <div className="pd-custom-titles">
+                  <h3>DISCUSS CUSTOMIZATIONS</h3>
+                  <p>Connect with our designer for any custom requests.</p>
+                </div>
+                <span className="pd-custom-ornament">✦</span>
+              </div>
+              <div className="pd-social-msgs">
+                <button 
+                  className="pd-whatsapp-customization-btn" 
+                  onClick={() => window.open(`https://wa.me/918897030909?text=Hi, I would like to discuss customizations for ${product.name}`, '_blank')}
+                >
+                  <FaWhatsapp className="pd-social-icon" />
+                  <div className="pd-social-text">
+                    <strong>Chat on WhatsApp</strong>
+                    <span>Discuss on WhatsApp</span>
+                  </div>
+                </button>
+                <button 
+                  className="pd-instagram-customization-btn" 
+                  onClick={() => window.open(`https://instagram.com/houseoframya`, '_blank')}
+                >
+                  <FaInstagram className="pd-social-icon ig-icon" />
+                  <div className="pd-social-text">
+                    <strong>Message on Instagram</strong>
+                    <span>DM us on Instagram</span>
+                  </div>
+                </button>
+              </div>
+            </div>
 
             {/* Delivery info strip */}
             <div className="pd-delivery-strip">
@@ -433,67 +460,58 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Tabs */}
-            <div className="pd-tabs">
-              <button className={`pd-tab ${tab === 'desc' ? 'active' : ''}`} onClick={() => setTab('desc')}>Description</button>
-              <button className={`pd-tab ${tab === 'details' ? 'active' : ''}`} onClick={() => setTab('details')}>Details</button>
-              <button className={`pd-tab ${tab === 'washing' ? 'active' : ''}`} onClick={() => setTab('washing')}>🧺 Washing Instructions</button>
-            </div>
-            <div className="pd-tab-content">
-              {tab === 'desc' && (
-                <p className="pd-desc">{product.description || 'No description available.'}</p>
-              )}
-              {tab === 'details' && (
-                <div className="pd-details-table">
-                  <div className="pd-detail-row"><span>Category</span><span>{product.category}</span></div>
-                  {product.gender && <div className="pd-detail-row"><span>Gender</span><span>{product.gender}</span></div>}
-                  {colors && <div className="pd-detail-row"><span>Colors</span><span>{colors.map(c => c.name).filter(Boolean).join(', ') || colors.length + ' colors'}</span></div>}
-                  {product.styleTags?.length > 0 && <div className="pd-detail-row"><span>Style</span><span>{product.styleTags.join(', ')}</span></div>}
-                  <div className="pd-detail-row"><span>Available Sizes</span><span>{sizes.join(', ')}</span></div>
-                  <div className="pd-detail-row"><span>Tag</span><span>{TAG_LABELS[product.tag] || '—'}</span></div>
-                  <div className="pd-detail-row"><span>SKU</span><span>AZ-{String(product.id).padStart(4, '0')}</span></div>
-                </div>
-              )}
-              {tab === 'washing' && (
-                <div className="pd-washing-instructions">
-                  {product.washing_instructions ? (
-                    <p className="pd-desc">{product.washing_instructions}</p>
-                  ) : (
-                    <p className="pd-desc" style={{ opacity: 0.6 }}>No washing instructions provided for this item.</p>
-                  )}
-                </div>
-              )}
+            {/* Accordions */}
+            <div className="pd-accordions">
+              <div className="pd-accordion-item">
+                <button className="pd-accordion-header" onClick={() => setOpenSection(openSection === 'desc' ? null : 'desc')}>
+                  <span>Description</span>
+                  <span className="pd-accordion-icon">{openSection === 'desc' ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}</span>
+                </button>
+                {openSection === 'desc' && (
+                  <div className="pd-accordion-content">
+                    <p className="pd-desc">{product.description || 'No description available.'}</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="pd-accordion-item">
+                <button className="pd-accordion-header" onClick={() => setOpenSection(openSection === 'details' ? null : 'details')}>
+                  <span>Details</span>
+                  <span className="pd-accordion-icon">{openSection === 'details' ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}</span>
+                </button>
+                {openSection === 'details' && (
+                  <div className="pd-accordion-content">
+                    <div className="pd-details-table">
+                      <div className="pd-detail-row"><span>Category</span><span>{product.category}</span></div>
+                      {product.gender && <div className="pd-detail-row"><span>Gender</span><span>{product.gender}</span></div>}
+                      {colors && <div className="pd-detail-row"><span>Colors</span><span>{colors.map(c => c.name).filter(Boolean).join(', ') || colors.length + ' colors'}</span></div>}
+                      {product.styleTags?.length > 0 && <div className="pd-detail-row"><span>Style</span><span>{product.styleTags.join(', ')}</span></div>}
+                      <div className="pd-detail-row"><span>Available Sizes</span><span>{sizes.join(', ')}</span></div>
+                      <div className="pd-detail-row"><span>Tag</span><span>{TAG_LABELS[product.tag] || '—'}</span></div>
+                      <div className="pd-detail-row"><span>SKU</span><span>AZ-{String(product.id).padStart(4, '0')}</span></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="pd-accordion-item">
+                <button className="pd-accordion-header" onClick={() => setOpenSection(openSection === 'washing' ? null : 'washing')}>
+                  <span>🧺 Washing Instructions</span>
+                  <span className="pd-accordion-icon">{openSection === 'washing' ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}</span>
+                </button>
+                {openSection === 'washing' && (
+                  <div className="pd-accordion-content">
+                    {product.washing_instructions ? (
+                      <p className="pd-desc">{product.washing_instructions}</p>
+                    ) : (
+                      <p className="pd-desc" style={{ opacity: 0.6 }}>No washing instructions provided for this item.</p>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Customer Reviews */}
-        <section id="reviews" className="pd-reviews-section">
-          <h2 className="pd-related-title">Customer <span>Reviews</span></h2>
-          {reviews.length > 0 ? (
-            <div className="pd-reviews-grid">
-              {reviews.map((r, i) => (
-                <div key={i} className="pd-review-card">
-                  <div className="pd-rev-header">
-                    <div className="pd-rev-user">
-                      <div className="pd-rev-avatar">{r.user ? r.user.charAt(0).toUpperCase() : 'U'}</div>
-                      <div>
-                        <h4>{r.user}</h4>
-                        <span className="pd-rev-date">{new Date(r.date || Date.now()).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                    <div className="pd-rev-stars">
-                      {'★'.repeat(r.rating || 5)}{'☆'.repeat(5 - (r.rating || 5))}
-                    </div>
-                  </div>
-                  <p className="pd-rev-text">{r.comment}</p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="pd-no-reviews">No reviews yet.</p>
-          )}
-        </section>
 
         {/* Customer Reviews */}
         <section id="reviews" className="pd-reviews-section">
@@ -561,7 +579,7 @@ const ProductDetail = () => {
         <div className="sg-overlay" onClick={() => setShowSizeGuide(false)}>
           <div className="sg-modal" onClick={e => e.stopPropagation()}>
             <button className="sg-close" onClick={() => setShowSizeGuide(false)}>✕</button>
-            <h2 className="sg-title">📏 Size Guide — {product.category}</h2>
+            <h2 className="sg-title">📏 Size Guide — </h2>
 
             <div className="sg-image-wrap" style={{ padding: '1rem', textAlign: 'center' }}>
               <img src={sizeGuideImg} alt="Size Guide" style={{ width: '100%', maxWidth: '600px', height: 'auto', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }} />

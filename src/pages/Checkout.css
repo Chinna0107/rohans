@@ -204,7 +204,7 @@
 /* ── Step Actions ── */
 .co-step-actions {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;
+  gap: 1.5rem; flex-wrap: wrap; margin-top: 2.5rem;
 }
 
 .co-back-btn {
@@ -406,7 +406,7 @@
   .co-summary-bar { flex-direction: column; align-items: flex-start; }
   .co-step-label { display: none; }
   .co-step-line { width: 28px; }
-  .co-step-actions { flex-direction: column-reverse; }
+  .co-step-actions { flex-direction: column-reverse; gap: 1.5rem; }
   .co-next-btn, .co-back-btn { width: 100%; justify-content: center; }
 }
 
@@ -586,8 +586,8 @@
 }
 .co-coupon-row input {
   flex: 1; padding: 0.7rem 1rem;
-  background: rgba(0,0,0,0.03);
-  border: 1px solid rgba(0,0,0,0.12);
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.25);
   border-radius: 10px; color: #111;
   font-size: 0.9rem; font-family: inherit;
   letter-spacing: 1px; text-transform: uppercase;

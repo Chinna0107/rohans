@@ -1,18 +1,17 @@
 #root {
-  padding-top: 130px;
+  /* padding handled by natural document flow */
 }
 
 @media (max-width: 1024px) {
   #root {
-    padding-top: calc(72px + env(safe-area-inset-top, 0px));
   }
 }
 
 @media (max-width: 768px) {
   #root {
-    padding-top: calc(67px + env(safe-area-inset-top, 0px));
   }
 }
+
 
 .whatsapp-float {
   position: fixed;

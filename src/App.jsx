@@ -20,13 +20,16 @@ import AdminSliders from './pages/AdminSliders'
 import AdminOrders from './pages/AdminOrders'
 import AdminCoupons from './pages/AdminCoupons'
 import AdminCategories from './pages/AdminCategories'
+import AdminSettings from './pages/AdminSettings'
 import NotFound from './pages/NotFound'
 import Contact from './pages/Contact'
 import FAQ from './pages/FAQ'
 import About from './pages/About'
 import Policies from './pages/Policies'
 import Search from './pages/Search'
+import TopBanner from './components/TopBanner'
 import { FaWhatsapp } from 'react-icons/fa';
+
 import './App.css'
 
 // Clear old localStorage product cache
@@ -59,6 +62,7 @@ function AnimatedRoutes() {
         <Route path="/admin/coupons" element={<PageWrapper><AdminCoupons /></PageWrapper>} />
         <Route path="/admin/sliders" element={<PageWrapper><AdminSliders /></PageWrapper>} />
         <Route path="/admin/categories" element={<PageWrapper><AdminCategories /></PageWrapper>} />
+        <Route path="/admin/settings" element={<PageWrapper><AdminSettings /></PageWrapper>} />
         <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
         <Route path="/faq" element={<PageWrapper><FAQ /></PageWrapper>} />
         <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
@@ -95,7 +99,10 @@ function AppContent() {
   return (
     <>
       <ScrollToTop />
-      {!isAdminRoute && <Header />}
+      <div className="sticky-header-wrapper" style={{ position: 'sticky', top: 0, zIndex: 1000, width: '100%', display: 'flex', flexDirection: 'column' }}>
+        {!isAdminRoute && <TopBanner />}
+        {!isAdminRoute && <Header />}
+      </div>
       <AnimatedRoutes />
       {!isAdminRoute && <Footer />}
       {!isAdminRoute && <BottomNav />}

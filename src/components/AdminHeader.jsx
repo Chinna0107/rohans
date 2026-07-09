@@ -56,6 +56,12 @@ const AdminHeader = () => {
         >
           🖼️ Sliders
         </button>
+        <button
+          className={`admin-nav-btn ${isActive('/admin/settings') ? 'active' : ''}`}
+          onClick={() => navigate('/admin/settings')}
+        >
+          ⚙️ Settings
+        </button>
         <button className="admin-nav-btn" onClick={() => navigate('/')}>
           🏪 View Store
         </button>
