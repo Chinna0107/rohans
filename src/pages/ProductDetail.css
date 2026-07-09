@@ -461,7 +461,8 @@
 }
 
 @media (max-width: 900px) {
-  .pd-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .pd-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .pd-info { gap: 1rem; }
   .pd-images { flex-direction: column-reverse; }
   .pd-thumbs-col { flex-direction: row; overflow-x: auto; }
   .pd-thumb { flex-shrink: 0; }
@@ -473,7 +474,10 @@
 
 @media (max-width: 600px) {
   .pd-container { padding: 0 1rem; }
+  .pd-grid { gap: 1.2rem; }
+  .pd-info { gap: 0.85rem; }
   .pd-name { font-size: 1.6rem; }
+  .pd-colors { margin-top: -0.5rem; }
   .pd-sale-price { font-size: 1.9rem; }
   .pd-cart-row { flex-direction: column; }
   .pd-add-btn, .pd-buy-btn { min-width: unset; }
@@ -507,10 +511,10 @@
 }
 
 .pd-color-label {
-  font-size: 0.85rem; color: rgba(255,255,255,0.55);
+  font-size: 0.85rem; color: var(--text-muted);
   font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
 }
-.pd-color-label strong { color: #fff; text-transform: none; letter-spacing: 0; }
+.pd-color-label strong { color: var(--text-dark); text-transform: none; letter-spacing: 0; }
 
 .pd-color-swatches { display: flex; gap: 0.6rem; flex-wrap: wrap; }
 
