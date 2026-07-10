@@ -63,8 +63,10 @@ const Footer = () => (
         <p>&copy; {new Date().getFullYear()} House of Ramya. All rights reserved.</p>
         <ul className="policy-links">
           <li><Link to="/privacy-policy">Privacy Policy</Link></li>
-          <li><Link to="/terms">Terms of Service</Link></li>
-          <li><Link to="/privacy-policy">Cookie Policy</Link></li>
+          <li><Link to="/terms">Terms & Conditions</Link></li>
+          <li><Link to="/refund-policy">Refund Policy</Link></li>
+          <li><Link to="/cancellation-policy">Cancellation Policy</Link></li>
+          <li><Link to="/shipping-policy">Shipping Policy</Link></li>
         </ul>
       </div>
     </div>

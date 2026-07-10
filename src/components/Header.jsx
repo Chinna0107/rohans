@@ -43,7 +43,7 @@ const Header = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+      navigate('/search', { state: { query: searchQuery.trim() } });
       setIsMenuOpen(false);
       setSearchQuery('');
     }

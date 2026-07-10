@@ -140,3 +140,17 @@
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .admin-page { padding: 2rem 2rem 6rem 2rem; }
+}
+@media (max-width: 768px) {
+  .admin-page { padding: 2rem 1rem 6rem 1rem; }
+  .ad-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .ad-stat-card { padding: 0.75rem; flex-direction: column; text-align: center; gap: 0.5rem; }
+  .ad-stat-icon { width: 36px; height: 36px; font-size: 1.2rem; }
+  .ad-stat-info h3 { font-size: 1rem; }
+  .ad-stat-info p { font-size: 0.65rem; }
+  .ad-table-wrap { overflow-x: auto; display: block; white-space: nowrap; }
+}

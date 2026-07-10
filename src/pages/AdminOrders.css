@@ -351,16 +351,25 @@
 
 /* Responsive */
 @media (max-width: 1100px) { .ao-stats { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 900px) {
+  .admin-page { padding: 2rem 2rem 6rem 2rem; }
+}
 @media (max-width: 768px) {
+  .admin-page { padding: 2rem 1rem 6rem 1rem; }
   .ao-stats { grid-template-columns: repeat(2, 1fr); }
-  .ao-table-wrap { overflow-x: auto; }
+  .ao-table-wrap { overflow-x: auto; display: block; }
   .ao-table { white-space: nowrap; font-size: 0.82rem; }
   .ao-modal-grid { grid-template-columns: 1fr; }
   .ao-pipeline { gap: 0.35rem; }
   .ao-pipe-line { width: 16px; }
+  .ao-search-wrap input { min-width: 100%; width: 100%; }
 }
 @media (max-width: 480px) {
-  .ao-stats { grid-template-columns: 1fr 1fr; }
+  .ao-stats { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .ao-stat-card { padding: 0.75rem; }
+  .ao-stat-card > span { font-size: 1.4rem; }
+  .ao-stat-card h3 { font-size: 1.2rem; }
+  .ao-stat-card p { font-size: 0.65rem; }
   .ao-stage-tabs { gap: 0.35rem; }
   .ao-stage-tab { font-size: 0.78rem; padding: 0.5rem 0.85rem; }
 }

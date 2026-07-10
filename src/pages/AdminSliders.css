@@ -105,8 +105,15 @@
   .slider-form { grid-template-columns: 1fr 1fr; }
 }
 
+@media (max-width: 900px) {
+  .admin-page { padding: 2rem 2rem 6rem 2rem; }
+}
+
 @media (max-width: 768px) {
+  .admin-page { padding: 2rem 1rem 6rem 1rem; }
   .slider-form { grid-template-columns: 1fr; padding: 1.25rem; }
   .sliders-grid { grid-template-columns: 1fr; gap: 1rem; }
   .slider-info { padding: 1rem; }
+  .form-actions { display: flex; flex-direction: column; width: 100%; }
+  .form-actions button { width: 100%; margin-bottom: 0.5rem; }
 }

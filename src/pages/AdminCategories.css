@@ -152,3 +152,14 @@
   color: var(--text-muted);
   font-style: italic;
 }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .admin-page { padding: 2rem 2rem 6rem 2rem; }
+}
+@media (max-width: 768px) {
+  .admin-page { padding: 2rem 1rem 6rem 1rem; }
+  .cat-form-card, .cat-list-card { padding: 1.5rem; }
+  .cat-grid { grid-template-columns: 1fr; }
+  .submit-btn { width: 100%; margin-top: 1rem; }
+}

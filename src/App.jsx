@@ -74,6 +74,7 @@ function AnimatedRoutes() {
         <Route path="/privacy-policy" element={<PageWrapper><Policies /></PageWrapper>} />
         <Route path="/shipping-policy" element={<PageWrapper><Policies /></PageWrapper>} />
         <Route path="/refund-policy" element={<PageWrapper><Policies /></PageWrapper>} />
+        <Route path="/cancellation-policy" element={<PageWrapper><Policies /></PageWrapper>} />
         <Route path="/terms" element={<PageWrapper><Policies /></PageWrapper>} />
         <Route path="/search" element={<PageWrapper><Search /></PageWrapper>} />
         <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
@@ -117,7 +118,7 @@ function AppContent() {
       {!isAdminRoute && <BottomNav />}
       {!isAdminRoute && (
         <a 
-          href="https://wa.me/" 
+          href="https://wa.me/918897030909" 
           className="whatsapp-float"
           target="_blank" 
           rel="noopener noreferrer"

@@ -1,6 +1,6 @@
 .policy-page {
   min-height: 100vh;
-  padding: 100px 2rem 5rem;
+  padding: 2rem 2rem 5rem;
 }
 
 .policy-container {
@@ -22,7 +22,7 @@
 .policy-nav h4 {
   font-size: 0.75rem;
   font-weight: 800;
-  color: rgba(255,255,255,0.4);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin: 0 0 1rem;
@@ -40,21 +40,21 @@
   border-radius: 10px;
   font-size: 0.88rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.55);
+  color: var(--text-dark);
   text-decoration: none;
   transition: all 0.2s ease;
   border: 1px solid transparent;
 }
 
 .policy-nav a:hover {
-  color: #fff;
-  background: rgba(225,120,45,0.1);
+  color: var(--primary);
+  background: var(--bg-off);
 }
 
 .policy-nav a.active {
-  color: #e1782d;
-  background: rgba(225,120,45,0.12);
-  border-color: rgba(225,120,45,0.25);
+  color: var(--primary);
+  background: var(--bg-off);
+  border-color: var(--border-subtle);
 }
 
 /* ── Content ── */
@@ -65,13 +65,13 @@
 .policy-content h1 {
   font-size: 2rem;
   font-weight: 900;
-  color: #fff;
+  color: var(--primary);
   margin: 0 0 0.4rem;
 }
 
 .policy-updated {
   font-size: 0.8rem;
-  color: rgba(255,255,255,0.35);
+  color: var(--text-muted);
   margin: 0 0 2.5rem;
 }
 
@@ -83,7 +83,7 @@
 
 .policy-section {
   padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid var(--border-subtle);
 }
 .policy-section:last-child {
   border-bottom: none;
@@ -93,25 +93,23 @@
 .policy-section h2 {
   font-size: 1.05rem;
   font-weight: 800;
-  color: #e1782d;
+  color: var(--primary);
   margin: 0 0 0.65rem;
 }
 
 .policy-section p {
   font-size: 0.93rem;
-  color: rgba(255,255,255,0.65);
+  color: var(--text-dark);
   line-height: 1.8;
   margin: 0;
 }
 
 /* ── Glass ── */
 .glass {
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(180,30,30,0.12);
+  box-shadow: var(--shadow-subtle);
 }
 
 /* ── Responsive ── */
@@ -135,6 +133,6 @@
 }
 
 @media (max-width: 480px) {
-  .policy-page { padding: 90px 1rem 4rem; }
+  .policy-page { padding: 1rem 1rem 4rem; }
   .policy-content { padding: 1.25rem; }
 }

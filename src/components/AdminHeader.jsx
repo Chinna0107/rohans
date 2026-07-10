@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FiBarChart2, FiUsers, FiBox, FiClipboard, FiTag, FiFolder, FiImage, FiSettings, FiShoppingBag, FiLogOut } from 'react-icons/fi';
 import logo from '../assets/logo.jpeg';
 import './AdminHeader.css';
 
@@ -36,52 +37,52 @@ const AdminHeader = () => {
           className={`admin-nav-btn ${isActive('/admin') || isActive('/admin/dashboard') ? 'active' : ''}`}
           onClick={() => navigate('/admin')}
         >
-          📊 Dashboard
+          <FiBarChart2 /> Dashboard
         </button>
         <button
           className={`admin-nav-btn ${isActive('/admin/customers') ? 'active' : ''}`}
           onClick={() => navigate('/admin/customers')}
         >
-          👥 Customers
+          <FiUsers /> Customers
         </button>
         <button
           className={`admin-nav-btn ${isActive('/admin/products') ? 'active' : ''}`}
           onClick={() => navigate('/admin/products')}
         >
-          📦 Products
+          <FiBox /> Products
         </button>
         <button
           className={`admin-nav-btn ${isActive('/admin/orders') ? 'active' : ''}`}
           onClick={() => navigate('/admin/orders')}
         >
-          🧾 Orders
+          <FiClipboard /> Orders
         </button>
         <button
           className={`admin-nav-btn ${isActive('/admin/coupons') ? 'active' : ''}`}
           onClick={() => navigate('/admin/coupons')}
         >
-          🏷️ Coupons
+          <FiTag /> Coupons
         </button>
         <button
           className={`admin-nav-btn ${isActive('/admin/categories') ? 'active' : ''}`}
           onClick={() => navigate('/admin/categories')}
         >
-          🗂️ Categories
+          <FiFolder /> Categories
         </button>
         <button
           className={`admin-nav-btn ${isActive('/admin/sliders') ? 'active' : ''}`}
           onClick={() => navigate('/admin/sliders')}
         >
-          🖼️ Sliders
+          <FiImage /> Sliders
         </button>
         <button
           className={`admin-nav-btn ${isActive('/admin/settings') ? 'active' : ''}`}
           onClick={() => navigate('/admin/settings')}
         >
-          ⚙️ Settings
+          <FiSettings /> Settings
         </button>
         <button className="admin-nav-btn" onClick={() => navigate('/')}>
-          🏪 View Store
+          <FiShoppingBag /> View Store
         </button>
       </nav>
 
@@ -91,7 +92,7 @@ const AdminHeader = () => {
           <span>{user.email || 'Admin'}</span>
         </div>
         <button className="admin-logout-btn" onClick={handleLogout}>
-          🚪 Logout
+          <FiLogOut /> Logout
         </button>
       </div>
     </aside>

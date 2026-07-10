@@ -10,7 +10,7 @@ const Contact = () => {
     const email = e.target.email.value;
     const message = e.target.message.value;
     // Sending to one of the contact numbers provided
-    window.open(`https://wa.me/918008007884?text=Name: ${name}%0AEmail: ${email}%0AMessage: ${message}`, '_blank');
+    window.open(`https://wa.me/918885553249?text=Name: ${name}%0AEmail: ${email}%0AMessage: ${message}`, '_blank');
     toast.success('Redirecting to WhatsApp...');
     e.target.reset();
   };
@@ -47,8 +47,8 @@ const Contact = () => {
                 <span className="info-icon">📞</span>
                 <div>
                   <h3>Phone</h3>
-                  <p><motion.a href="tel:+918008007884" style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }} whileHover={{ scale: 1.05, color: '#000' }}>+91 8008007884</motion.a></p>
-                  <p><motion.a href="https://wa.me/918897030909" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }} whileHover={{ scale: 1.05, color: '#25D366' }}>+91 8897030909 (WhatsApp)</motion.a></p>
+                  <p><motion.a href="tel:+918885553249" style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }} whileHover={{ scale: 1.05, color: '#000' }}>+91 8885553249</motion.a></p>
+                  <p><motion.a href="https://wa.me/918885553249" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }} whileHover={{ scale: 1.05, color: '#25D366' }}>+91 8885553249 (WhatsApp)</motion.a></p>
                 </div>
               </div>
 

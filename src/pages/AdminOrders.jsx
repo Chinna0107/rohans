@@ -16,16 +16,18 @@ const STAGES = [
   { key: 'all',        label: 'All Orders',  icon: '📋' },
   { key: 'pending',    label: 'Pending',      icon: '⏳' },
   { key: 'confirmed',  label: 'Confirmed',    icon: '✅' },
+  { key: 'packing',    label: 'Packing',      icon: '🛍️' },
   { key: 'dispatched', label: 'Dispatched',   icon: '🚚' },
   { key: 'delivered',  label: 'Delivered',    icon: '📦' },
   { key: 'cancelled',  label: 'Cancelled',    icon: '❌' },
 ];
 
-const STAGE_FLOW = ['pending', 'confirmed', 'dispatched', 'delivered'];
+const STAGE_FLOW = ['pending', 'confirmed', 'packing', 'dispatched', 'delivered'];
 
 const STATUS_COLORS = {
   pending:    { bg: 'rgba(240,165,75,0.15)',  border: 'rgba(240,165,75,0.35)',  color: '#f0a54b' },
   confirmed:  { bg: 'rgba(74,222,128,0.12)',  border: 'rgba(74,222,128,0.3)',   color: '#4ade80' },
+  packing:    { bg: 'rgba(251,191,36,0.12)',  border: 'rgba(251,191,36,0.3)',   color: '#fbbf24' },
   dispatched: { bg: 'rgba(96,165,250,0.12)',  border: 'rgba(96,165,250,0.3)',   color: '#60a5fa' },
   delivered:  { bg: 'rgba(167,139,250,0.12)', border: 'rgba(167,139,250,0.3)',  color: '#a78bfa' },
   cancelled:  { bg: 'rgba(248,113,113,0.12)', border: 'rgba(248,113,113,0.3)',  color: '#f87171' },
@@ -271,6 +273,7 @@ const AdminOrders = () => {
                             >
                               <option value="pending" disabled>Pending</option>
                               <option value="confirmed">Confirmed</option>
+                              <option value="packing">Packing</option>
                               <option value="dispatched">Dispatched</option>
                               <option value="delivered">Delivered</option>
                               <option value="cancelled">Cancelled</option>
