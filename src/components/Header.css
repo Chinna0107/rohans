@@ -47,40 +47,58 @@
 }
 
 .brand-logo-circle {
-  width: 150px;
-  height: 150px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
   background: #fff;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.45),
-    0 0 0 2px rgba(255, 255, 255, 0.15),
-    0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   margin: 0;
-  margin-bottom: -35px;
-  transition: box-shadow 0.35s ease, transform 0.35s ease;
+  transition: transform 0.3s ease;
   flex-shrink: 0;
-  position: relative;
-  z-index: 10;
-  transform: translateY(10px);
 }
 
 .brand-logo:hover .brand-logo-circle {
-  box-shadow:
-    0 14px 48px rgba(0, 0, 0, 0.55),
-    0 0 0 4px rgba(255, 255, 255, 0.3);
-  transform: translateY(10px) scale(1.07);
+  transform: scale(1.05);
 }
 
 .brand-logo-img {
-  height: 136px;
-  width: 136px;
+  height: 65px;
+  width: 65px;
   object-fit: contain;
   border-radius: 50%;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-left: 1.5rem;
+  white-space: nowrap;
+}
+
+.brand-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--primary);
+  line-height: 1;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.brand-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  margin-top: 4px;
+  white-space: nowrap;
 }
 
 /* Center - Navigation & Search */
@@ -90,11 +108,12 @@
   align-items: center;
   justify-content: center;
   gap: 2rem;
+  padding-left: 3rem; /* Extra space from the company name */
 }
 
 .main-nav {
   display: flex;
-  gap: 2.5rem;
+  gap: 2rem; /* slightly reduce gap if space is tight */
 }
 
 .main-nav a {
@@ -568,30 +587,30 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 30px;
   padding: 0.3rem 0.6rem 0.3rem 0.3rem;
   cursor: pointer;
-  color: #fff;
+  color: var(--text-dark);
   transition: all 0.3s ease;
 }
 
 .user-avatar-wrapper:hover,
 .user-avatar-wrapper.active {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.15);
 }
 
 .user-avatar-circle {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--text-dark);
   transition: transform 0.3s ease;
 }
 

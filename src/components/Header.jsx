@@ -65,7 +65,7 @@ const Header = () => {
             <div className="brand-logo-circle">
               <img src={logo} alt="House of Ramya" className="brand-logo-img" />
             </div>
-            <div className="brand-text hide-on-desktop">
+            <div className="brand-text">
               <span className="brand-title">HOUSE OF RAMYA</span>
               <span className="brand-subtitle">TIMELESS FASHION, TAILORED FOR YOU</span>
             </div>
