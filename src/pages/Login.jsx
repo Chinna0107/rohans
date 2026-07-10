@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FiKey } from 'react-icons/fi';
 import logo from '../assets/logo.jpeg';
 import config from '../config';
 import './Login.css';
@@ -49,7 +50,7 @@ const Login = () => {
           <div className="login-left-content">
             <img src={logo} alt="House of Ramya" className="login-logo" />
             <h1><span className="l-alpha">House of</span> <span className="l-zone">Ramya</span></h1>
-            <p>Your premium fashion destination for sandals, shoes, flip flops, tshirts & night pants.</p>
+            <p>Your exclusive destination for premium sarees, elegant kurtas, and luxury ethnic wear.</p>
             <div className="login-features">
               <div className="lf-item"><span>🥻</span> Premium Sarees</div>
               <div className="lf-item"><span>👕</span> Trendy Apparel</div>
@@ -110,7 +111,7 @@ const Login = () => {
                 {loading ? (
                   <><span className="spinner" /> Signing in...</>
                 ) : (
-                  <><span>🔑</span> Sign In</>
+                  <><FiKey /> Sign In</>
                 )}
               </button>
             </form>
