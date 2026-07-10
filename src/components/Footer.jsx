@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FaInstagram, FaFacebookF, FaTwitter } from 'react-icons/fa';
+import { FaInstagram, FaFacebookF, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import './Footer.css';
 
@@ -17,6 +17,7 @@ const Footer = () => (
           <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
           <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook"><FaFacebookF /></a>
           <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter"><FaTwitter /></a>
+          <a href="https://youtube.com/@aniruddayaenterprises?si=A-OvDYlC38vU8AZ_" target="_blank" rel="noreferrer" aria-label="YouTube"><FaYoutube /></a>
         </div>
       </div>
 

@@ -120,7 +120,7 @@ const AdminCoupons = () => {
 
   return (
     <>
-      <AdminHeader />
+
       <ToastContainer position="top-right" autoClose={2000} />
       <div className="admin-page">
         <div className="admin-content">

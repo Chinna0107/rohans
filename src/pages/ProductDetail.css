@@ -862,3 +862,138 @@
   font-style: italic;
   margin-top: 1rem;
 }
+
+/* ── Fullscreen Video Fixes for Mobile ── */
+.pd-main-img video:fullscreen {
+  object-fit: contain !important;
+  background: black;
+}
+.pd-main-img video:-webkit-full-screen {
+  object-fit: contain !important;
+  background: black;
+}
+.pd-main-img video:-moz-full-screen {
+  object-fit: contain !important;
+  background: black;
+}
+
+/* ── Mobile Responsiveness ── */
+@media (max-width: 992px) {
+  .pd-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  .pd-images {
+    flex-direction: column-reverse; /* Thumbnails below the main image */
+  }
+  .pd-thumbs-col {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  .pd-thumb {
+    width: 60px;
+    height: 60px;
+  }
+  .pd-delivery-strip {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .pd-delivery-strip::-webkit-scrollbar {
+    display: none;
+  }
+  .pd-del-item {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    border-right: 1px solid rgba(0,0,0,0.06);
+    border-bottom: none;
+    padding: 0.75rem 0.5rem;
+    gap: 0.35rem;
+    min-width: 110px;
+    flex: 1 0 auto;
+  }
+  .pd-del-item div {
+    align-items: center;
+  }
+  .pd-del-item svg, .pd-del-icon {
+    font-size: 1.3rem;
+  }
+  .pd-del-item strong {
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+  .pd-del-item span {
+    font-size: 0.65rem;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  .pd-del-item:last-child {
+    border-right: none;
+    border-bottom: none;
+  }
+  .pd-action-btns {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+  }
+  .pd-back-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+  }
+}
+
+@media (max-width: 600px) {
+  .pd-container {
+    padding: 0 1rem;
+  }
+  .pd-name {
+    font-size: 1.4rem;
+  }
+  .pd-sale-price {
+    font-size: 2rem;
+  }
+  .pd-cart-row {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  .pd-cart-row button {
+    width: auto;
+    flex: 1;
+    font-size: 0.9rem;
+    padding: 0.75rem 0.5rem;
+  }
+  .pd-qty-control {
+    width: 100%;
+    justify-content: center;
+  }
+  .pd-social-msgs {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  .pd-whatsapp-customization-btn, .pd-instagram-customization-btn {
+    padding: 0.6rem 0.5rem;
+    gap: 0.4rem;
+    justify-content: center;
+  }
+  .pd-whatsapp-customization-btn .pd-social-icon, .pd-instagram-customization-btn .pd-social-icon {
+    font-size: 1.4rem;
+  }
+  .pd-whatsapp-customization-btn .pd-social-text strong, .pd-instagram-customization-btn .pd-social-text strong {
+    font-size: 0.75rem;
+  }
+  .pd-whatsapp-customization-btn .pd-social-text span, .pd-instagram-customization-btn .pd-social-text span {
+    display: none;
+  }
+  .pd-top-actions {
+    position: static;
+    margin-bottom: 1rem;
+  }
+}

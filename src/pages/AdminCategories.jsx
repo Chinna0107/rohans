@@ -81,7 +81,7 @@ const AdminCategories = () => {
 
   return (
     <div className="admin-page category-page">
-      <AdminHeader />
+
       <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="admin-content">

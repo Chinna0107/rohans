@@ -16,7 +16,7 @@ const TAGS = [
   { value: 'limited',       label: '⏳ Limited Edition' },
 ];
 
-const EMPTY_COLOR = { name: '', hex: '#ffffff', images: ['', '', ''], stock: {} };
+const EMPTY_COLOR = { name: '', hex: '#ffffff', images: [''], videos: [], stock: {}, video: '' };
 
 const INIT_FORM = {
   name: '', category: '', gender: '', styleTags: [],
@@ -146,13 +146,12 @@ const AdminProducts = () => {
       gender: product.gender || '', styleTags: product.styleTags || [],
       grams: product.grams || [], prices: product.prices || {},
       originalPrices: product.originalPrices || {},
-      description: product.description, washingInstructions: product.washing_instructions || '', tag: product.tag || '', stock: product.stock ?? '', festiveSeason: product.festiveSeason || false, reviews: product.reviews || [],
+      description: product.description, washingInstructions: product.washing_instructions || '', tag: product.tag || '', stock: product.stock ?? '', videoUrl: product.videoUrl || '', festiveSeason: product.festiveSeason || false, reviews: product.reviews || [],
       colors: product.colors?.length
-        ? product.colors.map(c => ({ name: c.name || '', hex: c.hex || '#ffffff', images: c.images || ['','',''], stock: c.stock || {} }))
-        : [{ name: '', hex: '#ffffff', images: product.images || ['','',''], stock: {} }],
+        ? product.colors.map(c => ({ name: c.name || '', hex: c.hex || '#ffffff', images: c.images?.length ? c.images : [''], videos: c.videos || (c.video ? [c.video] : []), stock: c.stock || {}, video: c.video || '' }))
+        : [{ name: '', hex: '#ffffff', images: product.images?.length ? product.images : [''], videos: product.videoUrl ? [product.videoUrl] : [], stock: {}, video: '' }],
     });
-    setShowForm(false);
-    setTimeout(() => inlineFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    setShowForm(true);
   };
 
   const resetForm = () => { setFormData(INIT_FORM); setEditingProduct(null); setInlineEditId(null); setShowForm(false); };
@@ -206,6 +205,16 @@ const AdminProducts = () => {
     }),
   }));
 
+  const updateColorVideo = (ci, vidIdx, value) => setFormData(prev => ({
+    ...prev,
+    colors: prev.colors.map((c, i) => {
+      if (i !== ci) return c;
+      const vids = [...(c.videos || [])];
+      vids[vidIdx] = value;
+      return { ...c, videos: vids };
+    }),
+  }));
+
   const handleFileUpload = async (e, ci, imgIdx) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -223,6 +232,29 @@ const AdminProducts = () => {
     } catch (err) {
       console.error(err);
       toast.error('Failed to upload image.', { autoClose: 2000 });
+    }
+  };
+
+  const handleColorVideoUpload = async (e, ci, vidIdx) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const token = localStorage.getItem('token');
+    const uploadData = new FormData();
+    uploadData.append('image', file);
+    try {
+      toast.info('Uploading video, please wait...', { autoClose: false, toastId: 'videoUpload' });
+      const res = await axios.post(`${config.API_URL}/api/upload`, uploadData, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
+      });
+      if (res.data.url) {
+        updateColorVideo(ci, vidIdx, res.data.url);
+        toast.dismiss('videoUpload');
+        toast.success('Video uploaded successfully!', { autoClose: 1500 });
+      }
+    } catch (err) {
+      console.error(err);
+      toast.dismiss('videoUpload');
+      toast.error('Failed to upload video.', { autoClose: 2000 });
     }
   };
 
@@ -324,7 +356,7 @@ const AdminProducts = () => {
 
   return (
     <>
-      <AdminHeader />
+
       <ToastContainer position="top-right" autoClose={1500} />
       <div className="admin-page">
         <div className="admin-content">
@@ -363,7 +395,7 @@ const AdminProducts = () => {
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                 />
-                <span className="search-icon">🔎</span>
+                {/* <span className="search-icon"></span> */}
               </div>
               <div className="toolbar-field">
                 <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
@@ -427,7 +459,13 @@ const AdminProducts = () => {
           </div>
 
           {showForm && (
-            <form onSubmit={handleSubmit} className="product-form">
+            <div className="ac-modal-overlay form-modal-overlay">
+              <div className="ac-modal form-modal">
+                <div className="modal-header" style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1.5rem'}}>
+                  <h2 style={{margin:0,fontSize:'1.5rem',color:'var(--accent)'}}>{editingProduct ? 'Edit Product' : 'Add Product'}</h2>
+                  <button type="button" onClick={resetForm} style={{background:'none',border:'none',color:'var(--text-dark)',fontSize:'1.5rem',cursor:'pointer'}}>✕</button>
+                </div>
+                <form onSubmit={handleSubmit} className="product-form">
 
               {/* Name */}
               <div className="form-field">
@@ -594,14 +632,14 @@ const AdminProducts = () => {
               </div>
 
               {/* Stock */}
-              <div className="form-field">
+              {/* <div className="form-field">
                 <label>Stock Quantity</label>
                 <input
                   type="number" min="0" placeholder="e.g. 50 (leave blank for unlimited)"
                   value={formData.stock}
                   onChange={e => setFormData({ ...formData, stock: e.target.value })}
                 />
-              </div>
+              </div> */}
 
               {/* Colors + Images */}
               <div className="form-field full-width">
@@ -628,12 +666,13 @@ const AdminProducts = () => {
                         )}
                       </div>
                       <div className="color-images">
-                        {[0, 1, 2].map(imgIdx => (
-                          <div key={imgIdx} className="image-upload-wrapper" style={{ display: 'flex', gap: '0.5rem', width: '100%' }}>
+                        <div style={{ marginBottom: '0.5rem', fontWeight: 600 }}>Images</div>
+                        {color.images.map((imgUrl, imgIdx) => (
+                          <div key={`img-${imgIdx}`} className="image-upload-wrapper" style={{ display: 'flex', gap: '0.5rem', width: '100%', marginBottom: '0.5rem' }}>
                             <input
                               type="url"
                               placeholder={`Image ${imgIdx + 1} URL`}
-                              value={color.images[imgIdx] || ''}
+                              value={imgUrl || ''}
                               onChange={e => updateColorImage(ci, imgIdx, e.target.value)}
                               required={imgIdx === 0}
                               style={{ flex: 1 }}
@@ -642,8 +681,39 @@ const AdminProducts = () => {
                               Upload
                               <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleFileUpload(e, ci, imgIdx)} />
                             </label>
+                            {color.images.length > 1 && (
+                              <button type="button" className="remove-color-btn" style={{ height: '40px' }} onClick={() => {
+                                const newImages = [...color.images];
+                                newImages.splice(imgIdx, 1);
+                                updateColor(ci, 'images', newImages);
+                              }}>✕</button>
+                            )}
                           </div>
                         ))}
+                        <button type="button" className="add-color-btn" style={{ marginTop: '0.2rem', marginBottom: '1.5rem' }} onClick={() => updateColor(ci, 'images', [...color.images, ''])}>+ Add Image</button>
+
+                        <div style={{ marginBottom: '0.5rem', fontWeight: 600 }}>Videos</div>
+                        {(color.videos || []).map((vidUrl, vidIdx) => (
+                          <div key={`vid-${vidIdx}`} className="image-upload-wrapper" style={{ display: 'flex', gap: '0.5rem', width: '100%', marginBottom: '0.5rem' }}>
+                            <input
+                              type="url"
+                              placeholder={`Video ${vidIdx + 1} URL`}
+                              value={vidUrl || ''}
+                              onChange={e => updateColorVideo(ci, vidIdx, e.target.value)}
+                              style={{ flex: 1 }}
+                            />
+                            <label className="admin-btn" style={{ padding: '0 1rem', cursor: 'pointer', margin: 0, height: '40px' }}>
+                              Upload
+                              <input type="file" accept="video/*" style={{ display: 'none' }} onChange={e => handleColorVideoUpload(e, ci, vidIdx)} />
+                            </label>
+                            <button type="button" className="remove-color-btn" style={{ height: '40px' }} onClick={() => {
+                              const newVideos = [...color.videos];
+                              newVideos.splice(vidIdx, 1);
+                              updateColor(ci, 'videos', newVideos);
+                            }}>✕</button>
+                          </div>
+                        ))}
+                        <button type="button" className="add-color-btn" style={{ marginTop: '0.2rem' }} onClick={() => updateColor(ci, 'videos', [...(color.videos || []), ''])}>+ Add Video</button>
                       </div>
                       {/* Stock per size */}
                       {formData.grams.length > 0 && (
@@ -677,403 +747,61 @@ const AdminProducts = () => {
                   {loading ? <><span className="spinner" />{editingProduct ? 'Updating...' : 'Adding...'}</> : editingProduct ? 'Update Product' : 'Add Product'}
                 </button>
               </div>
-            </form>
+                </form>
+              </div>
+            </div>
           )}
 
-          <table className="products-table">
-            <thead>
-              <tr>
-                <th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Tag</th><th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedProducts.length === 0 ? (
-                <tr>
-                  <td colSpan="7">
-                    <div className="empty-state">
-                      <span>📦</span>
-                      <p>{products.length === 0 ? 'No products yet.' : 'No products match your filters.'}</p>
+          
+          <div className="products-grid">
+            {sortedProducts.length === 0 ? (
+              <div className="empty-state">
+                <span>📦</span>
+                <p>{products.length === 0 ? 'No products yet.' : 'No products match your filters.'}</p>
+              </div>
+            ) : sortedProducts.map(product => {
+              const meta = getStockMeta(product);
+              return (
+                <div key={product.id} className="hor-product-card" onClick={() => handleEdit(product)}>
+                  <div className="hor-product-image-container">
+                    {product.images?.[0] || product.colors?.[0]?.images?.[0] ? (
+                      <img src={product.images?.[0] || product.colors?.[0]?.images?.[0]} alt={product.name} />
+                    ) : (
+                      <div className="hor-no-image">No Image</div>
+                    )}
+                    {product.tag && (
+                      <span className="hor-product-badge">{TAGS.find(t => t.value === product.tag)?.label || product.tag}</span>
+                    )}
+                    <div className="hor-product-actions">
+                      <button className="edit-btn" onClick={(e) => { e.stopPropagation(); handleEdit(product); }}>✏️</button>
+                      <button className="delete-btn" onClick={(e) => { e.stopPropagation(); handleDelete(product.id); }}>🗑️</button>
                     </div>
-                  </td>
-                </tr>
-              ) : sortedProducts.map(product => (
-                <>
-                  <tr key={product.id} className="product-row" onClick={() => togglePreview(product.id)}>
-                    <td><img src={product.images?.[0] || product.colors?.[0]?.images?.[0]} alt={product.name} /></td>
-                    <td className="product-name-cell">{product.name}</td>
-                    <td><span className="category-badge">{product.category}</span></td>
-                    <td>
-                      <div className="price-list">
-                        {product.prices && typeof product.prices === 'object'
-                          ? Object.entries(product.prices).map(([size, price]) => {
-                            const orig = product.originalPrices?.[size];
-                            const disc = calcDiscount(orig, price);
-                            return (
-                              <div key={size} className="price-list-row">
-                                <span className="price-size">{size}</span>
-                                {orig && Number(orig) > Number(price) && <span className="price-original">₹{orig}</span>}
-                                <strong className="price-sale">₹{price}</strong>
-                                {disc && <span className="discount-pill">-{disc}%</span>}
-                              </div>
-                            );
-                          })
-                          : <strong className="price-sale">₹{product.price || 0}</strong>}
+                  </div>
+                  <div className="hor-product-details">
+                    <div className="hor-product-header">
+                      <div className="hor-product-title-wrap">
+                        <h3 className="hor-product-title">{product.name}</h3>
+                        <span className="hor-product-category">{product.category}</span>
                       </div>
-                    </td>
-                    <td>
-                      <div className="action-btns">
-                        {(() => {
-                          const meta = getStockMeta(product);
-                          return (
-                            <div className="ac-stock-mini">
-                              {!meta.hasData ? <span className="stock-pill unlimited">Unlimited</span> : <span className="stock-total">Qty {meta.total}</span>}
-                              {meta.hasLow && meta.total !== 0 && <span className="stock-pill low">Low</span>}
-                              {meta.hasData && meta.total === 0 && <span className="stock-pill out">Out</span>}
-                              {meta.hasData && meta.total > 0 && !meta.hasLow && <span className="stock-pill in">In Stock</span>}
-                              <button
-                                className="ac-add-stock-btn"
-                                onClick={(e) => { e.stopPropagation(); setStockModal(product); setAddStockQty(''); }}
-                                title="Add Stock"
-                              >
-                                + Stock
-                              </button>
-                            </div>
-                          );
-                        })()}
+                      <span className="hor-product-price">
+                        ₹{product.price || (product.prices && Object.values(product.prices)[0]) || 0}
+                      </span>
+                    </div>
+                    <p className="hor-product-desc">{product.description}</p>
+                    <div className="hor-product-footer">
+                      <div className="ac-stock-mini" onClick={(e) => e.stopPropagation()}>
+                        {!meta.hasData ? <span className="stock-pill unlimited">Unlimited</span> : <span className="stock-total">Qty {meta.total}</span>}
+                        {meta.hasLow && meta.total !== 0 && <span className="stock-pill low">Low</span>}
+                        {meta.hasData && meta.total === 0 && <span className="stock-pill out">Out</span>}
+                        {meta.hasData && meta.total > 0 && !meta.hasLow && <span className="stock-pill in">In Stock</span>}
+                        <button className="ac-add-stock-btn" onClick={(e) => { e.stopPropagation(); setStockModal(product); setAddStockQty(''); }} title="Add Stock">+ Stock</button>
                       </div>
-                    </td>
-                    <td>{product.tag ? <span className="tag-badge">{TAGS.find(t => t.value === product.tag)?.label || product.tag}</span> : <span style={{ color: 'rgba(255,255,255,0.3)' }}>—</span>}</td>
-                    <td>
-                      <div className="action-btns">
-                        <button className={`edit-btn ${inlineEditId === product.id ? 'active' : ''}`} onClick={(e) => { e.stopPropagation(); inlineEditId === product.id ? resetForm() : handleEdit(product); }}>
-                          {inlineEditId === product.id ? '✕ Close' : '✏️ Edit'}
-                        </button>
-                        <button className="delete-btn" onClick={(e) => { e.stopPropagation(); handleDelete(product.id); }}>🗑️ Delete</button>
-                      </div>
-                    </td>
-                  </tr>
-                  {previewId === product.id && (
-                    <tr className="product-preview-row">
-                      <td colSpan="7">
-                        <div className="product-preview-card">
-                          <div className="preview-grid">
-                            <div className="preview-section">
-                              <div className="preview-label">Gender</div>
-                              <div className="preview-value">
-                                <span className={`gender-badge gender-${(product.gender || '').toLowerCase()}`}>
-                                  {product.gender === 'Men' ? '👨' : product.gender === 'Women' ? '👩' : product.gender === 'Children' ? '👦' : '—'} {product.gender || '—'}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="preview-section">
-                              <div className="preview-label">Sizes</div>
-                              <div className="preview-value">{Array.isArray(product.grams) ? product.grams.join(', ') : product.grams || '—'}</div>
-                            </div>
-                            <div className="preview-section">
-                              <div className="preview-label">Style</div>
-                              <div className="preview-value">
-                                {product.styleTags?.length
-                                  ? product.styleTags.map(s => <span key={s} className="style-badge">{s}</span>)
-                                  : <span className="muted">—</span>}
-                              </div>
-                            </div>
-                            <div className="preview-section">
-                              <div className="preview-label">Colors</div>
-                              <div className="preview-value">
-                                <div className="color-swatches-admin">
-                                  {(product.colors || []).map((c, i) => (
-                                    <span key={i} className="color-swatch-admin" style={{ background: c.hex }} title={c.name} />
-                                  ))}
-                                  {(!product.colors || product.colors.length === 0) && <span className="muted">—</span>}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="preview-prices">
-                            <div className="preview-label">Price Breakdown</div>
-                            <div className="price-list">
-                              {product.prices && typeof product.prices === 'object'
-                                ? Object.entries(product.prices).map(([size, price]) => {
-                                  const orig = product.originalPrices?.[size];
-                                  const disc = calcDiscount(orig, price);
-                                  return (
-                                    <div key={size} className="price-list-row">
-                                      <span className="price-size">{size}</span>
-                                      {orig && Number(orig) > Number(price) && <span className="price-original">₹{orig}</span>}
-                                      <strong className="price-sale">₹{price}</strong>
-                                      {disc && <span className="discount-pill">-{disc}%</span>}
-                                    </div>
-                                  );
-                                })
-                                : <strong className="price-sale">₹{product.price || 0}</strong>}
-                            </div>
-                          </div>
-
-                          <div className="preview-stock">
-                            <div className="preview-label">Stock Breakdown</div>
-                            <div className="ac-stock-breakdown">
-                              {(product.colors || []).map((c, ci) => (
-                                <div key={ci} className="ac-stock-color-row">
-                                  <span className="ac-stock-color-dot" style={{ background: c.hex }} />
-                                  <span className="ac-stock-color-name">{c.name || `C${ci+1}`}:</span>
-                                  {Object.entries(c.stock || {}).length > 0
-                                    ? Object.entries(c.stock).map(([size, qty]) => (
-                                        <span key={size} className={`ac-stock-size-qty ${Number(qty) <= 5 ? 'low' : ''}`}>{size}:{qty}</span>
-                                      ))
-                                    : <span className="muted">∞</span>}
-                                </div>
-                              ))}
-                              {(!product.colors || product.colors.length === 0) && <span className="muted">∞</span>}
-                            </div>
-                          </div>
-
-                          <div className="preview-section">
-                            <div className="preview-label">Description</div>
-                            <div className="preview-value preview-desc">{product.description || '—'}</div>
-                          </div>
-                          
-                          <div className="preview-section">
-                            <div className="preview-label">Washing Instructions</div>
-                            <div className="preview-value preview-desc">{product.washing_instructions || '—'}</div>
-                          </div>
-
-                          <div className="preview-section">
-                            <div className="preview-label">Images</div>
-                            <div className="preview-images">
-                              {(product.images?.length ? product.images : product.colors?.[0]?.images || []).filter(Boolean).map((img, idx) => (
-                                <img key={idx} src={img} alt={`${product.name} ${idx + 1}`} />
-                              ))}
-                              {(!product.images?.length && !product.colors?.[0]?.images?.length) && <span className="muted">—</span>}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                  {inlineEditId === product.id && (
-                    <tr key={`edit-${product.id}`} className="inline-edit-row">
-                      <td colSpan="7">
-                        <div ref={inlineFormRef} className="inline-edit-wrap">
-                          <form onSubmit={handleSubmit} className="product-form">
-
-                            <div className="form-field">
-                              <label>Product Name *</label>
-                              <input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
-                            </div>
-
-                            <div className="form-field">
-                              <label>Category *</label>
-                              <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value, styleTags: [], grams: [], prices: {} })} required>
-                                <option value="">Select category</option>
-                                {categories.map(c => <option key={c.id || c.name} value={c.name}>{c.name}</option>)}
-                              </select>
-                            </div>
-
-                            <div className="form-field">
-                              <label>Gender *</label>
-                              <div className="gender-options">
-                                {['Men', 'Women', 'Children'].map(g => (
-                                  <label key={g} className={`gender-option ${formData.gender === g ? 'active' : ''}`}>
-                                    <input type="radio" name="gender" value={g} checked={formData.gender === g} onChange={() => setFormData({ ...formData, gender: g })} required />
-                                    <span>{g === 'Men' ? '👨' : g === 'Women' ? '👩' : '👦'}</span>{g}
-                                  </label>
-                                ))}
-                              </div>
-                            </div>
-
-                            <div className="form-field full-width">
-                              <label>Style</label>
-                              {!formData.category || styleOptions.length === 0
-                                ? <div className="size-hint">Select a category with styles defined first</div>
-                                : (
-                                  <div className="style-tag-options">
-                                    {styleOptions.map(s => (
-                                      <button type="button" key={s}
-                                        className={`style-tag-btn ${formData.styleTags.includes(s) ? 'active' : ''}`}
-                                        onClick={() => {
-                                          if (formData.styleTags.includes(s)) {
-                                            setFormData({ ...formData, styleTags: formData.styleTags.filter(t => t !== s) });
-                                          } else {
-                                            setFormData({ ...formData, styleTags: [...formData.styleTags, s] });
-                                          }
-                                        }}
-                                      >{s}</button>
-                                    ))}
-                                  </div>
-                                )
-                              }
-                            </div>
-
-                            <div className="form-field">
-                              <label>Sizes *</label>
-                              {!formData.category || weightOptions.length === 0 ? <div className="size-hint">Select a category with sizes defined first</div> : (
-                                <div className="custom-dropdown">
-                                  <div className="dropdown-header" onClick={() => setShowWeightDropdown(!showWeightDropdown)}>
-                                    {formData.grams.length > 0 ? formData.grams.join(', ') : 'Select sizes'}
-                                  </div>
-                                  {showWeightDropdown && (
-                                    <div className="dropdown-list">
-                                      {weightOptions.map(size => (
-                                        <label key={size} className="dropdown-item">
-                                          <input type="checkbox" checked={formData.grams.includes(size)} onChange={() => handleWeightToggle(size)} />{size}
-                                        </label>
-                                      ))}
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-
-                            <div className="form-field full-width">
-                              <label>Prices (₹) *</label>
-                              <div className="price-inputs">
-                                {formData.grams.length === 0 && <p style={{ color: 'rgba(255,255,255,0.3)', margin: 0, fontSize: '0.88rem' }}>Select sizes first</p>}
-                                {formData.grams.map(size => {
-                                  const disc = calcDiscount(formData.originalPrices[size], formData.prices[size]);
-                                  return (
-                                    <div key={size} className="price-input-row">
-                                      <span>{size}</span>
-                                      <div className="price-input-group">
-                                        <input type="number" value={formData.originalPrices[size] || ''} onChange={e => setFormData(prev => ({ ...prev, originalPrices: { ...prev.originalPrices, [size]: e.target.value } }))} placeholder="MRP" />
-                                        <input type="number" value={formData.prices[size] || ''} onChange={e => setFormData(prev => ({ ...prev, prices: { ...prev.prices, [size]: e.target.value } }))} placeholder="Sale Price" required />
-                                        {disc && <span className="discount-pill">-{disc}%</span>}
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-
-                            <div className="form-field full-width">
-                              <label>Description *</label>
-                              <textarea value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} required />
-                            </div>
-
-                            <div className="form-field full-width">
-                              <label>Washing Instructions</label>
-                              <textarea value={formData.washingInstructions} onChange={e => setFormData({ ...formData, washingInstructions: e.target.value })} placeholder="e.g., Dry clean only, Do not bleach..." />
-                            </div>
-
-                            <div className="form-field">
-                              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                                <input type="checkbox" checked={formData.festiveSeason} onChange={e => setFormData({ ...formData, festiveSeason: e.target.checked })} />
-                                <label>Festive Season Collection</label>
-                              </label>
-                            </div>
-                            
-                            {/* Inline Reviews */}
-                            <div className="form-section inline-reviews">
-                              <div className="section-header">
-                                <h3>Customer Reviews</h3>
-                                <button type="button" className="add-btn" onClick={handleReviewAdd}>+ Add Review</button>
-                              </div>
-                              {formData.reviews && formData.reviews.length > 0 && (
-                                <div className="reviews-list inline">
-                                  {formData.reviews.map((rev, i) => (
-                                    <div key={i} className="review-edit-box">
-                                      <div className="review-edit-row">
-                                        <input type="text" placeholder="Reviewer Name" value={rev.user} onChange={e => handleReviewUpdate(i, 'user', e.target.value)} required />
-                                        <select value={rev.rating} onChange={e => handleReviewUpdate(i, 'rating', Number(e.target.value))}>
-                                          <option value={5}>5 Stars</option>
-                                          <option value={4}>4 Stars</option>
-                                          <option value={3}>3 Stars</option>
-                                          <option value={2}>2 Stars</option>
-                                          <option value={1}>1 Star</option>
-                                        </select>
-                                        <button type="button" className="del-btn" onClick={() => handleReviewRemove(i)}>✕</button>
-                                      </div>
-                                      <textarea placeholder="Review Comment" value={rev.comment} onChange={e => handleReviewUpdate(i, 'comment', e.target.value)} required rows="2" />
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-
-                            <div className="form-field">
-                              <label>Style Tags</label>
-                              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                {[{ value: 'new', label: 'New Arrival' }, { value: 'trending', label: 'Trending' }, { value: 'bestseller', label: 'Best Seller' }].map(t => (
-                                  <label key={t.value} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer' }}>
-                                    <input
-                                      type="checkbox"
-                                      checked={formData.styleTags.includes(t.value)}
-                                      onChange={(e) => {
-                                        const updatedTags = e.target.checked
-                                          ? [...formData.styleTags, t.value]
-                                          : formData.styleTags.filter(tag => tag !== t.value);
-                                        setFormData({ ...formData, styleTags: updatedTags });
-                                      }}
-                                    />
-                                    {t.label}
-                                  </label>
-                                ))}
-                              </div>
-                            </div>
-
-                            <div className="form-field full-width">
-                              <label>Colors & Images *</label>
-                              <div className="colors-section">
-                                {formData.colors.map((color, ci) => (
-                                  <div key={ci} className="color-block">
-                                    <div className="color-block-header">
-                                      <span className="color-block-num">Color {ci + 1}</span>
-                                      <div className="color-name-row">
-                                        <input type="text" placeholder="Color name" value={color.name} onChange={e => updateColor(ci, 'name', e.target.value)} className="color-name-input" />
-                                        <div className="color-picker-wrap">
-                                          <input type="color" value={color.hex} onChange={e => updateColor(ci, 'hex', e.target.value)} className="color-picker" />
-                                          <span className="color-hex">{color.hex}</span>
-                                        </div>
-                                      </div>
-                                      {formData.colors.length > 1 && (
-                                        <button type="button" className="remove-color-btn" onClick={() => removeColor(ci)}>✕ Remove</button>
-                                      )}
-                                    </div>
-                                    <div className="color-images">
-                                      {[0, 1, 2].map(imgIdx => (
-                                        <div key={imgIdx} className="image-upload-wrapper" style={{ display: 'flex', gap: '0.5rem', width: '100%' }}>
-                                          <input type="url" placeholder={`Image ${imgIdx + 1} URL`} value={color.images[imgIdx] || ''} onChange={e => updateColorImage(ci, imgIdx, e.target.value)} required={imgIdx === 0} style={{ flex: 1 }} />
-                                          <label className="admin-btn" style={{ padding: '0 1rem', cursor: 'pointer', margin: 0, height: '40px' }}>
-                                            Upload
-                                            <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleFileUpload(e, ci, imgIdx)} />
-                                          </label>
-                                        </div>
-                                      ))}
-                                    </div>
-                                    {formData.grams.length > 0 && (
-                                      <div className="color-stock-section">
-                                        <span className="color-stock-label">Stock per size</span>
-                                        <div className="color-stock-grid">
-                                          {formData.grams.map(size => (
-                                            <div key={size} className="color-stock-row">
-                                              <span className="color-stock-size">{size}</span>
-                                              <input type="number" min="0" placeholder="qty" value={color.stock?.[size] ?? ''} onChange={e => updateColorStock(ci, size, e.target.value)} className="color-stock-input" />
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
-                                ))}
-                                <button type="button" className="add-color-btn" onClick={addColor}>+ Add Color</button>
-                              </div>
-                            </div>
-
-                            <div className="form-actions">
-                              <button type="button" className="admin-btn cancel-btn" onClick={resetForm}>Cancel</button>
-                              <button type="submit" className="admin-btn" disabled={loading}>
-                                {loading ? <><span className="spinner" />Updating...</> : 'Update Product'}
-                              </button>
-                            </div>
-                          </form>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </>
-              ))}
-            </tbody>
-          </table>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
         </div>
       </div>

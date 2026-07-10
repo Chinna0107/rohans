@@ -11,7 +11,7 @@
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 12px;
-  padding: 1.5rem 1.25rem;
+  padding: 1rem 1.25rem;
   text-align: center;
   transition: all 0.3s ease;
   box-shadow: 0 8px 30px rgba(0,0,0,0.03);
@@ -169,30 +169,35 @@
 /* Action Buttons */
 .ao-action-btns { display: flex; gap: 0.4rem; align-items: center; }
 
-.ao-advance-btn {
-  padding: 0.4rem 0.85rem;
-  background: rgba(74,222,128,0.12);
-  border: 1px solid rgba(74,222,128,0.3);
-  color: #4ade80; border-radius: 20px;
-  font-size: 0.78rem; font-weight: 700;
-  cursor: pointer; font-family: inherit;
-  transition: all 0.2s ease; white-space: nowrap;
-}
-.ao-advance-btn:hover { background: rgba(74,222,128,0.25); color: #fff; transform: translateY(-1px); }
-.ao-advance-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-.ao-cancel-btn {
-  width: 28px; height: 28px; padding: 0 !important;
-  background: rgba(248,113,113,0.12) !important;
-  border: 1px solid rgba(248,113,113,0.3) !important;
-  color: #f87171 !important; border-radius: 8px !important;
+.ao-status-select {
+  padding: 0.45rem 0.8rem;
+  background: rgba(122,34,48,0.05);
+  border: 1px solid rgba(122,34,48,0.15);
+  color: var(--primary);
+  border-radius: 8px;
   font-size: 0.8rem; font-weight: 700;
   cursor: pointer; font-family: inherit;
-  display: flex !important; align-items: center; justify-content: center;
   transition: all 0.2s ease;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%237A2230%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem top 50%;
+  background-size: 0.65rem auto;
+  padding-right: 1.8rem;
 }
-.ao-cancel-btn:hover { background: rgba(248,113,113,0.3) !important; color: #fff !important; }
-.ao-cancel-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.ao-status-select:hover { background-color: rgba(122,34,48,0.1); border-color: rgba(122,34,48,0.3); }
+.ao-status-select:focus { box-shadow: 0 0 0 2px rgba(122,34,48,0.2); }
+.ao-status-select:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ao-spinner-mini {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(122,34,48,0.2);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── Modal ── */
 .ao-modal-overlay {

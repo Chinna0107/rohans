@@ -55,7 +55,7 @@ const AdminSettings = () => {
 
   return (
     <div className="admin-page">
-      <AdminHeader />
+
       <div className="admin-content">
         <div className="admin-header-actions">
           <h2>Site Settings</h2>

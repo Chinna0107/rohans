@@ -142,7 +142,7 @@ const AdminSliders = () => {
 
   return (
     <>
-      <AdminHeader />
+
       <ToastContainer position="top-right" autoClose={1500} />
       <div className="admin-page">
         <div className="admin-content">

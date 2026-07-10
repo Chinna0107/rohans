@@ -15,6 +15,8 @@ import UserDashboard from './pages/UserDashboard'
 import Products from './pages/Products'
 import ProductDetail from './pages/ProductDetail'
 import Checkout from './pages/Checkout'
+import AdminDashboard from './pages/AdminDashboard'
+import AdminCustomers from './pages/AdminCustomers'
 import AdminProducts from './pages/AdminProducts'
 import AdminSliders from './pages/AdminSliders'
 import AdminOrders from './pages/AdminOrders'
@@ -57,6 +59,9 @@ function AnimatedRoutes() {
         <Route path="/products" element={<PageWrapper><Products /></PageWrapper>} />
         <Route path="/products/:slug" element={<PageWrapper><ProductDetail /></PageWrapper>} />
         <Route path="/checkout" element={<PageWrapper><Checkout /></PageWrapper>} />
+        <Route path="/admin" element={<PageWrapper><AdminDashboard /></PageWrapper>} />
+        <Route path="/admin/dashboard" element={<PageWrapper><AdminDashboard /></PageWrapper>} />
+        <Route path="/admin/customers" element={<PageWrapper><AdminCustomers /></PageWrapper>} />
         <Route path="/admin/products" element={<PageWrapper><AdminProducts /></PageWrapper>} />
         <Route path="/admin/orders" element={<PageWrapper><AdminOrders /></PageWrapper>} />
         <Route path="/admin/coupons" element={<PageWrapper><AdminCoupons /></PageWrapper>} />
@@ -90,11 +95,14 @@ function PageWrapper({ children }) {
   );
 }
 
+import AdminHeader from './components/AdminHeader';
+
 function AppContent() {
   const location = useLocation();
   
   // Hide customer Header and Footer on admin routes and admin login
   const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname === '/login';
+  const isAdminPanel = location.pathname.startsWith('/admin');
 
   return (
     <>
@@ -103,6 +111,7 @@ function AppContent() {
         {!isAdminRoute && <TopBanner />}
         {!isAdminRoute && <Header />}
       </div>
+      {isAdminPanel && <AdminHeader />}
       <AnimatedRoutes />
       {!isAdminRoute && <Footer />}
       {!isAdminRoute && <BottomNav />}

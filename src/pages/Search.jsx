@@ -53,7 +53,7 @@ const Search = () => {
     <div className="search-page">
       <div className="search-header-container">
         <form className="search-input-wrapper" onSubmit={handleSearchSubmit}>
-          <MdSearch className="search-icon" />
+          {/* <MdSearch className="search-icon" /> */}
           <input 
             ref={inputRef}
             type="text" 

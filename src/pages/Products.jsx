@@ -58,6 +58,15 @@ const Products = () => {
   const [selectedWeights,  setSelectedWeights]  = useState({});
   const [selectedColors,   setSelectedColors]   = useState({});
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const searchParam = params.get('search');
+    if (searchParam) {
+      setSearchTerm(searchParam);
+      setSearchOpen(true);
+    }
+  }, [location.search]);
+
   const filterRef = useRef(null);
 
   const categories = useMemo(() => ['All', ...new Set(products.map(p => p.category))], [products]);

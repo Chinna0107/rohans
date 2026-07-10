@@ -23,7 +23,7 @@ const Login = () => {
         localStorage.setItem('user', JSON.stringify(response.data.user));
         localStorage.setItem('token', response.data.token);
         toast.success('Login successful!');
-        setTimeout(() => navigate('/admin/products'), 1500);
+        setTimeout(() => navigate('/admin/dashboard'), 1500);
       } else {
         toast.error(response.data.message || 'Login failed');
         setLoading(false);

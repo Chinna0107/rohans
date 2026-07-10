@@ -193,7 +193,12 @@ const ProductDetail = () => {
   const discount = calcDiscount(origPrice, salePrice);
   const colors  = product.colors?.length ? product.colors : null;
   const activeColor = colors?.[activeColorIdx] ? { name: colors[activeColorIdx].name || '', hex: colors[activeColorIdx].hex || '' } : null;
-  const images  = (colors?.[activeColorIdx]?.images?.filter(Boolean) || product.images || []).filter(Boolean);
+  const rawImages = (colors?.[activeColorIdx]?.images?.filter(Boolean) || product.images || []).filter(Boolean);
+  const rawVideos = (colors?.[activeColorIdx]?.videos?.filter(Boolean) || (colors?.[activeColorIdx]?.video ? [colors[activeColorIdx].video] : []) || (product.videoUrl ? [product.videoUrl] : [])).filter(Boolean);
+  const media = [
+    ...rawImages.map(url => ({ type: 'image', url })),
+    ...rawVideos.map(url => ({ type: 'video', url }))
+  ];
   const savings = discount && origPrice ? Number(origPrice) - Number(salePrice) : null;
 
   // stock helpers
@@ -238,13 +243,21 @@ const ProductDetail = () => {
           <div className="pd-images">
             {/* Thumbnails vertical */}
             <div className="pd-thumbs-col">
-              {images.map((img, i) => (
+              {media.map((m, i) => (
                 <div
                   key={i}
                   className={`pd-thumb ${activeImg === i ? 'active' : ''}`}
                   onClick={() => setActiveImg(i)}
+                  style={{ position: 'relative' }}
                 >
-                  <img src={img} alt={`view ${i + 1}`} />
+                  {m.type === 'video' ? (
+                    <>
+                      <video src={m.url} muted style={{width:'100%', height:'100%', objectFit:'cover'}} />
+                      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'rgba(0,0,0,0.5)', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>▶</div>
+                    </>
+                  ) : (
+                    <img src={m.url} alt={`view ${i + 1}`} />
+                  )}
                 </div>
               ))}
             </div>
@@ -269,21 +282,27 @@ const ProductDetail = () => {
               {product.tag && <span className="pd-tag-badge">{TAG_LABELS[product.tag] || product.tag}</span>}
               {discount && <span className="pd-discount-badge">-{discount}%</span>}
               <div
-                className={`pd-main-img ${zoomed ? 'zoomed' : ''}`}
+                className={`pd-main-img ${zoomed && media[activeImg]?.type !== 'video' ? 'zoomed' : ''}`}
                 ref={imgRef}
                 onMouseMove={handleMouseMove}
                 onMouseEnter={() => setZoomed(true)}
                 onMouseLeave={() => setZoomed(false)}
-                style={zoomed ? { '--zx': `${zoomPos.x}%`, '--zy': `${zoomPos.y}%` } : {}}
+                style={zoomed && media[activeImg]?.type !== 'video' ? { '--zx': `${zoomPos.x}%`, '--zy': `${zoomPos.y}%` } : {}}
               >
-                <img src={images[activeImg]} alt={product.name} />
-                {!zoomed && <span className="pd-zoom-hint"><MdZoomIn /> Hover to zoom</span>}
+                {media[activeImg]?.type === 'video' ? (
+                  <video src={media[activeImg]?.url} autoPlay loop muted controls playsInline style={{width:'100%', height:'100%', objectFit:'cover', borderRadius: '16px'}} />
+                ) : (
+                  <>
+                    <img src={media[activeImg]?.url} alt={product.name} />
+                    {!zoomed && <span className="pd-zoom-hint"><MdZoomIn /> Hover to zoom</span>}
+                  </>
+                )}
               </div>
               {/* Nav arrows */}
-              {images.length > 1 && (
+              {media.length > 1 && (
                 <>
-                  <button className="pd-img-prev" onClick={() => setActiveImg(i => (i - 1 + images.length) % images.length)}>‹</button>
-                  <button className="pd-img-next" onClick={() => setActiveImg(i => (i + 1) % images.length)}>›</button>
+                  <button className="pd-img-prev" onClick={() => setActiveImg(i => (i - 1 + media.length) % media.length)}>‹</button>
+                  <button className="pd-img-next" onClick={() => setActiveImg(i => (i + 1) % media.length)}>›</button>
                 </>
               )}
             </div>

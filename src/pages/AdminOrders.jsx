@@ -107,13 +107,22 @@ const AdminOrders = () => {
 
   const formatDate = (order) => {
     const date = order.orderDate ? new Date(order.orderDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short' }) : '—';
-    const time = order.orderTime || '';
+    let time = order.orderTime || '';
+    if (time) {
+      const parts = time.split(':');
+      if (parts.length >= 2) {
+        const h = parseInt(parts[0], 10);
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        const h12 = h % 12 || 12;
+        time = `${String(h12).padStart(2, '0')}:${parts[1]} ${ampm}`;
+      }
+    }
     return time ? `${date}, ${time}` : date;
   };
 
   return (
     <>
-      <AdminHeader />
+
       <ToastContainer position="top-right" autoClose={2000} />
       <div className="admin-page">
         <div className="admin-content">
@@ -254,26 +263,19 @@ const AdminOrders = () => {
                         <td className="ao-date">{formatDate(order)}</td>
                         <td onClick={e => e.stopPropagation()}>
                           <div className="ao-action-btns">
-                            {nextStatus && status !== 'cancelled' && (
-                              <button
-                                className="ao-advance-btn"
-                                onClick={() => updateStatus(orderId, nextStatus)}
-                                disabled={updatingId === orderId}
-                                title={`Mark as ${nextStatus}`}
-                              >
-                                {updatingId === orderId ? '...' : `→ ${nextStatus.charAt(0).toUpperCase() + nextStatus.slice(1)}`}
-                              </button>
-                            )}
-                            {status !== 'cancelled' && status !== 'delivered' && (
-                              <button
-                                className="ao-cancel-btn"
-                                onClick={() => updateStatus(orderId, 'cancelled')}
-                                disabled={updatingId === orderId}
-                                title="Cancel order"
-                              >
-                                ✕
-                              </button>
-                            )}
+                            <select
+                              className="ao-status-select"
+                              value={status}
+                              onChange={(e) => updateStatus(orderId, e.target.value)}
+                              disabled={updatingId === orderId}
+                            >
+                              <option value="pending" disabled>Pending</option>
+                              <option value="confirmed">Confirmed</option>
+                              <option value="dispatched">Dispatched</option>
+                              <option value="delivered">Delivered</option>
+                              <option value="cancelled">Cancelled</option>
+                            </select>
+                            {updatingId === orderId && <span className="ao-spinner-mini" />}
                           </div>
                         </td>
                       </tr>

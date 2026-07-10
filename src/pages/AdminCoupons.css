@@ -1,100 +1,192 @@
+/* ── Stat Cards ── */
 .ac-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
 }
 
-.ac-form { margin-bottom: 2rem; }
+.ac-stats .stat-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+  border-radius: 16px;
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.ac-stats .stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 45px rgba(0,0,0,0.06);
+}
+
+.ac-stats .stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--primary));
+  opacity: 0.8;
+}
+
+.ac-stats .stat-icon {
+  width: 56px; height: 56px;
+  background: rgba(122, 34, 48, 0.05);
+  border: 1px solid rgba(122, 34, 48, 0.1);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; color: var(--primary);
+  margin-bottom: 0.75rem;
+}
+
+.ac-stats h3 {
+  margin: 0.3rem 0 0.1rem;
+  font-size: 1.8rem; font-weight: 700;
+  color: var(--text-dark); font-family: var(--font-serif);
+}
+
+.ac-stats p {
+  margin: 0; font-size: 0.82rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+/* ── Form Enhancements ── */
+.ac-form {
+  margin-bottom: 2.5rem;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.8);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.04);
+}
 
 .ac-field-note {
-  font-size: 0.75rem; color: rgba(255,255,255,0.35);
-  margin-top: 0.3rem; display: block;
+  font-size: 0.75rem; color: rgba(0,0,0,0.4);
+  margin-top: 0.4rem; display: block;
 }
 
-/* ── Table ── */
-.ac-table-wrap {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
+/* Segmented Control for Gender Options (Discount Type) */
+.ac-form .gender-options {
+  display: flex; gap: 0.5rem;
+  background: rgba(0,0,0,0.03);
+  padding: 0.25rem;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.8);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+}
+
+.ac-form .gender-option {
+  flex: 1; text-align: center;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer; font-size: 0.85rem; font-weight: 600;
+  color: var(--text-muted); transition: all 0.3s ease;
+  position: relative;
+}
+
+.ac-form .gender-option input { display: none; }
+
+.ac-form .gender-option.active {
+  background: #fff;
+  color: var(--primary);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* ── Table Container ── */
+.ac-table-wrap {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.9);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.04);
   padding: 1.5rem;
   overflow-x: auto;
 }
 
+/* ── Table Typography & Elements ── */
 .ac-code-cell { display: flex; flex-direction: column; gap: 0.2rem; }
 
 .ac-code {
-  font-size: 0.95rem; font-weight: 800;
+  font-size: 0.98rem; font-weight: 800;
   color: var(--text-dark); letter-spacing: 1.5px;
   font-family: monospace;
 }
 
-.ac-desc { font-size: 0.75rem; color: var(--text-muted); }
+.ac-desc { font-size: 0.78rem; color: var(--text-muted); }
 
+/* Jewel-Toned Badges */
 .ac-type-badge {
-  display: inline-block; padding: 0.25rem 0.7rem;
-  border-radius: 20px; font-size: 0.78rem; font-weight: 700;
-  text-transform: capitalize;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
 }
 .ac-type-badge.percent {
-  background: rgba(96,165,250,0.12);
-  border: 1px solid rgba(96,165,250,0.3);
-  color: #60a5fa;
+  background: rgba(122, 34, 48, 0.08);
+  border: 1px solid rgba(122, 34, 48, 0.2);
+  color: var(--primary);
 }
 .ac-type-badge.flat {
-  background: rgba(167,139,250,0.12);
-  border: 1px solid rgba(167,139,250,0.3);
-  color: #a78bfa;
+  background: rgba(200, 161, 101, 0.12);
+  border: 1px solid rgba(200, 161, 101, 0.3);
+  color: #a37c44;
 }
 
-.ac-discount-val { font-size: 1rem; font-weight: 800; color: #4ade80; }
+.ac-discount-val { font-size: 1.05rem; font-weight: 800; color: var(--text-dark); }
 
-.ac-none { color: rgba(255,255,255,0.3); font-size: 0.85rem; }
+.ac-none { color: rgba(0,0,0,0.3); font-size: 0.85rem; font-weight: 600; }
 
-/* ── Usage Bar ── */
+/* ── Usage Bar (Premium Gradient) ── */
 .ac-usage { display: flex; flex-direction: column; gap: 0.35rem; }
-.ac-usage span { font-size: 0.82rem; color: rgba(255,255,255,0.6); font-weight: 600; }
+.ac-usage span { font-size: 0.82rem; color: var(--text-muted); font-weight: 600; }
 .ac-usage-bar {
-  width: 80px; height: 5px;
-  background: rgba(255,255,255,0.1);
+  width: 90px; height: 6px;
+  background: rgba(0,0,0,0.06);
   border-radius: 10px; overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
 }
 .ac-usage-fill {
   height: 100%;
-  background: linear-gradient(90deg, #e1782d, #f0a54b);
+  background: linear-gradient(90deg, var(--accent), var(--primary));
   border-radius: 10px;
-  transition: width 0.4s ease;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ── Expiry ── */
-.ac-expiry { font-size: 0.82rem; color: rgba(255,255,255,0.6); font-weight: 600; }
-.ac-expired { font-size: 0.82rem; color: #f87171; font-weight: 600; }
+.ac-expiry { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+.ac-expired { font-size: 0.85rem; color: #dc2626; font-weight: 700; }
 
-/* ── Toggle Button ── */
+/* ── Toggle Switch / Pill Button ── */
 .ac-toggle-btn {
-  padding: 0.35rem 0.85rem;
-  border-radius: 20px; font-size: 0.78rem; font-weight: 700;
+  padding: 0.4rem 0.9rem;
+  border-radius: 50px; font-size: 0.78rem; font-weight: 700;
   cursor: pointer; font-family: inherit; transition: all 0.25s ease;
-  white-space: nowrap;
+  white-space: nowrap; display: inline-flex; align-items: center; gap: 0.3rem;
 }
 .ac-toggle-btn.active {
-  background: rgba(74,222,128,0.12) !important;
-  border: 1px solid rgba(74,222,128,0.3) !important;
-  color: #22c55e !important;
+  background: rgba(16, 185, 129, 0.1) !important;
+  border: 1px solid rgba(16, 185, 129, 0.2) !important;
+  color: #059669 !important;
 }
-.ac-toggle-btn.active:hover { background: rgba(74,222,128,0.25) !important; }
+.ac-toggle-btn.active:hover { background: rgba(16, 185, 129, 0.15) !important; transform: translateY(-1px); }
 .ac-toggle-btn.inactive {
-  background: rgba(0,0,0,0.06) !important;
-  border: 1px solid rgba(0,0,0,0.12) !important;
+  background: rgba(0,0,0,0.04) !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
   color: var(--text-muted) !important;
 }
-.ac-toggle-btn.inactive:hover { background: rgba(0,0,0,0.12) !important; color: var(--text-dark) !important; }
+.ac-toggle-btn.inactive:hover { background: rgba(0,0,0,0.08) !important; color: var(--text-dark) !important; transform: translateY(-1px); }
 .ac-toggle-btn:disabled {
-  background: rgba(248,113,113,0.08) !important;
-  border: 1px solid rgba(248,113,113,0.2) !important;
-  color: #f87171 !important; cursor: not-allowed;
+  background: rgba(220, 38, 38, 0.05) !important;
+  border: 1px solid rgba(220, 38, 38, 0.1) !important;
+  color: #dc2626 !important; cursor: not-allowed;
+  opacity: 0.7; transform: none !important;
 }
 
 /* ── Loading ── */
@@ -103,10 +195,9 @@
   align-items: center; justify-content: center;
   padding: 4rem; gap: 1rem;
 }
-.ac-loading p { color: #e1782d; font-weight: 600; margin: 0; }
+.ac-loading p { color: var(--primary); font-weight: 600; margin: 0; }
 
-@media (max-width: 768px) {
-  .ac-stats { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) {
+  .ac-stats { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
   .ac-table-wrap { overflow-x: auto; }
-  .products-table { white-space: nowrap; }
 }

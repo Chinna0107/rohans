@@ -16,16 +16,34 @@ const AdminHeader = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <header className="admin-header">
-      <div className="admin-header-left">
+    <aside className="admin-sidebar">
+      <div className="admin-sidebar-brand">
         <img src={logo} alt="House of Ramya" className="admin-logo" />
         <div className="admin-brand">
-          <span className="ab-alpha">House of</span> <span className="ab-zone">Ramya</span>
-          <span className="ab-tag">Admin</span>
+          <div className="admin-brand-title">
+            <div className="house-of-stack">
+              <span className="ab-house">HOUSE</span>
+              <span className="ab-of">OF</span>
+            </div>
+            <span className="ab-ramya">RAMYA</span>
+          </div>
+          <span className="ab-tag">ADMIN</span>
         </div>
       </div>
 
       <nav className="admin-nav">
+        <button
+          className={`admin-nav-btn ${isActive('/admin') || isActive('/admin/dashboard') ? 'active' : ''}`}
+          onClick={() => navigate('/admin')}
+        >
+          📊 Dashboard
+        </button>
+        <button
+          className={`admin-nav-btn ${isActive('/admin/customers') ? 'active' : ''}`}
+          onClick={() => navigate('/admin/customers')}
+        >
+          👥 Customers
+        </button>
         <button
           className={`admin-nav-btn ${isActive('/admin/products') ? 'active' : ''}`}
           onClick={() => navigate('/admin/products')}
@@ -67,7 +85,7 @@ const AdminHeader = () => {
         </button>
       </nav>
 
-      <div className="admin-header-right">
+      <div className="admin-sidebar-footer">
         <div className="admin-user-pill">
           <span className="admin-user-dot" />
           <span>{user.email || 'Admin'}</span>
@@ -76,7 +94,7 @@ const AdminHeader = () => {
           🚪 Logout
         </button>
       </div>
-    </header>
+    </aside>
   );
 };
 
