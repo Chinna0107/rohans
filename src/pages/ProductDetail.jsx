@@ -328,15 +328,21 @@ const ProductDetail = () => {
               <div className="pd-colors">
                 <span className="pd-color-label">Color: <strong>{activeColor?.name || ''}</strong></span>
                 <div className="pd-color-swatches">
-                  {colors.map((c, ci) => (
-                    <button
-                      key={ci}
-                      className={`pd-color-swatch ${activeColorIdx === ci ? 'active' : ''}`}
-                      style={{ background: c.hex }}
-                      title={c.name}
-                      onClick={() => { setActiveColorIdx(ci); setActiveImg(0); }}
-                    />
-                  ))}
+                  {colors.map((c, ci) => {
+                    const thumbImg = (c.images && c.images[0]) || (product.images && product.images[0]);
+                    return (
+                      <button
+                        key={ci}
+                        className={`pd-color-swatch ${activeColorIdx === ci ? 'active' : ''}`}
+                        style={{ 
+                          backgroundImage: thumbImg ? `url(${thumbImg})` : 'none',
+                          backgroundColor: c.hex || '#ccc'
+                        }}
+                        title={c.name}
+                        onClick={() => { setActiveColorIdx(ci); setActiveImg(0); }}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             )}
