@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap');
 
 .login-page {
   min-height: 100vh;
@@ -9,7 +8,7 @@
   padding: 5rem 1.5rem 1.5rem;
   position: relative;
   overflow: hidden;
-  font-family: 'Jost', var(--font-sans);
+  font-family: var(--font-sans), var(--font-sans);
 }
 
 /* Card */
@@ -62,7 +61,7 @@
 }
 
 .login-left-content h1 {
-  font-family: 'Cinzel', var(--font-serif);
+  font-family: var(--font-serif), var(--font-serif);
   font-size: 2.2rem; font-weight: 400;
   margin: 0 0 1rem; letter-spacing: 2px;
 }
@@ -118,7 +117,7 @@
 
 .login-header { margin-bottom: 2.5rem; }
 .login-header h2 {
-  font-family: 'Cinzel', var(--font-serif);
+  font-family: var(--font-serif), var(--font-serif);
   font-size: 2.2rem; font-weight: 500;
   margin: 0 0 0.4rem; color: var(--text-dark);
 }

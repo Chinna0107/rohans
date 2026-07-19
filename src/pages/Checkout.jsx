@@ -219,7 +219,7 @@ const Checkout = () => {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: data.order.amount,
         currency: 'INR',
-        name: 'House of Ramya',
+        name: 'ROHANS MATCHING CENTRE',
         description: `Order of ${cartItems.length} item(s)`,
         order_id: data.order.id,
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },

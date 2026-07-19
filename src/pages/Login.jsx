@@ -48,7 +48,7 @@ const Login = () => {
         {/* Left panel */}
         <div className="login-left">
           <div className="login-left-content">
-            <img src={logo} alt="House of Ramya" className="login-logo" />
+            <img src={logo} alt="ROHANS MATCHING CENTRE" className="login-logo" />
             <h1><span className="l-alpha">House of</span> <span className="l-zone">Ramya</span></h1>
             <p>Your exclusive destination for premium sarees, elegant kurtas, and luxury ethnic wear.</p>
             <div className="login-features">
@@ -117,7 +117,7 @@ const Login = () => {
             </form>
 
             <div className="login-footer">
-              <span>House of Ramya Admin Panel</span>
+              <span>ROHANS MATCHING CENTRE Admin Panel</span>
             </div>
           </div>
         </div>

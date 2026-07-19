@@ -173,7 +173,7 @@ const CustomerLogin = () => {
         {/* Left Card - Branding */}
         <div className="auth-left-card">
           <div className="auth-brand-content">
-            <img src={logo} alt="House of Ramya" className="auth-logo-img" />
+            <img src={logo} alt="ROHANS MATCHING CENTRE" className="auth-logo-img" />
             <h1><span className="l-alpha">House of</span> <span className="l-zone">Ramya</span></h1>
             <p>Your premium luxury fashion destination.</p>
           </div>
@@ -194,7 +194,7 @@ const CustomerLogin = () => {
           {mode === 'signup' ? 'Create Account' : mode === 'forgot' ? 'Reset Password' : 'Welcome Back'}
         </h2>
         <p className="auth-subtitle">
-          {mode === 'signup' ? 'Join House of Ramya for exclusive benefits.' : mode === 'forgot' ? 'Enter your email to receive a reset code.' : 'Sign in to access your luxury shopping experience.'}
+          {mode === 'signup' ? 'Join ROHANS MATCHING CENTRE for exclusive benefits.' : mode === 'forgot' ? 'Enter your email to receive a reset code.' : 'Sign in to access your luxury shopping experience.'}
         </p>
 
         {error && <div className="auth-error">{error}</div>}

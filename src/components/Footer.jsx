@@ -1,7 +1,15 @@
 import { Link } from 'react-router-dom';
 import { FaInstagram, FaFacebookF, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { MdLocationOn, MdOpenInNew } from 'react-icons/md';
 import { motion } from 'framer-motion';
+import logo from '../assets/logo.jpeg';
 import './Footer.css';
+
+const BRANCHES = [
+  { name: 'Manikonda', url: 'https://maps.app.goo.gl/jyCKgUTFSoMYjbWa8' },
+  { name: 'Banjara Hills', url: 'https://maps.app.goo.gl/Kpv6XZdtu6xgfLf68' },
+  { name: 'Asrao Nagar', url: 'https://maps.app.goo.gl/dQYDTuFiNmQY6chv5' },
+];
 
 const Footer = () => (
   <footer className="luxury-footer">
@@ -9,7 +17,13 @@ const Footer = () => (
       
       {/* Column 1: Brand & Social */}
       <div className="footer-col brand-col">
-        <h3 className="footer-brand">House of Ramya</h3>
+        <div className="footer-brand-wrap">
+          <img src={logo} alt="ROHANS MATCHING CENTRE" className="footer-logo" />
+          <h3 className="footer-brand">
+            <span>ROHANS</span><br />
+            <span className="footer-brand-accent">MATCHING CENTRE</span>
+          </h3>
+        </div>
         <p className="brand-bio">
           Your premium destination for stunning ethnic wear, elegant sarees, custom stitching, and intricate Maggam work.
         </p>
@@ -33,7 +47,23 @@ const Footer = () => (
         </ul>
       </div>
 
-      {/* Column 3: Help */}
+      {/* Column 3: Locations */}
+      <div className="footer-col">
+        <h4>Our Locations</h4>
+        <ul className="footer-branches">
+          {BRANCHES.map((b) => (
+            <li key={b.name}>
+              <a href={b.url} target="_blank" rel="noopener noreferrer" className="footer-branch-link">
+                <MdLocationOn className="footer-branch-icon" />
+                <span>{b.name}</span>
+                <MdOpenInNew className="footer-branch-ext" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Column 4: Help */}
       <div className="footer-col">
         <h4>Help</h4>
         <ul>
@@ -60,7 +90,7 @@ const Footer = () => (
     {/* Bottom Bar */}
     <div className="footer-bottom">
       <div className="bottom-content">
-        <p>&copy; {new Date().getFullYear()} House of Ramya. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Rohans Matching Centre. All rights reserved.</p>
         <ul className="policy-links">
           <li><Link to="/privacy-policy">Privacy Policy</Link></li>
           <li><Link to="/terms">Terms & Conditions</Link></li>

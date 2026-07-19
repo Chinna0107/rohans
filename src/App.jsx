@@ -29,6 +29,9 @@ import FAQ from './pages/FAQ'
 import About from './pages/About'
 import Policies from './pages/Policies'
 import Search from './pages/Search'
+import NewArrivals from './pages/NewArrivals'
+import BestSellers from './pages/BestSellers'
+import TrendingProducts from './pages/TrendingProducts'
 import TopBanner from './components/TopBanner'
 import { FaWhatsapp } from 'react-icons/fa';
 
@@ -77,6 +80,9 @@ function AnimatedRoutes() {
         <Route path="/cancellation-policy" element={<PageWrapper><Policies /></PageWrapper>} />
         <Route path="/terms" element={<PageWrapper><Policies /></PageWrapper>} />
         <Route path="/search" element={<PageWrapper><Search /></PageWrapper>} />
+        <Route path="/new-arrivals" element={<PageWrapper><NewArrivals /></PageWrapper>} />
+        <Route path="/best-sellers" element={<PageWrapper><BestSellers /></PageWrapper>} />
+        <Route path="/trending" element={<PageWrapper><TrendingProducts /></PageWrapper>} />
         <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
       </Routes>
     </AnimatePresence>

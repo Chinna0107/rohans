@@ -19,7 +19,7 @@ const AdminHeader = () => {
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar-brand">
-        <img src={logo} alt="House of Ramya" className="admin-logo" />
+        <img src={logo} alt="ROHANS MATCHING CENTRE" className="admin-logo" />
         <div className="admin-brand">
           <div className="admin-brand-title">
             <div className="house-of-stack">

@@ -28,7 +28,7 @@ const POLICIES = {
       },
       {
         heading: '6. Grievance Officer and Contact Us',
-        content: 'In accordance with the Information Technology Act 2000 and rules made thereunder, the name and contact details of the Grievance Officer are provided below. If you have any questions or comments about this notice, you may email us at thehouseoframya@gmail.com, call us at +91 8008007884, or contact us by post at: House of Ramya, 13-6-586, P.K.Layout, Tirupati-517501, Andhra Pradesh, India.',
+        content: 'In accordance with the Information Technology Act 2000 and rules made thereunder, the name and contact details of the Grievance Officer are provided below. If you have any questions or comments about this notice, you may email us at thehouseoframya@gmail.com, call us at +91 8008007884, or contact us by post at: ROHANS MATCHING CENTRE, 13-6-586, P.K.Layout, Tirupati-517501, Andhra Pradesh, India.',
       },
     ],
   },
@@ -38,7 +38,7 @@ const POLICIES = {
     sections: [
       {
         heading: '1. Shipping Areas and Partners',
-        content: 'House of Ramya delivers products across India using reliable courier partners. For deliveries to remote locations or outside our standard delivery zones, please contact us directly via WhatsApp or phone to confirm service availability before placing an order.',
+        content: 'ROHANS MATCHING CENTRE delivers products across India using reliable courier partners. For deliveries to remote locations or outside our standard delivery zones, please contact us directly via WhatsApp or phone to confirm service availability before placing an order.',
       },
       {
         heading: '2. Processing and Dispatch Time',
@@ -113,7 +113,7 @@ const POLICIES = {
         content: 'For successfully cancelled prepaid orders, the refund will be initiated immediately upon confirmation of the cancellation. The refund amount will be credited back to your original payment method (bank account, credit/debit card, or UPI) within 5 to 7 business days, depending on your bank’s processing time.',
       },
       {
-        heading: '5. Cancellation by House of Ramya',
+        heading: '5. Cancellation by ROHANS MATCHING CENTRE',
         content: 'We reserve the right to refuse or cancel any order for any reason at our sole discretion. Situations that may result in your order being cancelled include limitations on quantities available for purchase, inaccuracies or errors in product or pricing information, or problems identified by our credit and fraud avoidance department. If your prepaid order is cancelled by us, a full refund will be issued within 5-7 business days.',
       },
     ],
@@ -124,7 +124,7 @@ const POLICIES = {
     sections: [
       {
         heading: '1. Introduction and Acceptance',
-        content: 'Welcome to House of Ramya. These Terms and Conditions outline the rules and regulations for the use of House of Ramya’s Website, located at houseoframya.com and houseoframya.in. By accessing this website, we assume you accept these terms and conditions in full. Do not continue to use House of Ramya if you do not agree to take all of the terms and conditions stated on this page.',
+        content: 'Welcome to ROHANS MATCHING CENTRE. These Terms and Conditions outline the rules and regulations for the use of ROHANS MATCHING CENTRE’s Website, located at houseoframya.com and houseoframya.in. By accessing this website, we assume you accept these terms and conditions in full. Do not continue to use ROHANS MATCHING CENTRE if you do not agree to take all of the terms and conditions stated on this page.',
       },
       {
         heading: '2. Products, Accuracy, and Pricing',
@@ -136,15 +136,15 @@ const POLICIES = {
       },
       {
         heading: '4. Intellectual Property Rights',
-        content: 'Unless otherwise stated, House of Ramya and/or its licensors own the intellectual property rights for all material on House of Ramya. All intellectual property rights are reserved. You may access this from House of Ramya for your own personal use subjected to restrictions set in these terms and conditions. You must not republish, sell, rent, reproduce, duplicate, or copy material from House of Ramya.',
+        content: 'Unless otherwise stated, ROHANS MATCHING CENTRE and/or its licensors own the intellectual property rights for all material on ROHANS MATCHING CENTRE. All intellectual property rights are reserved. You may access this from ROHANS MATCHING CENTRE for your own personal use subjected to restrictions set in these terms and conditions. You must not republish, sell, rent, reproduce, duplicate, or copy material from ROHANS MATCHING CENTRE.',
       },
       {
         heading: '5. User Comments and Feedback',
-        content: 'Certain parts of this website offer the opportunity for users to post and exchange opinions and information. House of Ramya reserves the right to monitor all Comments and to remove any Comments which can be considered inappropriate, offensive, or causes breach of these Terms and Conditions.',
+        content: 'Certain parts of this website offer the opportunity for users to post and exchange opinions and information. ROHANS MATCHING CENTRE reserves the right to monitor all Comments and to remove any Comments which can be considered inappropriate, offensive, or causes breach of these Terms and Conditions.',
       },
       {
         heading: '6. Limitation of Liability and Indemnification',
-        content: 'In no event shall House of Ramya, nor any of its officers, directors, and employees, be held liable for anything arising out of or in any way connected with your use of this Website. You hereby indemnify to the fullest extent House of Ramya from and against any and/or all liabilities, costs, demands, causes of action, damages, and expenses arising in any way related to your breach of any of the provisions of these Terms.',
+        content: 'In no event shall ROHANS MATCHING CENTRE, nor any of its officers, directors, and employees, be held liable for anything arising out of or in any way connected with your use of this Website. You hereby indemnify to the fullest extent ROHANS MATCHING CENTRE from and against any and/or all liabilities, costs, demands, causes of action, damages, and expenses arising in any way related to your breach of any of the provisions of these Terms.',
       },
       {
         heading: '7. Governing Law and Jurisdiction',

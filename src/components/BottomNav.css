@@ -1,5 +1,5 @@
 /* ----------------------------------------------------
-   Bottom Nav CSS
+   Bottom Nav — Black Premium Theme (matches Footer)
 ---------------------------------------------------- */
 .bottom-nav {
   display: none;
@@ -7,11 +7,11 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background: #ffffff;
-  border-top: 1px solid #e0e0e0;
+  background: #0a0a0a;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
   z-index: 1000;
   padding: 0.5rem 0 calc(1.2rem + env(safe-area-inset-bottom, 0px));
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .bottom-nav-item {
@@ -21,26 +21,42 @@
   justify-content: center;
   flex: 1;
   text-decoration: none;
-  color: #666666;
-  gap: 0.2rem;
-  transition: color 0.3s ease;
+  color: rgba(255, 255, 255, 0.55);
+  gap: 0.15rem;
+  transition: color 0.25s ease, transform 0.2s ease;
+  padding: 0.3rem 0;
 }
 
 .bottom-nav-item:hover,
 .bottom-nav-item.active {
-  color: var(--text-dark, #000000);
+  color: #e91e8c;
+}
+
+.bottom-nav-item.active .bottom-nav-icon {
+  background: rgba(233, 30, 140, 0.12);
+  border-radius: 12px;
+  padding: 0.3rem 0.7rem;
+}
+
+.bottom-nav-item:active {
+  transform: scale(0.9);
 }
 
 .bottom-nav-icon {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.25s ease, padding 0.25s ease;
+  border-radius: 12px;
+  padding: 0.3rem 0.7rem;
 }
 
 .bottom-nav-label {
-  font-size: 0.6rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
 }
 
 @media (max-width: 1024px) {
@@ -58,23 +74,23 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 1001; /* Above everything but below the sheet */
-  opacity: 1;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1001;
   animation: fadeIn 0.2s ease;
 }
 
 .account-bottom-sheet {
   position: fixed;
-  bottom: -100%; /* Hidden by default */
+  bottom: -100%;
   left: 0;
   width: 100%;
-  background: #ffffff;
+  background: #0a0a0a;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  z-index: 1002; /* Above the overlay and nav */
+  z-index: 1002;
   padding: 1.5rem;
-  box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.4);
   transition: bottom 0.3s cubic-bezier(0.1, 0.8, 0.2, 1);
   padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
 }
@@ -94,15 +110,21 @@
   font-family: var(--font-serif);
   font-size: 1.3rem;
   margin: 0;
+  color: #ffffff;
 }
 
 .close-sheet-btn {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.55);
   cursor: pointer;
   padding: 0;
   display: flex;
+  transition: color 0.25s ease;
+}
+
+.close-sheet-btn:hover {
+  color: #e91e8c;
 }
 
 .sheet-menu {
@@ -116,31 +138,32 @@
   padding: 1rem;
   font-size: 1rem;
   font-weight: 500;
-  background: var(--bg-off);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
-  color: var(--text-dark);
-  transition: background 0.2s;
+  color: rgba(255, 255, 255, 0.88);
+  transition: background 0.2s, color 0.2s;
 }
 
 .sheet-menu button:hover {
-  background: #f0f0f0;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 .sheet-divider {
   height: 1px;
-  background: var(--border-subtle);
+  background: rgba(255, 255, 255, 0.07);
   margin: 0.5rem 0;
 }
 
 .sheet-menu button.logout-btn {
-  color: var(--accent);
+  color: #e91e8c;
   background: transparent;
   text-align: center;
   font-weight: 600;
 }
 
 .sheet-menu button.logout-btn:hover {
-  background: var(--accent-light);
+  background: rgba(233, 30, 140, 0.1);
 }
 
 @keyframes fadeIn {

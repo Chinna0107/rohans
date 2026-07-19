@@ -93,7 +93,7 @@ const AdminCustomers = () => {
       return;
     }
     const cleanedPhone = customer.phone.replace(/\D/g, '');
-    const msg = encodeURIComponent(`Hi ${customer.name}! 🙏 Thank you for being a valued customer at House of Ramya.`);
+    const msg = encodeURIComponent(`Hi ${customer.name}! 🙏 Thank you for being a valued customer at ROHANS MATCHING CENTRE.`);
     window.open(`https://wa.me/${cleanedPhone}?text=${msg}`, "_blank");
   };
 

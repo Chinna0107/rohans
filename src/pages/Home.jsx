@@ -5,16 +5,35 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
 import { MdStar, MdVerified, MdLocalShipping, MdPayment, MdPhone, MdOutlineAssignmentReturn } from 'react-icons/md';
 import { FaHeart, FaRegHeart, FaInstagram } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import Typewriter from 'typewriter-effect';
 import CountUp from 'react-countup';
 import useProducts from '../hooks/useProducts';
 import { useUserAuth } from '../context/UserAuthContext';
 import { toast } from 'react-toastify';
 import './Home.css';
+
+const COLLECTION_BANNERS = [
+  {
+    label: 'New Arrivals',
+    sub: 'Fresh styles, just landed',
+    path: '/new-arrivals',
+    img: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=900&auto=format&fit=crop',
+  },
+  {
+    label: 'Best Sellers',
+    sub: 'Our most loved pieces',
+    path: '/best-sellers',
+    img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=900&auto=format&fit=crop',
+  },
+  {
+    label: 'Trending Now',
+    sub: 'What everyone is wearing',
+    path: '/trending',
+    img: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=900&auto=format&fit=crop',
+  },
+];
 
 const CATEGORIES = [
   { name: "KURTIES", img: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=600&auto=format&fit=crop', link: 'KURTIES' },
@@ -24,81 +43,41 @@ const CATEGORIES = [
   { name: "MAGGAM WORK", img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsQGk5k3Oy4-uWWk1AEr_BXAlPvGlLaolJ6v2NIbCcSg&s=10', link: 'MAGGAM WORK' },
 ];
 
-const ProductCard = ({ product, addToCart, navigate }) => {
+const FestiveCard = ({ product, navigate }) => {
   const { customer, toggleWishlist } = useUserAuth();
-  const [isHovered, setIsHovered] = useState(false);
-  
   const pid = product.id || product._id;
-  const imgUrl = product.images?.[0] || product.image;
-  const currentPrice = product.prices?.[product.grams?.[0] || product.grams] || product.price || 0;
-  const origPrice = product.originalPrices?.[product.grams?.[0] || product.grams] || currentPrice * 1.5;
-  
-  const calcDisc = (o, c) => Math.round(((o - c) / o) * 100);
-  const disc = origPrice > currentPrice ? calcDisc(origPrice, currentPrice) : null;
+  const images = product.images || [];
+  const defaultWeight = Array.isArray(product.grams) ? product.grams[0] : product.grams;
+  const currentPrice = product.prices?.[defaultWeight] || product.price || 0;
+  const origPrice = product.originalPrices?.[defaultWeight];
+  const disc = origPrice && Number(origPrice) > Number(currentPrice)
+    ? Math.round(((Number(origPrice) - Number(currentPrice)) / Number(origPrice)) * 100)
+    : null;
+  const isWishlisted = customer?.wishlist?.some(item => String(item.id) === String(pid));
   const slug = product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-  const isWishlisted = customer?.wishlist?.some(item => String(item.id) === String(pid));
-
-  const handleWishlistClick = async (e) => {
+  const handleWishlist = async (e) => {
     e.stopPropagation();
-    if (!customer) {
-      toast.info('Please log in to save to your wishlist.');
-      return;
-    }
+    if (!customer) { toast.info('Please log in to save to your wishlist.'); return; }
     const res = await toggleWishlist(product);
-    if (res.success) {
-      toast.success(res.isWishlisted ? 'Added to wishlist' : 'Removed from wishlist');
-    } else {
-      toast.error('Failed to update wishlist');
-    }
+    toast[res.success ? 'success' : 'error'](res.success ? (res.isWishlisted ? 'Added to wishlist' : 'Removed from wishlist') : 'Failed to update wishlist');
   };
 
   return (
-    <div 
-      className="luxury-product-card"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={() => navigate(`/products/${slug}-${pid}`)}
-    >
-      <div className="card-image-wrap">
-        <div className="card-badges">
-          {product.tag && <span className="badge new-badge">{product.tag}</span>}
-          {disc && <span className="badge sale-badge">{disc}% OFF</span>}
-        </div>
-        
-        <button className="wishlist-btn" onClick={handleWishlistClick}>
-          {isWishlisted ? <FaHeart color="#FF4747" /> : <FaRegHeart />}
+    <div className="festive-product-card" onClick={() => navigate(`/products/${slug}-${pid}`)}>
+      <div className="festive-card-img">
+        {disc && <span className="festive-disc-badge">-{disc}%</span>}
+        <button className="festive-wishlist-btn" onClick={handleWishlist}>
+          {isWishlisted ? <FaHeart color="#e91e8c" /> : <FaRegHeart color="#999" />}
         </button>
-
-        <img src={imgUrl} alt={product.name} />
-        
-        <div className={`quick-add-overlay ${isHovered ? 'visible' : ''}`}>
-          <button className="quick-add-btn" onClick={(e) => { e.stopPropagation(); addToCart(pid, product.grams?.[0] || product.grams); }}>
-            Quick Add
-          </button>
-        </div>
+        <img src={images[0]} alt={product.name} onError={e => { e.target.style.display = 'none'; }} />
       </div>
-
-      <div className="card-content">
-        <span className="brand-label">HOUSE OF RAMYA</span>
-        <h3 className="product-title">{product.name}</h3>
-        
-        <div className="rating-row">
-          <div className="stars">
-            {[...Array(5)].map((_, i) => <MdStar key={i} />)}
-          </div>
-          <span className="review-count">(12)</span>
-        </div>
-
-        <div className="price-row">
-          <span className="current-price">₹{currentPrice}</span>
-          {origPrice > currentPrice && <span className="original-price">₹{Math.round(origPrice)}</span>}
-          {disc && <span className="discount-text">({disc}% OFF)</span>}
-        </div>
-        
-        <div className="color-swatches">
-          <span className="swatch" style={{ background: '#000000' }}></span>
-          <span className="swatch" style={{ background: '#f5f5dc' }}></span>
+      <div className="festive-card-info">
+        <span className="festive-card-cat">{product.category}</span>
+        <h4 className="festive-card-name">{product.name}</h4>
+        <div className="festive-card-price">
+          {origPrice && Number(origPrice) > Number(currentPrice) && <span className="festive-orig">₹{origPrice}</span>}
+          <span className="festive-price">₹{currentPrice}</span>
         </div>
       </div>
     </div>
@@ -106,9 +85,8 @@ const ProductCard = ({ product, addToCart, navigate }) => {
 };
 
 const Home = () => {
-  const { products } = useProducts();
-  const { addToCart } = useCart();
   const navigate = useNavigate();
+  const { products } = useProducts();
   const [sliders, setSliders] = useState([]);
 
   useEffect(() => {
@@ -138,69 +116,132 @@ const Home = () => {
     pauseOnHover: false
   };
 
-  const newArrivals = products.filter(p => p.styleTags?.includes('new')).slice(0, 4);
-  const bestSellers = products.filter(p => p.styleTags?.includes('bestseller')).slice(0, 4);
-  const trending = products.filter(p => p.styleTags?.includes('trending')).slice(0, 4);
-  
-  // Fallbacks if no products are tagged yet, to keep the layout looking good
-  const displayNew = newArrivals.length > 0 ? newArrivals : products.slice(0, 4);
-  const displayBest = bestSellers.length > 0 ? bestSellers : products.slice(4, 8);
-  const displayTrending = trending.length > 0 ? trending : products.slice(8, 12);
-  const displayFestive = products.filter(p => p.festiveSeason).slice(0, 4);
-
   return (
     <div className="luxury-home">
       
-      {/* Hero Section */}
-      {sliders.length > 0 ? (
-        <section className="luxury-slider-hero">
-          <Slider {...sliderSettings}>
-            {sliders.map((slider) => (
-              <div key={slider.id} className="hero-slide">
-                <picture>
-                  <source media="(max-width: 768px)" srcSet={slider.mobile || slider.imageUrl} />
-                  <img src={slider.desktop || slider.imageUrl} alt={slider.title || 'Banner'} className="hero-slide-bg" />
-                </picture>
-                <div className="hero-slide-overlay"></div>
-                <div className="hero-content compact-hero">
-                  <motion.h2
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {slider.heading || slider.title || 'Exclusive Collection'}
-                  </motion.h2>
-                  <motion.p 
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                  >
-                    {slider.desc || slider.description || 'Discover our premium range of elegant styles tailored just for you.'}
-                  </motion.p>
-                  <motion.button 
-                    className="luxury-btn solid-maroon-btn small-btn" 
-                    onClick={() => navigate(slider.productSlug ? `/products/${slider.productSlug}` : '/products')}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                  >
-                    Shop Now
-                  </motion.button>
-                </div>
-              </div>
-            ))}
-          </Slider>
-        </section>
-      ) : (
-        <section className="luxury-slider-hero">
-          <div className="hero-slide fallback-slide">
-            <picture>
-              <source media="(max-width: 768px)" srcSet="/images/house-of-ramya-banner-mobile.png" />
-              <img src="/images/house-of-ramya-banner.png" alt="House of Ramya Banner" className="hero-slide-bg" />
-            </picture>
+      {/* Hero Section - Rohan's Matching Centre Banner */}
+      <section className="rmc-hero-section">
+        <div className="rmc-hero-inner">
+          <img
+            src="/images/rohans-matching-centre-banner.png"
+            alt="Rohan's Matching Centre - Sarees, Blouses, Men's Collection"
+            className="rmc-hero-img"
+          />
+          <div className="rmc-hero-overlay">
+            <motion.div
+              className="rmc-hero-content"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.p
+                className="rmc-hero-tagline"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                ✦ Your One-Stop Fashion Destination ✦
+              </motion.p>
+              <motion.h1
+                className="rmc-hero-title"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+              >
+                ROHAN'S MATCHING CENTRE
+              </motion.h1>
+              <motion.div
+                className="rmc-category-chips"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+              >
+                {['Sarees', 'Blouses', "Men's Wear", 'Dress Materials', 'Kurties', 'Custom Stitching'].map(cat => (
+                  <span key={cat} className="rmc-chip" onClick={() => navigate('/products', { state: { category: cat.toUpperCase() } })}>{cat}</span>
+                ))}
+              </motion.div>
+              <motion.div
+                className="rmc-hero-cta-row"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
+              >
+                <button className="rmc-btn-primary" onClick={() => navigate('/products')}>
+                  Shop Now
+                </button>
+                <button className="rmc-btn-outline" onClick={() => navigate('/products', { state: { category: 'SAREES' } })}>
+                  Explore Sarees
+                </button>
+              </motion.div>
+            </motion.div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
+
+      {/* Mobile Marquee Strip */}
+      <div className="mobile-marquee-strip">
+        <div className="mobile-marquee-track">
+          {['Free Shipping ₹499+', 'New Arrivals', 'Premium Quality', 'Best Sellers', '7-Day Returns', 'Trending Now', 'Free Shipping ₹499+', 'New Arrivals', 'Premium Quality', 'Best Sellers', '7-Day Returns', 'Trending Now'].map((t, i) => (
+            <span key={i}>{t} <span className="marquee-dot">✦</span></span>
+          ))}
+        </div>
+      </div>
+
+      {/* Weave of the Month */}
+      <motion.section
+        className="weave-section"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.7 }}
+      >
+        <div className="weave-label">Weave of the Month</div>
+        <h2 className="weave-title">The Royal Mangalgiri Pattu</h2>
+
+        <div className="weave-images">
+          <motion.div
+            className="weave-img-card"
+            whileHover={{ scale: 1.04, y: -8, boxShadow: '0 24px 60px rgba(106,44,58,0.18)' }}
+            transition={{ duration: 0.35 }}
+          >
+            <img
+              src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop"
+              alt="Golden Saree Weave"
+            />
+            <div className="weave-img-label">Golden Saree Weave</div>
+          </motion.div>
+
+          <motion.div
+            className="weave-img-card"
+            whileHover={{ scale: 1.04, y: -8, boxShadow: '0 24px 60px rgba(106,44,58,0.18)' }}
+            transition={{ duration: 0.35 }}
+          >
+            <img
+              src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800&auto=format&fit=crop"
+              alt="Colorful Saree Weave"
+            />
+            <div className="weave-img-label">Colorful Saree Weave</div>
+          </motion.div>
+        </div>
+
+        <div className="weave-content">
+          <h3 className="weave-sub">Tradition in Every Weave: the Mangalagiri Pattu Legacy</h3>
+          <p className="weave-desc">
+            Celebrated for Its Timeless Elegance, Our Featured Mangalagiri Pattu Is Handwoven By Skilled Artisans
+            Using the Finest Cotton and Silk Yarns, Adorned with Its Signature Zari Borders and Distinctive
+            Nizam-inspired Craftsmanship. Every Saree Is A Testament to Generations of Weaving Heritage, Taking
+            Days of Meticulous Handcrafting to Bring Its Understated Beauty to Life.
+          </p>
+          <motion.button
+            className="luxury-btn solid-maroon-btn weave-btn"
+            onClick={() => navigate('/products', { state: { category: 'SAREES' } })}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            Shop Featured Sarees
+          </motion.button>
+        </div>
+      </motion.section>
 
       {/* Category Grid */}
       <motion.section 
@@ -223,79 +264,66 @@ const Home = () => {
         </div>
       </motion.section>
 
-      {/* New Arrivals */}
-      <motion.section 
-        className="luxury-section" style={{ background: 'var(--bg-off)' }}
+      {/* Collections Banner Row */}
+      <motion.section
+        className="luxury-section collections-section"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="section-heading">New Arrivals</h2>
-        <div className="product-grid-4">
-          {displayNew.map(product => (
-            <ProductCard key={product.id || product._id} product={product} addToCart={addToCart} navigate={navigate} />
-          ))}
-        </div>
-      </motion.section>
-
-      {/* Best Sellers */}
-      <motion.section 
-        className="luxury-section"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-      >
-        <h2 className="section-heading">Best Sellers</h2>
-        <div className="product-grid-4">
-          {displayBest.map(product => (
-            <ProductCard key={product.id || product._id} product={product} addToCart={addToCart} navigate={navigate} />
-          ))}
-        </div>
-      </motion.section>
-
-      {/* Trending Products */}
-      <motion.section 
-        className="luxury-section" style={{ background: 'var(--bg-off)' }}
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-      >
-        <h2 className="section-heading">Trending Products</h2>
-        <div className="product-grid-4">
-          {displayTrending.map(product => (
-            <ProductCard key={product.id || product._id} product={product} addToCart={addToCart} navigate={navigate} />
+        <h2 className="section-heading">Our Collections</h2>
+        <div className="collection-banners-row">
+          {COLLECTION_BANNERS.map((banner, i) => (
+            <motion.div
+              key={banner.path}
+              className="collection-banner-card"
+              onClick={() => navigate(banner.path)}
+              whileHover={{ scale: 1.02 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+            >
+              <img src={banner.img} alt={banner.label} />
+              <div className="collection-banner-overlay">
+                <span className="collection-banner-sub">{banner.sub}</span>
+                <h3 className="collection-banner-title">{banner.label}</h3>
+                <span className="collection-banner-cta">Shop Now →</span>
+              </div>
+            </motion.div>
           ))}
         </div>
       </motion.section>
       
       {/* Festival Collection */}
-      <motion.section 
-        className="luxury-section"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-      >
-        <h2 className="section-heading">Festive Season Collection</h2>
-        {displayFestive.length > 0 ? (
-          <div className="product-grid-4">
-            {displayFestive.map(product => (
-              <ProductCard key={product.id || product._id} product={product} addToCart={addToCart} navigate={navigate} />
-            ))}
-          </div>
-        ) : (
-          <div className="festival-banner" onClick={() => navigate('/products')}>
-            <div className="festival-content">
-              <h2>The Festival Collection</h2>
-              <p>Celebrate in style with our curated festive edit.</p>
-              <button className="luxury-btn">Shop Collection</button>
+      {(() => {
+        const festive = products.filter(p => p.festiveSeason);
+        const display = festive.length > 0 ? festive : products.slice(0, 8);
+        return display.length > 0 ? (
+          <motion.section
+            className="luxury-section festive-section"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="festive-header">
+              <span className="festive-label">✦ Limited Edition</span>
+              <h2 className="section-heading" style={{ marginBottom: 0 }}>Festive Collection</h2>
+              <p className="festive-sub">Celebrate in style with our curated festive edit</p>
             </div>
-          </div>
-        )}
-      </motion.section>
+            <div className="festive-products-grid">
+              {display.slice(0, 8).map(p => (
+                <FestiveCard key={p.id || p._id} product={p} navigate={navigate} />
+              ))}
+            </div>
+            <div className="festive-footer-cta">
+              <button className="luxury-btn solid-maroon-btn" onClick={() => navigate('/products')}>View All</button>
+            </div>
+          </motion.section>
+        ) : null;
+      })()}
 
       {/* Customer Reviews */}
       <motion.section 
@@ -311,10 +339,10 @@ const Home = () => {
             {[
               { name: 'Anjali R.', text: 'The Maggam work on my blouse was incredibly detailed and perfect. Truly exquisite craftsmanship!' },
               { name: 'Priya S.', text: 'I ordered a premium saree for a wedding, and the fabric quality is simply outstanding.' },
-              { name: 'Divya K.', text: 'The custom stitching for my kurti fit flawlessly. House of Ramya never disappoints!' },
+              { name: 'Divya K.', text: 'The custom stitching for my kurti fit flawlessly. ROHANS MATCHING CENTRE never disappoints!' },
               { name: 'Anjali R.', text: 'The Maggam work on my blouse was incredibly detailed and perfect. Truly exquisite craftsmanship!' },
               { name: 'Priya S.', text: 'I ordered a premium saree for a wedding, and the fabric quality is simply outstanding.' },
-              { name: 'Divya K.', text: 'The custom stitching for my kurti fit flawlessly. House of Ramya never disappoints!' },
+              { name: 'Divya K.', text: 'The custom stitching for my kurti fit flawlessly. ROHANS MATCHING CENTRE never disappoints!' },
             ].map((t, i) => (
               <div key={i} className="luxury-review-card">
                 <div className="stars">{[...Array(5)].map((_, j) => <MdStar key={j} />)}</div>

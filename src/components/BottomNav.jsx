@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { MdHome, MdGridView, MdSearch, MdPerson, MdClose } from 'react-icons/md';
-import { FaRegHeart } from 'react-icons/fa';
+import { LuHouse, LuLayoutGrid, LuSearch, LuHeart, LuCircleUserRound, LuX } from 'react-icons/lu';
 import { useUserAuth } from '../context/UserAuthContext';
 import './BottomNav.css';
 
@@ -26,11 +25,11 @@ const BottomNav = () => {
   }, [showAccountMenu]);
 
   const navItems = [
-    { path: '/', icon: <MdHome size={22} />, label: 'HOME' },
-    { path: '/products', icon: <MdGridView size={22} />, label: 'CATEGORIES' },
-    { path: '/search', icon: <MdSearch size={22} />, label: 'SEARCH' },
-    { path: customer ? '/dashboard/wishlist' : '/customer-login', icon: <FaRegHeart size={20} />, label: 'WISHLIST' },
-    { isAccount: true, icon: <MdPerson size={22} />, label: 'ACCOUNT' }
+    { path: '/', icon: <LuHouse size={22} strokeWidth={1.5} />, label: 'HOME' },
+    { path: '/products', icon: <LuLayoutGrid size={22} strokeWidth={1.5} />, label: 'CATEGORIES' },
+    { path: '/search', icon: <LuSearch size={22} strokeWidth={1.5} />, label: 'SEARCH' },
+    { path: customer ? '/dashboard/wishlist' : '/customer-login', icon: <LuHeart size={22} strokeWidth={1.5} />, label: 'WISHLIST' },
+    { isAccount: true, icon: <LuCircleUserRound size={22} strokeWidth={1.5} />, label: 'ACCOUNT' }
   ];
 
   const handleAccountClick = (e) => {
@@ -60,7 +59,7 @@ const BottomNav = () => {
       <div className={`account-bottom-sheet ${showAccountMenu ? 'active' : ''}`} ref={menuRef}>
         <div className="sheet-header">
           <h3>My Account</h3>
-          <button onClick={() => setShowAccountMenu(false)} className="close-sheet-btn"><MdClose size={24} /></button>
+          <button onClick={() => setShowAccountMenu(false)} className="close-sheet-btn"><LuX size={22} strokeWidth={1.5} /></button>
         </div>
         <div className="sheet-menu">
           <button onClick={() => handleNavigate('/dashboard/profile')}>My Profile</button>

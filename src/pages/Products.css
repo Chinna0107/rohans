@@ -242,7 +242,8 @@
 /* Luxury Product Card (Reused styles from Home.css mostly) */
 .product-item {
   cursor: pointer;
-  group: hover;
+  border-radius: 18px;
+  overflow: hidden;
 }
 .product-image-container {
   position: relative;
@@ -250,6 +251,7 @@
   overflow: hidden;
   background: var(--bg-off);
   margin-bottom: 1rem;
+  border-radius: 18px;
 }
 .product-image-container img {
   width: 100%;
@@ -406,10 +408,12 @@
   text-decoration: line-through;
   color: var(--text-muted);
   font-size: 0.9rem;
+  color: #aaa;
 }
 .price {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1.1rem;
+  color: #e91e8c;
 }
 .discount-badge {
   display: none; /* Hidden since we have the corner badge */
@@ -496,5 +500,77 @@
   .filter-panel {
     width: 90%;
     right: 5%;
+  }
+}
+
+/* ----------------------------------------------------
+   Collection Pages (NewArrivals, BestSellers, Trending)
+---------------------------------------------------- */
+.collection-page-header {
+  text-align: center;
+  padding: 3.5rem 2rem 2rem;
+  background: #0a0a0a;
+  color: #fff;
+  position: relative;
+}
+
+.collection-back-btn {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.85);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.45rem 1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.collection-back-btn:hover {
+  background: #e91e8c;
+  border-color: #e91e8c;
+  color: #fff;
+}
+
+.collection-page-header h1 {
+  font-family: var(--font-serif);
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.collection-page-header p {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.5px;
+}
+
+.collection-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+  gap: 2rem !important;
+  padding: 2rem 4% !important;
+}
+
+@media (max-width: 600px) {
+  .collection-page-header h1 {
+    font-size: 2rem;
+  }
+
+  .collection-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+    padding: 1rem !important;
   }
 }

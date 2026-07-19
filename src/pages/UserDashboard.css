@@ -1,10 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap');
 
 .ud-page {
   min-height: 100vh;
   padding: 120px 2rem 5rem;
   background: linear-gradient(135deg, #fdfbfb 0%, #f3ecec 100%);
-  font-family: 'Jost', var(--font-sans);
+  font-family: var(--font-sans), var(--font-sans);
 }
 
 .ud-container {
@@ -24,7 +23,7 @@
 }
 
 .ud-section h2 {
-  font-family: 'Cinzel', var(--font-serif);
+  font-family: var(--font-serif), var(--font-serif);
   font-size: 2.5rem; 
   color: var(--text-dark);
   margin: 0 0 2rem;
@@ -45,7 +44,7 @@
   border: 1px dashed rgba(0, 0, 0, 0.15);
   border-radius: 8px;
 }
-.ud-empty p { color: var(--text-muted); margin: 0; font-size: 1.2rem; font-family: 'Cinzel', serif; letter-spacing: 1px; }
+.ud-empty p { color: var(--text-muted); margin: 0; font-size: 1.2rem; font-family: var(--font-serif), serif; letter-spacing: 1px; }
 .ud-empty button { margin-top: 1rem; }
 
 /* ── Orders ── */
@@ -102,7 +101,7 @@
   margin-bottom: 4rem;
 }
 .profile-section h2 {
-  font-family: 'Cinzel', var(--font-sans);
+  font-family: var(--font-serif), var(--font-sans);
   font-size: 1.8rem;
   font-weight: 400;
   letter-spacing: 0.25em;
@@ -116,7 +115,7 @@
   font-size: 0.85rem;
   color: var(--text-muted);
   letter-spacing: 0.1em;
-  font-family: 'Jost', var(--font-sans);
+  font-family: var(--font-sans), var(--font-sans);
 }
 
 .ud-profile-detail {
@@ -231,7 +230,7 @@
 }
 
 .address-type {
-  font-family: 'Cinzel', var(--font-sans);
+  font-family: var(--font-serif), var(--font-sans);
   font-size: 0.8rem;
   font-weight: 500;
   text-transform: uppercase;

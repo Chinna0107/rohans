@@ -198,7 +198,7 @@ const AdminSliders = () => {
                 <label>Heading</label>
                 <input type="text" value={formData.heading}
                   onChange={e => setFormData({ ...formData, heading: e.target.value })}
-                  placeholder="e.g. Welcome to House of Ramya" />
+                  placeholder="e.g. Welcome to ROHANS MATCHING CENTRE" />
               </div>
               <div className="form-field">
                 <label>Description</label>

@@ -4,8 +4,8 @@ import { useCart } from '../context/CartContext';
 import {
   MdStar, MdStarHalf, MdLocalShipping, MdVerified,
   MdArrowBack, MdShare, MdFavorite, MdFavoriteBorder,
-  MdZoomIn, MdCheckCircle, MdSwapHoriz,
-  MdKeyboardArrowDown, MdKeyboardArrowUp
+  MdCheckCircle, MdSwapHoriz,
+  MdKeyboardArrowDown, MdKeyboardArrowUp, MdClose, MdZoomIn, MdZoomOut
 } from 'react-icons/md';
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import useProducts from '../hooks/useProducts';
@@ -88,13 +88,19 @@ const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState('');
   const [activeColorIdx, setActiveColorIdx] = useState(0);
   const [activeImg, setActiveImg] = useState(0);
-  const [zoomed, setZoomed] = useState(false);
-  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
   const [wishlisted, setWishlisted] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [openSection, setOpenSection] = useState('desc'); // Accordion state
+  const [openSection, setOpenSection] = useState('desc');
   const [showSizeGuide, setShowSizeGuide] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImg, setLightboxImg] = useState(0);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [imgOffset, setImgOffset] = useState({ x: 0, y: 0 });
   const imgRef = useRef(null);
+  const lightboxImgRef = useRef(null);
 
   const { addToCart, updateQuantity, isInCart, getCartQuantity } = useCart();
 
@@ -121,14 +127,50 @@ const ProductDetail = () => {
     }
   }, [product, customer]);
 
-  const handleMouseMove = (e) => {
-    if (!imgRef.current) return;
-    const { left, top, width, height } = imgRef.current.getBoundingClientRect();
-    setZoomPos({
-      x: ((e.clientX - left) / width) * 100,
-      y: ((e.clientY - top) / height) * 100,
+  const openLightbox = (idx) => {
+    setLightboxImg(idx);
+    setZoomLevel(1);
+    setImgOffset({ x: 0, y: 0 });
+    setLightboxOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    document.body.style.overflow = '';
+  };
+
+  const handleLightboxZoomIn = () => setZoomLevel(z => Math.min(z + 0.5, 4));
+  const handleLightboxZoomOut = () => {
+    setZoomLevel(z => {
+      const next = Math.max(z - 0.5, 1);
+      if (next === 1) setImgOffset({ x: 0, y: 0 });
+      return next;
     });
   };
+
+  const handleLightboxWheel = (e) => {
+    e.preventDefault();
+    if (e.deltaY < 0) setZoomLevel(z => Math.min(z + 0.3, 4));
+    else setZoomLevel(z => { const n = Math.max(z - 0.3, 1); if (n === 1) setImgOffset({ x: 0, y: 0 }); return n; });
+  };
+
+  const handleDragStart = (e) => {
+    if (zoomLevel <= 1) return;
+    setIsDragging(true);
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    setDragStart({ x: clientX - imgOffset.x, y: clientY - imgOffset.y });
+  };
+
+  const handleDragMove = (e) => {
+    if (!isDragging) return;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    setImgOffset({ x: clientX - dragStart.x, y: clientY - dragStart.y });
+  };
+
+  const handleDragEnd = () => setIsDragging(false);
 
   const handleWishlist = async () => {
     if (!customer) {
@@ -282,19 +324,16 @@ const ProductDetail = () => {
               {product.tag && <span className="pd-tag-badge">{TAG_LABELS[product.tag] || product.tag}</span>}
               {discount && <span className="pd-discount-badge">-{discount}%</span>}
               <div
-                className={`pd-main-img ${zoomed && media[activeImg]?.type !== 'video' ? 'zoomed' : ''}`}
+                className="pd-main-img"
                 ref={imgRef}
-                onMouseMove={handleMouseMove}
-                onMouseEnter={() => setZoomed(true)}
-                onMouseLeave={() => setZoomed(false)}
-                style={zoomed && media[activeImg]?.type !== 'video' ? { '--zx': `${zoomPos.x}%`, '--zy': `${zoomPos.y}%` } : {}}
+                onClick={() => media[activeImg]?.type !== 'video' && openLightbox(activeImg)}
               >
                 {media[activeImg]?.type === 'video' ? (
                   <video src={media[activeImg]?.url} autoPlay loop muted controls playsInline style={{width:'100%', height:'100%', objectFit:'cover', borderRadius: '16px'}} />
                 ) : (
                   <>
                     <img src={media[activeImg]?.url} alt={product.name} />
-                    {!zoomed && <span className="pd-zoom-hint"><MdZoomIn /> Hover to zoom</span>}
+                    <span className="pd-zoom-hint"><MdZoomIn /> Tap to zoom</span>
                   </>
                 )}
               </div>
@@ -598,6 +637,72 @@ const ProductDetail = () => {
 
       </div>
     </div>
+
+      {/* ── Lightbox Modal ── */}
+      {lightboxOpen && (
+        <div className="lb-overlay" onClick={closeLightbox}>
+          <div className="lb-modal" onClick={e => e.stopPropagation()}>
+            {/* Top bar */}
+            <div className="lb-topbar">
+              <span className="lb-counter">{lightboxImg + 1} / {media.filter(m => m.type === 'image').length}</span>
+              <div className="lb-controls">
+                <button className="lb-ctrl-btn" onClick={handleLightboxZoomOut} disabled={zoomLevel <= 1}><MdZoomOut /></button>
+                <span className="lb-zoom-val">{Math.round(zoomLevel * 100)}%</span>
+                <button className="lb-ctrl-btn" onClick={handleLightboxZoomIn} disabled={zoomLevel >= 4}><MdZoomIn /></button>
+              </div>
+              <button className="lb-close" onClick={closeLightbox}><MdClose /></button>
+            </div>
+
+            {/* Image */}
+            <div
+              className="lb-img-wrap"
+              onWheel={handleLightboxWheel}
+              onMouseDown={handleDragStart}
+              onMouseMove={handleDragMove}
+              onMouseUp={handleDragEnd}
+              onMouseLeave={handleDragEnd}
+              onTouchStart={handleDragStart}
+              onTouchMove={handleDragMove}
+              onTouchEnd={handleDragEnd}
+              style={{ cursor: zoomLevel > 1 ? (isDragging ? 'grabbing' : 'grab') : 'zoom-in' }}
+            >
+              <img
+                ref={lightboxImgRef}
+                src={media[lightboxImg]?.url}
+                alt={product.name}
+                style={{
+                  transform: `scale(${zoomLevel}) translate(${imgOffset.x / zoomLevel}px, ${imgOffset.y / zoomLevel}px)`,
+                  transition: isDragging ? 'none' : 'transform 0.2s ease',
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+                draggable={false}
+              />
+            </div>
+
+            {/* Prev / Next */}
+            {media.filter(m => m.type === 'image').length > 1 && (
+              <>
+                <button className="lb-prev" onClick={() => { setLightboxImg(i => (i - 1 + media.length) % media.length); setZoomLevel(1); setImgOffset({ x: 0, y: 0 }); }}>‹</button>
+                <button className="lb-next" onClick={() => { setLightboxImg(i => (i + 1) % media.length); setZoomLevel(1); setImgOffset({ x: 0, y: 0 }); }}>›</button>
+              </>
+            )}
+
+            {/* Thumbnail strip */}
+            <div className="lb-thumbs">
+              {media.filter(m => m.type === 'image').map((m, i) => (
+                <img
+                  key={i}
+                  src={m.url}
+                  alt={`thumb ${i}`}
+                  className={`lb-thumb ${lightboxImg === i ? 'active' : ''}`}
+                  onClick={() => { setLightboxImg(i); setZoomLevel(1); setImgOffset({ x: 0, y: 0 }); }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Size Guide Modal ── */}
       {showSizeGuide && (

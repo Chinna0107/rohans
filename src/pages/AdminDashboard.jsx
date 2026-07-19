@@ -58,7 +58,7 @@ const AdminDashboard = () => {
     // Clean phone string
     const cleanedPhone = phone.replace(/\D/g, ''); 
     const items = (order.items || []).map(i => `${i.quantity}x ${i.productName || 'Item'}`).join(", ");
-    const msg = encodeURIComponent(`Hi ${order.customer?.name || "Customer"}! 🙏 Your House of Ramya order #${order._id || order.id} (${items}) is being prepared and will be delivered soon. Thank you for shopping with us! 🛍️`);
+    const msg = encodeURIComponent(`Hi ${order.customer?.name || "Customer"}! 🙏 Your ROHANS MATCHING CENTRE order #${order._id || order.id} (${items}) is being prepared and will be delivered soon. Thank you for shopping with us! 🛍️`);
     window.open(`https://wa.me/${cleanedPhone}?text=${msg}`, "_blank");
   };
 

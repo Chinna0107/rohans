@@ -1,6 +1,6 @@
 /* ── Categories Layout ── */
 .category-page {
-  font-family: 'Jost', var(--font-sans);
+  font-family: var(--font-sans), var(--font-sans);
 }
 
 .cat-layout {
@@ -30,7 +30,7 @@
 .cat-list-card { flex: 2; }
 
 .cat-form-card h3, .cat-list-card h3 {
-  font-family: 'Cinzel', var(--font-serif);
+  font-family: var(--font-serif), var(--font-serif);
   font-size: 1.5rem;
   color: var(--text-dark);
   margin: 0 0 2rem;
@@ -67,7 +67,7 @@
   background: rgba(0,0,0,0.02);
   font-size: 1rem;
   color: var(--text-dark);
-  font-family: 'Jost', var(--font-sans);
+  font-family: var(--font-sans), var(--font-sans);
   outline: none;
   transition: all 0.3s ease;
 }
@@ -118,7 +118,7 @@
 }
 
 .cat-info h4 {
-  font-family: 'Cinzel', var(--font-serif);
+  font-family: var(--font-serif), var(--font-serif);
   font-size: 1.1rem;
   margin: 0 0 0.5rem;
   color: var(--text-dark);

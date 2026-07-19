@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap');
 
 /* ── Page Shell ── */
 .admin-page {
@@ -6,7 +5,7 @@
   padding: 2.5rem 2rem 3rem calc(250px + 2rem);
   background: linear-gradient(135deg, #fdfbfb 0%, #f3ecec 100%);
   background-attachment: fixed;
-  font-family: 'Jost', var(--font-sans);
+  font-family: var(--font-sans), var(--font-sans);
 }
 
 .admin-content { max-width: 1400px; margin: 0 auto; }
@@ -22,7 +21,7 @@
 }
 
 .admin-page-title {
-  font-family: 'Cinzel', var(--font-serif);
+  font-family: var(--font-serif), var(--font-serif);
   font-size: 2rem; font-weight: 500; color: var(--text-dark);
   margin: 0;
   letter-spacing: 0.1em;
@@ -35,7 +34,7 @@
   font-size: 0.85rem; font-weight: 500; cursor: pointer;
   text-transform: uppercase; letter-spacing: 0.1em;
   transition: all 0.3s ease;
-  font-family: 'Jost', inherit;
+  font-family: var(--font-sans), inherit;
   display: inline-flex; align-items: center; gap: 0.4rem;
 }
 
@@ -86,7 +85,7 @@
 }
 
 .stat-info p { margin: 0; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
-.stat-info h3 { margin: 0.3rem 0 0; font-size: 1.6rem; font-weight: 400; color: var(--text-dark); font-family: 'Cinzel', serif; }
+.stat-info h3 { margin: 0.3rem 0 0; font-size: 1.6rem; font-weight: 400; color: var(--text-dark); font-family: var(--font-serif), serif; }
 
 /* ── Toolbar ── */
 .admin-toolbar {
