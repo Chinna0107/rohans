@@ -1,6 +1,6 @@
 const config = {
   API_URL: import.meta.env.MODE === 'production' 
-    ? 'https://hor-be.vercel.app' 
+    ? 'https://rohansbe.vercel.app' 
     : 'http://localhost:3000'
 };
 
