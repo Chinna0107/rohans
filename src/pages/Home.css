@@ -213,9 +213,8 @@
     font-size: 0.7rem;
   }
 
-  .rmc-chip {
-    font-size: 0.7rem;
-    padding: 0.28rem 0.65rem;
+  .rmc-category-chips {
+    display: none;
   }
 
   .rmc-btn-primary,
