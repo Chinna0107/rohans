@@ -34,6 +34,7 @@ const AdminProducts = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [inlineEditId, setInlineEditId]     = useState(null);
   const [loading, setLoading]         = useState(false);
+  const [uploadingMedia, setUploadingMedia] = useState({});
   const [formData, setFormData]       = useState(INIT_FORM);
   const [searchTerm, setSearchTerm]   = useState('');
   const [filterCategory, setFilterCategory] = useState('');
@@ -221,6 +222,7 @@ const AdminProducts = () => {
     const token = localStorage.getItem('token');
     const uploadData = new FormData();
     uploadData.append('image', file);
+    setUploadingMedia(prev => ({ ...prev, [`img-${ci}-${imgIdx}`]: true }));
     try {
       const res = await axios.post(`${config.API_URL}/api/upload`, uploadData, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
@@ -232,6 +234,8 @@ const AdminProducts = () => {
     } catch (err) {
       console.error(err);
       toast.error('Failed to upload image.', { autoClose: 2000 });
+    } finally {
+      setUploadingMedia(prev => ({ ...prev, [`img-${ci}-${imgIdx}`]: false }));
     }
   };
 
@@ -241,6 +245,7 @@ const AdminProducts = () => {
     const token = localStorage.getItem('token');
     const uploadData = new FormData();
     uploadData.append('image', file);
+    setUploadingMedia(prev => ({ ...prev, [`vid-${ci}-${vidIdx}`]: true }));
     try {
       toast.info('Uploading video, please wait...', { autoClose: false, toastId: 'videoUpload' });
       const res = await axios.post(`${config.API_URL}/api/upload`, uploadData, {
@@ -255,6 +260,8 @@ const AdminProducts = () => {
       console.error(err);
       toast.dismiss('videoUpload');
       toast.error('Failed to upload video.', { autoClose: 2000 });
+    } finally {
+      setUploadingMedia(prev => ({ ...prev, [`vid-${ci}-${vidIdx}`]: false }));
     }
   };
 
@@ -476,7 +483,11 @@ const AdminProducts = () => {
               {/* Category */}
               <div className="form-field">
                 <label>Category *</label>
-                <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value, styleTags: [], grams: [], prices: {} })} required>
+                <select value={formData.category} onChange={e => {
+                  const catName = e.target.value;
+                  const isMeters = categories.find(c => c.name === catName)?.is_meters;
+                  setFormData({ ...formData, category: catName, styleTags: [], grams: isMeters ? ['1 Meter'] : [], prices: {} });
+                }} required>
                   <option value="">Select category</option>
                   {categories.map(c => <option key={c.id || c.name} value={c.name}>{c.name}</option>)}
                 </select>
@@ -520,25 +531,27 @@ const AdminProducts = () => {
               </div>
 
               {/* Sizes */}
-              <div className="form-field">
-                <label>Sizes *</label>
-                {!formData.category || weightOptions.length === 0 ? <div className="size-hint">Select a category with sizes defined first</div> : (
-                  <div className="custom-dropdown">
-                    <div className="dropdown-header" onClick={() => setShowWeightDropdown(!showWeightDropdown)}>
-                      {formData.grams.length > 0 ? formData.grams.join(', ') : `Select sizes`}
-                    </div>
-                    {showWeightDropdown && (
-                      <div className="dropdown-list">
-                        {weightOptions.map(size => (
-                          <label key={size} className="dropdown-item">
-                            <input type="checkbox" checked={formData.grams.includes(size)} onChange={() => handleWeightToggle(size)} />{size}
-                          </label>
-                        ))}
+              {!activeCategoryObj?.is_meters && (
+                <div className="form-field">
+                  <label>Sizes *</label>
+                  {!formData.category || weightOptions.length === 0 ? <div className="size-hint">Select a category with sizes defined first</div> : (
+                    <div className="custom-dropdown">
+                      <div className="dropdown-header" onClick={() => setShowWeightDropdown(!showWeightDropdown)}>
+                        {formData.grams.length > 0 ? formData.grams.join(', ') : `Select sizes`}
                       </div>
-                    )}
-                  </div>
-                )}
-              </div>
+                      {showWeightDropdown && (
+                        <div className="dropdown-list">
+                          {weightOptions.map(size => (
+                            <label key={size} className="dropdown-item">
+                              <input type="checkbox" checked={formData.grams.includes(size)} onChange={() => handleWeightToggle(size)} />{size}
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Prices */}
               <div className="form-field full-width">
@@ -547,12 +560,13 @@ const AdminProducts = () => {
                   {formData.grams.length === 0 && <p style={{ color: 'rgba(255,255,255,0.3)', margin: 0, fontSize: '0.88rem' }}>Select sizes first</p>}
                   {formData.grams.map(size => {
                     const disc = calcDiscount(formData.originalPrices[size], formData.prices[size]);
+                    const label = activeCategoryObj?.is_meters && size === '1 Meter' ? 'Per Meter' : size;
                     return (
                       <div key={size} className="price-input-row">
-                        <span>{size}</span>
+                        <span>{label}</span>
                         <div className="price-input-group">
                           <input type="number" value={formData.originalPrices[size] || ''} onChange={e => setFormData(prev => ({ ...prev, originalPrices: { ...prev.originalPrices, [size]: e.target.value } }))} placeholder="MRP" />
-                          <input type="number" value={formData.prices[size] || ''} onChange={e => setFormData(prev => ({ ...prev, prices: { ...prev.prices, [size]: e.target.value } }))} placeholder="Sale Price" required />
+                          <input type="number" value={formData.prices[size] || ''} onChange={e => setFormData(prev => ({ ...prev, prices: { ...prev.prices, [size]: e.target.value } }))} placeholder={activeCategoryObj?.is_meters ? "Sale Price per Meter" : "Sale Price"} required />
                           {disc && <span className="discount-pill">-{disc}%</span>}
                         </div>
                       </div>
@@ -677,9 +691,9 @@ const AdminProducts = () => {
                               required={imgIdx === 0}
                               style={{ flex: 1 }}
                             />
-                            <label className="admin-btn" style={{ padding: '0 1rem', cursor: 'pointer', margin: 0, height: '40px' }}>
-                              Upload
-                              <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleFileUpload(e, ci, imgIdx)} />
+                            <label className="admin-btn" style={{ padding: '0 1rem', cursor: uploadingMedia[`img-${ci}-${imgIdx}`] ? 'not-allowed' : 'pointer', margin: 0, height: '40px', opacity: uploadingMedia[`img-${ci}-${imgIdx}`] ? 0.7 : 1 }}>
+                              {uploadingMedia[`img-${ci}-${imgIdx}`] ? 'Uploading...' : 'Upload'}
+                              <input type="file" accept="image/*" style={{ display: 'none' }} disabled={uploadingMedia[`img-${ci}-${imgIdx}`]} onChange={e => handleFileUpload(e, ci, imgIdx)} />
                             </label>
                             {color.images.length > 1 && (
                               <button type="button" className="remove-color-btn" style={{ height: '40px' }} onClick={() => {
@@ -702,9 +716,9 @@ const AdminProducts = () => {
                               onChange={e => updateColorVideo(ci, vidIdx, e.target.value)}
                               style={{ flex: 1 }}
                             />
-                            <label className="admin-btn" style={{ padding: '0 1rem', cursor: 'pointer', margin: 0, height: '40px' }}>
-                              Upload
-                              <input type="file" accept="video/*" style={{ display: 'none' }} onChange={e => handleColorVideoUpload(e, ci, vidIdx)} />
+                            <label className="admin-btn" style={{ padding: '0 1rem', cursor: uploadingMedia[`vid-${ci}-${vidIdx}`] ? 'not-allowed' : 'pointer', margin: 0, height: '40px', opacity: uploadingMedia[`vid-${ci}-${vidIdx}`] ? 0.7 : 1 }}>
+                              {uploadingMedia[`vid-${ci}-${vidIdx}`] ? 'Uploading...' : 'Upload'}
+                              <input type="file" accept="video/*" style={{ display: 'none' }} disabled={uploadingMedia[`vid-${ci}-${vidIdx}`]} onChange={e => handleColorVideoUpload(e, ci, vidIdx)} />
                             </label>
                             <button type="button" className="remove-color-btn" style={{ height: '40px' }} onClick={() => {
                               const newVideos = [...color.videos];

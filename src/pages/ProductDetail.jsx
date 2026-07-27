@@ -103,6 +103,7 @@ const ProductDetail = () => {
   const lightboxImgRef = useRef(null);
 
   const { addToCart, updateQuantity, isInCart, getCartQuantity } = useCart();
+  const [localMeters, setLocalMeters] = useState(1);
 
   useEffect(() => {
     if (!allProducts.length) return;
@@ -230,6 +231,7 @@ const ProductDetail = () => {
 
   const sizesRaw = Array.isArray(product.grams) ? product.grams : [product.grams].filter(Boolean);
   const sizes = sortSizesByCategory(product.category, sizesRaw);
+  const isMeters = sizes.length === 1 && sizes[0] === '1 Meter';
   const salePrice = product.prices?.[selectedSize] || product.price || 0;
   const origPrice = product.originalPrices?.[selectedSize];
   const discount = calcDiscount(origPrice, salePrice);
@@ -404,7 +406,7 @@ const ProductDetail = () => {
             {/* Price */}
             <div className="pd-price-block">
               <div className="pd-price-row">
-                <span className="pd-sale-price">₹{salePrice}</span>
+                <span className="pd-sale-price">₹{salePrice} {isMeters && <span style={{ fontSize: '1.2rem', fontWeight: '500', color: '#666' }}>per meter</span>}</span>
                 {origPrice && Number(origPrice) > Number(salePrice) && (
                   <span className="pd-orig-price">₹{origPrice}</span>
                 )}
@@ -416,58 +418,83 @@ const ProductDetail = () => {
             </div>
 
             {/* Size */}
-            <div className="pd-size-section">
-              <div className="pd-size-header">
-                <span className="pd-size-label">
-                  Select Size
-                  {['Sandals', 'Shoes', 'Flip Flops'].includes(product.category) && <em> (UK)</em>}
-                </span>
-                <span className="pd-size-guide" onClick={() => setShowSizeGuide(true)}><MdSwapHoriz /> Size Guide</span>
+            {!isMeters && (
+              <div className="pd-size-section">
+                <div className="pd-size-header">
+                  <span className="pd-size-label">
+                    Select Size
+                    {['Sandals', 'Shoes', 'Flip Flops'].includes(product.category) && <em> (UK)</em>}
+                  </span>
+                  <span className="pd-size-guide" onClick={() => setShowSizeGuide(true)}><MdSwapHoriz /> Size Guide</span>
+                </div>
+                <div className="pd-sizes">
+                  {sizes.map(size => {
+                    const sp = product.prices?.[size] || product.price || 0;
+                    const op = product.originalPrices?.[size];
+                    const d = calcDiscount(op, sp);
+                    const stock = getStock(activeColorIdx, size);
+                    const outOfStock = stock === 0;
+                    return (
+                      <button
+                        key={size}
+                        className={`pd-size-btn ${selectedSize === size ? 'active' : ''} ${outOfStock ? 'out-of-stock' : ''}`}
+                        onClick={() => !outOfStock && setSelectedSize(size)}
+                        disabled={outOfStock}
+                        title={outOfStock ? 'Out of stock' : ''}
+                      >
+                        <span className="pd-size-val">{size}</span>
+                        <span className="pd-size-price">₹{sp}</span>
+                        {d && !outOfStock && <span className="pd-size-disc">-{d}%</span>}
+                        {outOfStock && <span className="pd-size-oos">Out</span>}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-              <div className="pd-sizes">
-                {sizes.map(size => {
-                  const sp = product.prices?.[size] || product.price || 0;
-                  const op = product.originalPrices?.[size];
-                  const d = calcDiscount(op, sp);
-                  const stock = getStock(activeColorIdx, size);
-                  const outOfStock = stock === 0;
-                  return (
-                    <button
-                      key={size}
-                      className={`pd-size-btn ${selectedSize === size ? 'active' : ''} ${outOfStock ? 'out-of-stock' : ''}`}
-                      onClick={() => !outOfStock && setSelectedSize(size)}
-                      disabled={outOfStock}
-                      title={outOfStock ? 'Out of stock' : ''}
-                    >
-                      <span className="pd-size-val">{size}</span>
-                      <span className="pd-size-price">₹{sp}</span>
-                      {d && !outOfStock && <span className="pd-size-disc">-{d}%</span>}
-                      {outOfStock && <span className="pd-size-oos">Out</span>}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            )}
 
             {/* Cart Actions */}
+            {isMeters && !isInCart(product.id, selectedSize, activeColor) && activeStock > 0 && (
+              <div className="pd-meters-selector" style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                <span style={{ fontWeight: '500' }}>Length:</span>
+                <div className="pd-qty-control" style={{ margin: 0 }}>
+                  <button onClick={() => setLocalMeters(Math.max(1, localMeters - 1))}>−</button>
+                  <span>{localMeters}</span>
+                  <button onClick={() => setLocalMeters(localMeters + 1)}>+</button>
+                </div>
+                <span style={{ fontWeight: '500', color: '#666' }}>Meters</span>
+                <span style={{ fontWeight: 'bold', marginLeft: 'auto', fontSize: '1.2rem', color: '#e1782d' }}>
+                  Total: ₹{salePrice * localMeters}
+                </span>
+              </div>
+            )}
+            
             <div className="pd-cart-row">
               {activeStock === 0 ? (
                 <button className="pd-add-btn" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
                   ✕ Out of Stock
                 </button>
               ) : !isInCart(product.id, selectedSize, activeColor) ? (
-                <button className="pd-add-btn" onClick={() => addToCart(product.id, selectedSize, activeColor)}>
+                <button className="pd-add-btn" onClick={() => addToCart(product.id, selectedSize, activeColor, isMeters ? localMeters : 1)}>
                   🛍️ Add to Bag
                 </button>
               ) : (
-                <div className="pd-qty-control">
-                  <button onClick={() => updateQuantity(product.id, selectedSize, -1, activeColor)}>−</button>
-                  <span>{getCartQuantity(product.id, selectedSize, activeColor)}</span>
-                  <button
-                    onClick={() => updateQuantity(product.id, selectedSize, 1, activeColor)}
-                    disabled={!canAddMore}
-                    title={!canAddMore ? 'Max stock reached' : ''}
-                  >+</button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <div className="pd-qty-control">
+                    <button onClick={() => updateQuantity(product.id, selectedSize, -1, activeColor)}>−</button>
+                    <span>{getCartQuantity(product.id, selectedSize, activeColor)}</span>
+                    <button
+                      onClick={() => updateQuantity(product.id, selectedSize, 1, activeColor)}
+                      disabled={!canAddMore}
+                      title={!canAddMore ? 'Max stock reached' : ''}
+                    >+</button>
+                  </div>
+                  {isMeters && <span style={{ fontWeight: '500', color: '#666' }}>Meters</span>}
+                  {isMeters && (
+                    <span style={{ fontWeight: 'bold', marginLeft: '1rem', fontSize: '1.2rem', color: '#e1782d' }}>
+                      Total: ₹{salePrice * getCartQuantity(product.id, selectedSize, activeColor)}
+                    </span>
+                  )}
                 </div>
               )}
               <button className="pd-buy-btn" onClick={() => navigate('/checkout')} disabled={activeStock === 0}>

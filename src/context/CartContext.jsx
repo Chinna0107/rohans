@@ -22,7 +22,7 @@ export const CartProvider = ({ children }) => {
 
   const cacheProducts = (list) => setProductsList(list);
 
-  const addToCart = (productId, weight, color = null) => {
+  const addToCart = (productId, weight, color = null, quantityToAdd = 1) => {
     const token = localStorage.getItem('az_token');
     if (!token) {
       toast.error('Please login to add items to your cart.');
@@ -39,7 +39,7 @@ export const CartProvider = ({ children }) => {
     setCart(prev => {
       const current = prev[cartKey]?.quantity || 0;
       if (current >= maxQty) return prev;
-      return { ...prev, [cartKey]: { productId, weight, color: safeColor, quantity: current + 1 } };
+      return { ...prev, [cartKey]: { productId, weight, color: safeColor, quantity: current + quantityToAdd } };
     });
   };
 

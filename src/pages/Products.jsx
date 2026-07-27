@@ -7,6 +7,8 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import useProducts from '../hooks/useProducts';
 import { useUserAuth } from '../context/UserAuthContext';
 import { toast } from 'react-toastify';
+import axios from 'axios';
+import config from '../config';
 import './Products.css';
 
 const CATEGORY_ICONS = { All: '🛍️', Sandals: '👡', Shoes: '👟', 'Flip Flops': null, Slides: '🩴', 'T-Shirts': '👕', 'Track Pants': '🏃' };
@@ -69,7 +71,25 @@ const Products = () => {
 
   const filterRef = useRef(null);
 
-  const categories = useMemo(() => ['All', ...new Set(products.map(p => p.category))], [products]);
+  const [backendCategories, setBackendCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(`${config.API_URL}/api/categories`);
+        if (res.data.success) setBackendCategories(res.data.categories);
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const categories = useMemo(() => {
+    const fromBackend = backendCategories.map(c => c.name);
+    return ['All', ...fromBackend];
+  }, [backendCategories]);
+
   const dynamicGenders = useMemo(() => ['All', ...new Set(products.map(p => p.gender).filter(Boolean))], [products]);
   const dynamicStyles = useMemo(() => [...new Set(products.flatMap(p => p.styleTags || []).filter(Boolean))], [products]);
   const dynamicTags = useMemo(() => [...new Set(products.map(p => p.tag).filter(Boolean))], [products]);
@@ -254,6 +274,9 @@ const Products = () => {
                 {categories.map(cat => {
                   const catImg = (() => {
                     if (cat === 'All') return null;
+                    const backendCat = backendCategories.find(c => c.name === cat);
+                    if (backendCat && backendCat.image_url) return backendCat.image_url;
+                    
                     const prod = products.find(p => p.category === cat);
                     if (prod) {
                       if (prod.images && prod.images.length > 0) return prod.images[0];

@@ -41,13 +41,7 @@ const COLLECTION_BANNERS = [
   },
 ];
 
-const CATEGORIES = [
-  { name: "KURTIES", img: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=600&auto=format&fit=crop', link: 'KURTIES' },
-  { name: "SAREES", img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=600&auto=format&fit=crop', link: 'SAREES' },
-  { name: "DRESS MATERIALS", img: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=600&auto=format&fit=crop', link: 'DRESS MATERIALS' },
-  { name: "CUSTOM STITCHING", img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSc89EVoxCnoFRZYB97giFTjIQEtRRfVSyXjMPt1w4YSA&s=10', link: 'CUSTOM STITCHING' },
-  { name: "MAGGAM WORK", img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsQGk5k3Oy4-uWWk1AEr_BXAlPvGlLaolJ6v2NIbCcSg&s=10', link: 'MAGGAM WORK' },
-];
+
 
 const FestiveCard = ({ product, navigate }) => {
   const { customer, toggleWishlist } = useUserAuth();
@@ -96,19 +90,26 @@ const Home = () => {
   const { user } = useUserAuth();
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [sliders, setSliders] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const fetchSliders = async () => {
+    const fetchSlidersAndCategories = async () => {
       try {
-        const res = await axios.get(`${config.API_URL}/api/sliders`);
-        if (res.data.success) {
-          setSliders(res.data.sliders);
+        const [slidersRes, categoriesRes] = await Promise.all([
+          axios.get(`${config.API_URL}/api/sliders`),
+          axios.get(`${config.API_URL}/api/categories`)
+        ]);
+        if (slidersRes.data.success) {
+          setSliders(slidersRes.data.sliders);
+        }
+        if (categoriesRes.data.success) {
+          setCategories(categoriesRes.data.categories);
         }
       } catch (err) {
-        console.error("Failed to fetch sliders", err);
+        console.error("Failed to fetch data", err);
       }
     };
-    fetchSliders();
+    fetchSlidersAndCategories();
   }, []);
 
   const sliderSettings = {
@@ -261,10 +262,10 @@ const Home = () => {
       >
         <h2 className="section-heading">Shop by Category</h2>
         <div className="category-row-scroll">
-          {CATEGORIES.map(cat => (
-            <div key={cat.name} className="cat-item-circle" onClick={() => navigate('/products', { state: { category: cat.link } })}>
+          {categories.map(cat => (
+            <div key={cat.id || cat.name} className="cat-item-circle" onClick={() => navigate('/products', { state: { category: cat.name } })}>
               <div className="cat-img-wrapper">
-                <img src={cat.img} alt={cat.name} />
+                <img src={cat.image_url || 'https://via.placeholder.com/600x600?text=' + encodeURIComponent(cat.name)} alt={cat.name} />
               </div>
               <h3>{cat.name}</h3>
             </div>

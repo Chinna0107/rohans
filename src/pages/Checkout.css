@@ -12,13 +12,13 @@
 .co-empty p { color: rgba(0,0,0,0.5); margin: 0; }
 .co-empty button {
   padding: 0.85rem 2rem;
-  background: var(--text-dark);
+  background: #ff1493;
   color: white; border: none; border-radius: 50px;
   font-size: 1rem; font-weight: 700; cursor: pointer;
   font-family: inherit; transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1); margin-top: 0.5rem;
+  box-shadow: 0 6px 20px rgba(255, 20, 147, 0.2); margin-top: 0.5rem;
 }
-.co-empty button:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+.co-empty button:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3); background: #e01282; }
 
 /* ── Success ── */
 .co-success {
@@ -33,16 +33,16 @@
 .co-success-icon { font-size: 4rem; color: #4ade80; }
 .co-success-card h2 { font-size: 2rem; font-weight: 900; color: #fff; margin: 0; }
 .co-success-card p { color: rgba(255,255,255,0.6); margin: 0; font-size: 1rem; }
-.co-success-card strong { color: #e1782d; }
+.co-success-card strong { color: #ff1493; }
 .co-success-card button {
   margin-top: 0.5rem; padding: 0.9rem 2.2rem;
-  background: var(--text-dark);
+  background: #ff1493;
   color: white; border: none; border-radius: 50px;
   font-size: 1rem; font-weight: 700; cursor: pointer;
   font-family: inherit; transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 20px rgba(255, 20, 147, 0.2);
 }
-.co-success-card button:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+.co-success-card button:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3); background: #e01282; }
 
 /* ── Container ── */
 .co-container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
@@ -83,13 +83,13 @@
 .co-step-circle svg { font-size: 1.3rem; }
 
 .co-step.active .co-step-circle {
-  background: var(--text-dark);
-  border-color: var(--text-dark); color: #fff;
-  box-shadow: 0 0 0 5px rgba(0,0,0,0.05);
+  background: #ff1493;
+  border-color: #ff1493; color: #fff;
+  box-shadow: 0 0 0 5px rgba(255, 20, 147, 0.1);
 }
 .co-step.done .co-step-circle {
-  background: var(--text-dark);
-  border-color: var(--text-dark); color: #fff;
+  background: #ff1493;
+  border-color: #ff1493; color: #fff;
 }
 
 .co-step-label {
@@ -99,8 +99,8 @@
   margin-left: 0.6rem;
   transition: color 0.3s;
 }
-.co-step.active .co-step-label { color: var(--text-dark); }
-.co-step.done .co-step-label { color: var(--text-dark); }
+.co-step.active .co-step-label { color: #ff1493; }
+.co-step.done .co-step-label { color: #ff1493; }
 
 .co-step-line {
   width: 80px; height: 2px;
@@ -109,7 +109,7 @@
   transition: background 0.35s ease;
   flex-shrink: 0;
 }
-.co-step-line.done { background: var(--text-dark); }
+.co-step-line.done { background: #ff1493; }
 
 /* ── Step Content ── */
 .co-step-content { animation: fadeUp 0.35s ease; }
@@ -168,12 +168,12 @@
 }
 .co-qty button {
   width: 30px; height: 30px;
-  background: #111;
+  background: #ff1493;
   color: white; border: none; border-radius: 8px;
   font-size: 1rem; font-weight: 700; cursor: pointer;
   transition: all 0.2s ease; font-family: inherit;
 }
-.co-qty button:hover { transform: scale(1.1); }
+.co-qty button:hover { transform: scale(1.1); background: #e01282; }
 .co-qty span { min-width: 28px; text-align: center; font-size: 0.95rem; font-weight: 800; color: #111; }
 
 .co-item-total { font-size: 1rem; font-weight: 800; color: #333; }
@@ -220,7 +220,7 @@
 
 .co-next-btn {
   padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, #e1782d, #b41e1e);
+  background: linear-gradient(135deg, #ff1493, #b41e1e);
   color: white; border: none; border-radius: 50px;
   font-size: 0.95rem; font-weight: 700; cursor: pointer;
   font-family: inherit; transition: all 0.3s ease;
@@ -366,14 +366,14 @@
 /* ── Place Button ── */
 .co-place-btn {
   width: 100%; padding: 1.1rem;
-  background: linear-gradient(135deg, #e1782d, #b41e1e);
+  background: #ff1493;
   color: white; border: none; border-radius: 14px;
   font-size: 1rem; font-weight: 700; cursor: pointer;
   font-family: inherit; transition: all 0.3s ease;
-  box-shadow: 0 6px 22px rgba(180,30,30,0.45);
+  box-shadow: 0 6px 22px rgba(255, 20, 147, 0.3);
   display: flex; align-items: center; justify-content: center; gap: 0.5rem;
 }
-.co-place-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(180,30,30,0.6); }
+.co-place-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4); background: #e01282; }
 .co-place-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
 
 .co-spinner {
@@ -455,7 +455,7 @@
 .co-success-sub {
   font-size: 1rem; color: rgba(255,255,255,0.6); margin: 0;
 }
-.co-success-sub strong { color: #e1782d; }
+.co-success-sub strong { color: #ff1493; }
 
 .co-success-txn {
   font-size: 0.82rem; color: rgba(255,255,255,0.4);
@@ -500,7 +500,7 @@
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .co-success-item-info span { font-size: 0.75rem; color: rgba(255,255,255,0.45); }
-.co-success-item > strong { font-size: 0.95rem; font-weight: 800; color: #e1782d; flex-shrink: 0; }
+.co-success-item > strong { font-size: 0.95rem; font-weight: 800; color: #ff1493; flex-shrink: 0; }
 
 .co-success-totals { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
 .co-success-row { display: flex; justify-content: space-between; font-size: 0.88rem; color: rgba(255,255,255,0.55); }
@@ -512,7 +512,7 @@
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 .co-success-total-row span:last-child {
-  background: linear-gradient(135deg, #e1782d, #f0a54b);
+  background: linear-gradient(135deg, #ff1493, #f0a54b);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 
@@ -551,11 +551,11 @@
   margin: 0 0 0.6rem; line-height: 1.6;
 }
 .co-success-msg p:last-child { margin-bottom: 0; }
-.co-success-msg strong { color: #e1782d; }
+.co-success-msg strong { color: #ff1493; }
 
 .co-success-shop-btn {
   width: 100%; padding: 1rem;
-  background: linear-gradient(135deg, #e1782d, #b41e1e);
+  background: linear-gradient(135deg, #ff1493, #b41e1e);
   color: white; border: none; border-radius: 14px;
   font-size: 1rem; font-weight: 700; cursor: pointer;
   font-family: inherit; transition: all 0.3s ease;
@@ -598,13 +598,13 @@
 
 .co-coupon-btn {
   padding: 0.7rem 1.5rem;
-  background: linear-gradient(135deg, #e1782d, #b41e1e) !important;
+  background: #ff1493 !important;
   color: #fff !important; border: none !important;
   border-radius: 10px !important; font-size: 0.9rem;
   font-weight: 700; cursor: pointer; font-family: inherit;
   transition: all 0.25s ease; white-space: nowrap;
 }
-.co-coupon-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(180,30,30,0.4); }
+.co-coupon-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(255, 20, 147, 0.3); background: #e01282 !important; }
 .co-coupon-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .co-coupon-applied {

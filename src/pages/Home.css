@@ -30,15 +30,14 @@
 
 .rmc-hero-section {
   width: 100%;
-  padding: 1.2rem 1.2rem 2rem;
+  padding: 0 0 2rem 0;
 }
 
 .rmc-hero-inner {
   position: relative;
   width: 100%;
-  max-width: 1280px;
   margin: 0 auto;
-  border-radius: 1.5rem;
+  border-radius: 0;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(106, 44, 58, 0.25);
   min-height: 480px;
@@ -187,13 +186,13 @@
 
 @media (max-width: 768px) {
   .rmc-hero-section {
-    padding: 0.75rem 0.75rem 0;
+    padding: 0 0 1rem 0;
   }
 
   .rmc-hero-inner {
     min-height: 320px;
     max-height: 420px;
-    border-radius: 1rem;
+    border-radius: 0;
   }
 
   .rmc-hero-overlay {
@@ -228,7 +227,7 @@
   .rmc-hero-inner {
     min-height: 280px;
     max-height: 360px;
-    border-radius: 0.75rem;
+    border-radius: 0;
   }
 
   .rmc-hero-title {

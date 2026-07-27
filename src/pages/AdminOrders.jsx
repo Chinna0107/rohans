@@ -378,10 +378,10 @@ const AdminOrders = () => {
                   <img src={item.image} alt={item.name} />
                   <div className="ao-modal-item-info">
                     <strong>{item.name}</strong>
-                    <span>{item.category} · Size: {item.size}</span>
+                    <span>{item.category} · {item.size === '1 Meter' ? `Length: ${item.quantity || item.qty || 1} Meters` : `Size: ${item.size}`}</span>
                   </div>
                   <div className="ao-modal-item-right">
-                    <span>×{item.quantity || item.qty || 1}</span>
+                    {item.size !== '1 Meter' && <span>×{item.quantity || item.qty || 1}</span>}
                     <strong>₹{item.total || item.price * (item.quantity || item.qty || 1)}</strong>
                   </div>
                 </div>
