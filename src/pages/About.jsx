@@ -7,9 +7,9 @@ import { MdLocationOn, MdPhone, MdEmail, MdOpenInNew } from 'react-icons/md';
 import { FaInstagram, FaFacebookF, FaYoutube } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.jpeg';
-import imgManikonda from '../branches/Manikonda.JPG';
-import imgBanjara from '../branches/Banjara hills.JPG';
-import imgAsrao from '../branches/Asrao.JPG';
+import imgManikonda from '../Branches/Manikonda.JPG';
+import imgBanjara from '../Branches/Banjara hills.JPG';
+import imgAsrao from '../Branches/Asrao.JPG';
 
 const STATS = [
   { end: 15,     suffix: '+',  label: 'Years of Excellence',  decimals: 0 },

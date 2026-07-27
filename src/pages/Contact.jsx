@@ -5,9 +5,9 @@ import { MdLocationOn, MdPhone, MdEmail, MdAccessTime, MdOpenInNew } from 'react
 import { FaWhatsapp } from 'react-icons/fa';
 import './Contact.css';
 
-import imgManikonda from '../branches/Manikonda.JPG';
-import imgBanjara from '../branches/Banjara hills.JPG';
-import imgAsrao from '../branches/Asrao.JPG';
+import imgManikonda from '../Branches/Manikonda.JPG';
+import imgBanjara from '../Branches/Banjara hills.JPG';
+import imgAsrao from '../Branches/Asrao.JPG';
 
 const BRANCHES = [
   {
