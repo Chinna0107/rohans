@@ -75,7 +75,7 @@ export const generateInvoiceHtml = (order) => {
             <div class="brand-details">
               <strong>ROHANS MATCHING CENTRE Pvt Ltd</strong><br>
               Reg No.: HOR-2026-99381<br>
-              Phone: +91 8008007884 | Email: thehouseoframya@gmail.com<br>
+              Phone: +91 7396083412 | Email: rohansmatchingcentre143@gmail.com<br>
               Website: www.houseoframya.com
             </div>
           </div>
@@ -96,7 +96,7 @@ export const generateInvoiceHtml = (order) => {
                   <strong>ROHANS MATCHING CENTRE</strong><br>
                   13-6-586, P.K.Layout,<br>
                   Tirupati - 517501, Andhra Pradesh, India<br>
-                  <strong>Phone:</strong> +91 8008007884
+                  <strong>Phone:</strong> +91 7396083412
                 </div>
               </td>
               <td class="to-box">
@@ -130,7 +130,7 @@ export const generateInvoiceHtml = (order) => {
               <td class="terms-box">
                 <h3 style="font-size: 13px; font-weight: bold; color: #b41e1e; text-transform: uppercase; margin-bottom: 8px;">Terms & Conditions</h3>
                 <ul style="font-size: 12px; color: #555; padding-left: 20px; line-height: 1.6; margin: 0;">
-                  <li>Once we receive the order, we will start preparing it.</li>
+                  <li>Once we receive the order, we will start processing it.</li>
                   <li>It will take 2-4 days to dispatch the order.</li>
                   <li>We will share the tracking details through WhatsApp once shipped.</li>
                   <li>Estimated delivery time will depend on your shipping location.</li>

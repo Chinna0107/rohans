@@ -7,6 +7,9 @@ import { MdLocationOn, MdPhone, MdEmail, MdOpenInNew } from 'react-icons/md';
 import { FaInstagram, FaFacebookF, FaYoutube } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.jpeg';
+import imgManikonda from '../branches/Manikonda.JPG';
+import imgBanjara from '../branches/Banjara hills.JPG';
+import imgAsrao from '../branches/Asrao.JPG';
 
 const STATS = [
   { end: 15,     suffix: '+',  label: 'Years of Excellence',  decimals: 0 },
@@ -25,9 +28,9 @@ const CATEGORIES = [
 ];
 
 const BRANCHES = [
-  { name: 'Manikonda',    address: 'Shop No. 12, Manikonda Main Road, Hyderabad', url: 'https://maps.app.goo.gl/jyCKgUTFSoMYjbWa8' },
-  { name: 'Banjara Hills',address: 'Road No. 10, Banjara Hills, Hyderabad',       url: 'https://maps.app.goo.gl/Kpv6XZdtu6xgfLf68' },
-  { name: 'Ameerpet',     address: 'SR Nagar, Ameerpet, Hyderabad',               url: 'https://maps.app.goo.gl/dQYDTuFiNmQY6chv5' },
+  { name: 'Manikonda',    address: 'Shop No. 12, Manikonda Main Road, Hyderabad', url: 'https://maps.app.goo.gl/jyCKgUTFSoMYjbWa8', img: imgManikonda },
+  { name: 'Banjara Hills',address: 'Road No. 10, Banjara Hills, Hyderabad',       url: 'https://maps.app.goo.gl/Kpv6XZdtu6xgfLf68', img: imgBanjara },
+  { name: 'AS Rao Nagar', address: 'AS Rao Nagar, Hyderabad',                     url: '#', img: imgAsrao },
 ];
 
 const fadeUp   = (delay = 0) => ({ initial: { opacity: 0, y: 50 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: '-60px' }, transition: { duration: 0.7, delay } });
@@ -139,7 +142,7 @@ const About = () => {
       <section className="about-section about-promise-section">
         <div className="about-promise-inner">
           <motion.span className="about-section-tag centered" {...fadeUp(0)}>Our Promise</motion.span>
-          <motion.h2 className="about-section-heading" style={{ color: '#fff' }} {...fadeUp(0.1)}>
+          <motion.h2 className="about-section-heading" style={{ color: '#000' }} {...fadeUp(0.1)}>
             Crafted with Care.<br />Delivered with Pride.
           </motion.h2>
           <div className="about-promise-grid">
@@ -152,7 +155,7 @@ const About = () => {
               <motion.div key={i} className="about-promise-card"
                 initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.12, duration: 0.6 }}
-                whileHover={{ scale: 1.04, borderColor: 'rgba(233,30,140,0.5)', background: 'rgba(233,30,140,0.07)' }}>
+                whileHover={{ scale: 1.04, borderColor: 'rgba(0,0,0,0.2)', background: 'rgba(0,0,0,0.08)' }}>
                 <motion.span className="about-promise-icon"
                   whileInView={{ rotate: [0, -15, 15, 0], scale: [1, 1.2, 1] }}
                   viewport={{ once: true }}
@@ -201,12 +204,17 @@ const About = () => {
               initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ delay: i * 0.15, duration: 0.6 }}
               whileHover={{ y: -6, boxShadow: '0 16px 40px rgba(233,30,140,0.12)', borderColor: '#e91e8c' }}>
-              <div className="about-branch-num">0{i + 1}</div>
-              <div className="about-branch-info">
-                <h3>{b.name}</h3>
-                <p><MdLocationOn /> {b.address}</p>
+              <div className="about-branch-img-wrapper">
+                <img src={b.img} alt={b.name} className="about-branch-img" />
               </div>
-              <MdOpenInNew className="about-branch-ext" />
+              <div className="about-branch-content">
+                <div className="about-branch-num">0{i + 1}</div>
+                <div className="about-branch-info">
+                  <h3>{b.name}</h3>
+                  <p><MdLocationOn /> {b.address}</p>
+                </div>
+                <MdOpenInNew className="about-branch-ext" />
+              </div>
             </motion.a>
           ))}
         </div>
@@ -224,7 +232,7 @@ const About = () => {
 
           <div className="about-contact-cards">
             {/* WhatsApp */}
-            <motion.a href="https://wa.me/918897030909" target="_blank" rel="noopener noreferrer"
+            <motion.a href="https://wa.me/917396083412" target="_blank" rel="noopener noreferrer"
               className="about-contact-card"
               initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0, duration: 0.6 }}
               whileHover={{ y: -6 }}>
@@ -233,13 +241,13 @@ const About = () => {
               </motion.div>
               <div className="about-contact-card-body">
                 <span className="about-contact-card-label">Call / WhatsApp</span>
-                <span className="about-contact-card-value">+91 88970 30909</span>
+                <span className="about-contact-card-value">+91 73960 83412</span>
                 <span className="about-contact-card-hint">Tap to open WhatsApp</span>
               </div>
             </motion.a>
 
             {/* Email */}
-            <motion.a href="mailto:thehouseoframya@gmail.com"
+            <motion.a href="mailto:rohansmatchingcentre143@gmail.com"
               className="about-contact-card"
               initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.12, duration: 0.6 }}
               whileHover={{ y: -6 }}>
@@ -248,7 +256,7 @@ const About = () => {
               </motion.div>
               <div className="about-contact-card-body">
                 <span className="about-contact-card-label">Email Us</span>
-                <span className="about-contact-card-value">thehouseoframya@gmail.com</span>
+                <span className="about-contact-card-value">rohansmatchingcentre143@gmail.com</span>
                 <span className="about-contact-card-hint">We reply within 24 hours</span>
               </div>
             </motion.a>
@@ -272,9 +280,9 @@ const About = () => {
             <span className="about-contact-social-label">Connect with us on social media</span>
             <div className="about-social-links">
               {[
-                { icon: <FaInstagram />, href: 'https://instagram.com', label: 'Instagram' },
-                { icon: <FaFacebookF />, href: 'https://facebook.com', label: 'Facebook' },
-                { icon: <FaYoutube />,   href: 'https://youtube.com',   label: 'YouTube' },
+                { icon: <FaInstagram />, href: 'https://www.instagram.com/rohans_matchings_fabrics?igsh=YTM5MHl6M3Z1MTg%3D&utm_source=qr', label: 'Instagram' },
+                { icon: <FaFacebookF />, href: '#', label: 'Facebook' },
+                { icon: <FaYoutube />,   href: 'https://youtube.com/@rohansmatchingcenter?si=U3VJAKhfmYtdtS7V',   label: 'YouTube' },
               ].map((s, i) => (
                 <motion.a key={i} href={s.href} target="_blank" rel="noreferrer" aria-label={s.label}
                   whileHover={{ y: -4, scale: 1.1 }} whileTap={{ scale: 0.9 }}

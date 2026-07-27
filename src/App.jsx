@@ -124,7 +124,7 @@ function AppContent() {
       {!isAdminRoute && <BottomNav />}
       {!isAdminRoute && (
         <a 
-          href="https://wa.me/918897030909" 
+          href="https://wa.me/917396083412" 
           className="whatsapp-float"
           target="_blank" 
           rel="noopener noreferrer"

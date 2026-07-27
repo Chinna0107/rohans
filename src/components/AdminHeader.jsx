@@ -21,12 +21,9 @@ const AdminHeader = () => {
       <div className="admin-sidebar-brand">
         <img src={logo} alt="ROHANS MATCHING CENTRE" className="admin-logo" />
         <div className="admin-brand">
-          <div className="admin-brand-title">
-            <div className="house-of-stack">
-              <span className="ab-house">HOUSE</span>
-              <span className="ab-of">OF</span>
-            </div>
-            <span className="ab-ramya">RAMYA</span>
+          <div className="admin-brand-title" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.1 }}>
+            <span className="ab-ramya" style={{ fontSize: '1.2rem' }}>ROHANS</span>
+            <span className="ab-house" style={{ fontSize: '0.65rem', letterSpacing: '1px' }}>MATCHING CENTRE</span>
           </div>
           <span className="ab-tag">ADMIN</span>
         </div>
@@ -89,7 +86,7 @@ const AdminHeader = () => {
       <div className="admin-sidebar-footer">
         <div className="admin-user-pill">
           <span className="admin-user-dot" />
-          <span>{user.email || 'Admin'}</span>
+          <span>{user.email?.replace('houseoframya.com', 'rohans.com') || 'Admin'}</span>
         </div>
         <button className="admin-logout-btn" onClick={handleLogout}>
           <FiLogOut /> Logout

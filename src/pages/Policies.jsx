@@ -28,7 +28,7 @@ const POLICIES = {
       },
       {
         heading: '6. Grievance Officer and Contact Us',
-        content: 'In accordance with the Information Technology Act 2000 and rules made thereunder, the name and contact details of the Grievance Officer are provided below. If you have any questions or comments about this notice, you may email us at thehouseoframya@gmail.com, call us at +91 8008007884, or contact us by post at: ROHANS MATCHING CENTRE, 13-6-586, P.K.Layout, Tirupati-517501, Andhra Pradesh, India.',
+        content: 'In accordance with the Information Technology Act 2000 and rules made thereunder, the name and contact details of the Grievance Officer are provided below. If you have any questions or comments about this notice, you may email us at rohansmatchingcentre143@gmail.com, call us at +91 7396083412, or contact us by post at: ROHANS MATCHING CENTRE, 13-6-586, P.K.Layout, Tirupati-517501, Andhra Pradesh, India.',
       },
     ],
   },
@@ -88,7 +88,7 @@ const POLICIES = {
       },
       {
         heading: '6. How to Initiate a Return',
-        content: 'To start a return, you can contact us at thehouseoframya@gmail.com or WhatsApp us at +91 8008007884. Please include your order number, reason for return, and the mandatory unboxing video/photos. If your return is accepted, we will send you a return shipping label, as well as instructions on how and where to send your package.',
+        content: 'To start a return, you can contact us at rohansmatchingcentre143@gmail.com or WhatsApp us at +91 7396083412. Please include your order number, reason for return, and the mandatory unboxing video/photos. If your return is accepted, we will send you a return shipping label, as well as instructions on how and where to send your package.',
       },
     ],
   },
@@ -98,7 +98,7 @@ const POLICIES = {
     sections: [
       {
         heading: '1. Cancellation by Customer (Before Dispatch)',
-        content: 'You can cancel your order at any time before it has been processed and dispatched from our warehouse (typically within 24 hours of order placement). To request a cancellation, please contact us immediately on WhatsApp at +91 8008007884 or email thehouseoframya@gmail.com with your Order ID. If the order has not been shipped, we will cancel it and initiate a full refund.',
+        content: 'You can cancel your order at any time before it has been processed and dispatched from our warehouse (typically within 24 hours of order placement). To request a cancellation, please contact us immediately on WhatsApp at +91 7396083412 or email rohansmatchingcentre143@gmail.com with your Order ID. If the order has not been shipped, we will cancel it and initiate a full refund.',
       },
       {
         heading: '2. Cancellation by Customer (After Dispatch)',

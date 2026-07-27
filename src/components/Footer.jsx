@@ -8,7 +8,7 @@ import './Footer.css';
 const BRANCHES = [
   { name: 'Manikonda', url: 'https://maps.app.goo.gl/jyCKgUTFSoMYjbWa8' },
   { name: 'Banjara Hills', url: 'https://maps.app.goo.gl/Kpv6XZdtu6xgfLf68' },
-  { name: 'Asrao Nagar', url: 'https://maps.app.goo.gl/dQYDTuFiNmQY6chv5' },
+  { name: 'As Rao Nagar', url: 'https://maps.app.goo.gl/dQYDTuFiNmQY6chv5' },
 ];
 
 const Footer = () => (
@@ -28,10 +28,10 @@ const Footer = () => (
           Your premium destination for stunning ethnic wear, elegant sarees, custom stitching, and intricate Maggam work.
         </p>
         <div className="social-icons">
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
+          <a href="https://www.instagram.com/rohans_matchings_fabrics?igsh=YTM5MHl6M3Z1MTg%3D&utm_source=qr" target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
           <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook"><FaFacebookF /></a>
           <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter"><FaTwitter /></a>
-          <a href="https://youtube.com/@aniruddayaenterprises?si=A-OvDYlC38vU8AZ_" target="_blank" rel="noreferrer" aria-label="YouTube"><FaYoutube /></a>
+          <a href="https://youtube.com/@rohansmatchingcenter?si=U3VJAKhfmYtdtS7V" target="_blank" rel="noreferrer" aria-label="YouTube"><FaYoutube /></a>
         </div>
       </div>
 
@@ -78,10 +78,9 @@ const Footer = () => (
       <div className="footer-col">
         <h4>Contact</h4>
         <ul className="contact-info">
-          <li><strong>WhatsApp:</strong> <motion.a href="https://wa.me/918897030909" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }} whileHover={{ scale: 1.05, color: '#000' }}>+91 88970 30909</motion.a></li>
-          <li><strong>Phone:</strong> <motion.a href="tel:+918008007884" style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }} whileHover={{ scale: 1.05, color: '#000' }}>+91 80080 07884</motion.a></li>
-          <li><strong>Email:</strong> <motion.a href="mailto:thehouseoframya@gmail.com" style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }} whileHover={{ scale: 1.05, color: '#000' }}>thehouseoframya@gmail.com</motion.a></li>
-          <li><strong>Address:</strong> 13-6-586, P.K.Layout,<br />Tirupati-517501</li>
+          <li><strong>WhatsApp:</strong> <motion.a href="https://wa.me/917396083412" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }} whileHover={{ scale: 1.05, color: '#000' }}>+91 73960 83412</motion.a></li>
+          <li><strong>Phone:</strong> <motion.a href="tel:+917396083412" style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }} whileHover={{ scale: 1.05, color: '#000' }}>+91 73960 83412</motion.a></li>
+          <li><strong>Email:</strong> <motion.a href="mailto:rohansmatchingcentre143@gmail.com" style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }} whileHover={{ scale: 1.05, color: '#000' }}>rohansmatchingcentre143@gmail.com</motion.a></li>
         </ul>
       </div>
       

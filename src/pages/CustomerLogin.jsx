@@ -174,7 +174,7 @@ const CustomerLogin = () => {
         <div className="auth-left-card">
           <div className="auth-brand-content">
             <img src={logo} alt="ROHANS MATCHING CENTRE" className="auth-logo-img" />
-            <h1><span className="l-alpha">House of</span> <span className="l-zone">Ramya</span></h1>
+            <h1><span className="l-alpha">Rohans</span> <span className="l-zone" style={{ fontSize: '1.2rem', display: 'block', marginTop: '0.2rem' }}>Matching Centre</span></h1>
             <p>Your premium luxury fashion destination.</p>
           </div>
         </div>

@@ -5,6 +5,10 @@ import { MdLocationOn, MdPhone, MdEmail, MdAccessTime, MdOpenInNew } from 'react
 import { FaWhatsapp } from 'react-icons/fa';
 import './Contact.css';
 
+import imgManikonda from '../branches/Manikonda.JPG';
+import imgBanjara from '../branches/Banjara hills.JPG';
+import imgAsrao from '../branches/Asrao.JPG';
+
 const BRANCHES = [
   {
     name: 'Manikonda',
@@ -12,6 +16,7 @@ const BRANCHES = [
     mapUrl: 'https://maps.app.goo.gl/jyCKgUTFSoMYjbWa8',
     hours: 'Mon – Sun: 9:00 AM – 9:00 PM',
     tag: 'Branch 01',
+    img: imgManikonda
   },
   {
     name: 'Banjara Hills',
@@ -19,13 +24,15 @@ const BRANCHES = [
     mapUrl: 'https://maps.app.goo.gl/Kpv6XZdtu6xgfLf68',
     hours: 'Mon – Sun: 9:00 AM – 9:00 PM',
     tag: 'Branch 02',
+    img: imgBanjara
   },
   {
-    name: 'Asrao Nagar',
+    name: 'As Rao Nagar',
     address: 'Asrao Nagar, Hyderabad',
     mapUrl: 'https://maps.app.goo.gl/dQYDTuFiNmQY6chv5',
     hours: 'Mon – Sun: 9:00 AM – 9:00 PM',
     tag: 'Branch 03',
+    img: imgAsrao
   },
 ];
 
@@ -35,7 +42,7 @@ const Contact = () => {
     const name = e.target.name.value;
     const email = e.target.email.value;
     const message = e.target.message.value;
-    window.open(`https://wa.me/918885553249?text=Name: ${name}%0AEmail: ${email}%0AMessage: ${message}`, '_blank');
+    window.open(`https://wa.me/917396083412?text=Name: ${name}%0AEmail: ${email}%0AMessage: ${message}`, '_blank');
     toast.success('Redirecting to WhatsApp...');
     e.target.reset();
   };
@@ -69,24 +76,29 @@ const Contact = () => {
               transition={{ duration: 0.5, delay: i * 0.12 }}
               whileHover={{ y: -6 }}
             >
-              <div className="branch-tag">{b.tag}</div>
-              <div className="branch-icon-wrap">
-                <MdLocationOn />
+              <div className="branch-img-wrapper">
+                <img src={b.img} alt={b.name} className="branch-img" />
               </div>
-              <h3 className="branch-name">{b.name}</h3>
-              <p className="branch-address">{b.address}</p>
-              <div className="branch-hours">
-                <MdAccessTime size={14} />
-                <span>{b.hours}</span>
+              <div className="branch-content">
+                <div className="branch-tag">{b.tag}</div>
+                <div className="branch-icon-wrap">
+                  <MdLocationOn />
+                </div>
+                <h3 className="branch-name">{b.name}</h3>
+                <p className="branch-address">{b.address}</p>
+                <div className="branch-hours">
+                  <MdAccessTime size={14} />
+                  <span>{b.hours}</span>
+                </div>
+                <a
+                  href={b.mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="branch-map-btn"
+                >
+                  <MdOpenInNew size={15} /> Get Directions
+                </a>
               </div>
-              <a
-                href={b.mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="branch-map-btn"
-              >
-                <MdOpenInNew size={15} /> Get Directions
-              </a>
             </motion.div>
           ))}
         </div>
@@ -112,8 +124,9 @@ const Contact = () => {
                 <span className="info-icon-wrap"><MdPhone /></span>
                 <div>
                   <h3>Phone</h3>
-                  <p><a href="tel:+918885553249">+91 88855 53249</a></p>
-                  <p><a href="tel:+918008007884">+91 80080 07884</a></p>
+                  <p><a href="tel:+917396083412">+91 73960 83412</a> (Manikonda / Main)</p>
+                  <p><a href="tel:+919494819614">+91 94948 19614</a> (Banjara Hills)</p>
+                  <p><a href="tel:+919014773869">+91 90147 73869</a> (AS Rao Nagar)</p>
                 </div>
               </div>
 
@@ -121,7 +134,7 @@ const Contact = () => {
                 <span className="info-icon-wrap whatsapp"><FaWhatsapp /></span>
                 <div>
                   <h3>WhatsApp</h3>
-                  <p><a href="https://wa.me/918897030909" target="_blank" rel="noopener noreferrer">+91 88970 30909</a></p>
+                  <p><a href="https://wa.me/917396083412" target="_blank" rel="noopener noreferrer">+91 73960 83412</a></p>
                 </div>
               </div>
 
@@ -129,7 +142,7 @@ const Contact = () => {
                 <span className="info-icon-wrap"><MdEmail /></span>
                 <div>
                   <h3>Email</h3>
-                  <p><a href="mailto:thehouseoframya@gmail.com">thehouseoframya@gmail.com</a></p>
+                  <p><a href="mailto:rohansmatchingcentre143@gmail.com">rohansmatchingcentre143@gmail.com</a></p>
                 </div>
               </div>
 

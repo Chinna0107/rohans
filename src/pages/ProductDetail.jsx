@@ -487,7 +487,7 @@ const ProductDetail = () => {
               <div className="pd-social-msgs">
                 <button 
                   className="pd-whatsapp-customization-btn" 
-                  onClick={() => window.open(`https://wa.me/918885553249?text=Hi, I would like to discuss customizations for ${product.name}`, '_blank')}
+                  onClick={() => window.open(`https://wa.me/917396083412?text=Hi, I would like to discuss customizations for ${product.name}`, '_blank')}
                 >
                   <FaWhatsapp className="pd-social-icon" />
                   <div className="pd-social-text">

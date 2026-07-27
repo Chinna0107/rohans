@@ -858,9 +858,9 @@
   font-weight: 600;
 }
 
-.insta-grid-4 {
+.insta-grid-5 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
 }
 
@@ -936,8 +936,8 @@
 .luxury-highlights {
   display: flex;
   justify-content: space-around;
-  background: var(--text-dark);
-  color: var(--bg);
+  background: #ffc0cb;
+  color: #000000;
   padding: 1.5rem 2rem;
   max-width: 1400px;
   margin: 0 auto 4rem;
@@ -989,7 +989,7 @@
     font-size: 0.9rem;
   }
 
-  .insta-grid-4 {
+  .insta-grid-5 {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
@@ -999,11 +999,11 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .insta-grid-4::-webkit-scrollbar {
+  .insta-grid-5::-webkit-scrollbar {
     height: 4px;
   }
 
-  .insta-grid-4::-webkit-scrollbar-thumb {
+  .insta-grid-5::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
   }

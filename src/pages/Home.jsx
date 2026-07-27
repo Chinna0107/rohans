@@ -14,6 +14,12 @@ import { useUserAuth } from '../context/UserAuthContext';
 import { toast } from 'react-toastify';
 import './Home.css';
 
+import video1 from '../videos/video1.MP4';
+import video2 from '../videos/video2.MP4';
+import video3 from '../videos/video3.MP4';
+import video4 from '../videos/video4.MP4';
+import video5 from '../videos/video5.MP4';
+
 const COLLECTION_BANNERS = [
   {
     label: 'New Arrivals',
@@ -87,6 +93,8 @@ const FestiveCard = ({ product, navigate }) => {
 const Home = () => {
   const navigate = useNavigate();
   const { products } = useProducts();
+  const { user } = useUserAuth();
+  const [selectedVideo, setSelectedVideo] = useState(null);
   const [sliders, setSliders] = useState([]);
 
   useEffect(() => {
@@ -363,20 +371,69 @@ const Home = () => {
         transition={{ duration: 0.6 }}
       >
         <h2 className="section-heading"><FaInstagram style={{ marginRight: '0.5rem', transform: 'translateY(2px)' }} /> Instagram Feed</h2>
-        <div className="insta-grid-4">
+        <div className="insta-grid-5">
           {[
-            { id: 1, url: 'https://www.instagram.com/reel/placeholder1/' },
-            { id: 2, url: 'https://www.instagram.com/reel/placeholder2/' },
-            { id: 3, url: 'https://www.instagram.com/reel/placeholder3/' },
-            { id: 4, url: 'https://www.instagram.com/reel/placeholder4/' }
+            { id: 1, url: '#', src: video1 },
+            { id: 2, url: '#', src: video2 },
+            { id: 3, url: '#', src: video3 },
+            { id: 4, url: '#', src: video4 },
+            { id: 5, url: '#', src: video5 }
           ].map(item => (
-            <a key={item.id} href={item.url} target="_blank" rel="noopener noreferrer" className="insta-luxury-item">
-              <img src={`https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=400&auto=format&fit=crop&sig=${item.id}`} alt="Instagram reel" />
+            <div 
+              key={item.id} 
+              className="insta-luxury-item"
+              onClick={() => setSelectedVideo(item.src)}
+            >
+              <video 
+                src={item.src} 
+                autoPlay 
+                loop 
+                muted 
+                playsInline 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
               <div className="insta-overlay-luxury"><FaInstagram /></div>
-            </a>
+            </div>
           ))}
         </div>
       </motion.section>
+
+      {/* Video Modal */}
+      {selectedVideo && (
+        <div 
+          className="video-modal-overlay" 
+          onClick={() => setSelectedVideo(null)}
+          style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 9999,
+            display: 'flex', justifyContent: 'center', alignItems: 'center'
+          }}
+        >
+          <div 
+            className="video-modal-content" 
+            onClick={e => e.stopPropagation()}
+            style={{ position: 'relative', width: '90%', maxWidth: '500px', borderRadius: '10px', overflow: 'hidden' }}
+          >
+            <button 
+              onClick={() => setSelectedVideo(null)}
+              style={{
+                position: 'absolute', top: '10px', right: '10px', 
+                background: 'rgba(0,0,0,0.5)', border: 'none', color: '#fff', 
+                borderRadius: '50%', width: '30px', height: '30px', 
+                cursor: 'pointer', zIndex: 10
+              }}
+            >
+              ✕
+            </button>
+            <video 
+              src={selectedVideo} 
+              autoPlay 
+              controls
+              style={{ width: '100%', height: 'auto', display: 'block' }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Stats Section */}
       <section className="luxury-section stats-section">

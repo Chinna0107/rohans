@@ -328,7 +328,7 @@ const AdminOrders = () => {
                   <div key={s} className={`ao-pipe-step ${isDone ? 'done' : ''} ${isActive ? 'active' : ''}`}>
                     <button
                       className="ao-pipe-btn"
-                      style={isActive ? { background: sc.bg, border: `1.5px solid ${sc.border}`, color: sc.color } : {}}
+                      style={isActive ? { background: '#000', border: '1.5px solid #000', color: '#ffc0cb' } : {}}
                       onClick={() => updateStatus(selectedOrder._id || selectedOrder.id, s)}
                       disabled={updatingId === (selectedOrder._id || selectedOrder.id)}
                     >
@@ -358,11 +358,7 @@ const AdminOrders = () => {
               <div className="ao-modal-section">
                 <h4>💳 Payment</h4>
                 <p><span>Method</span><strong>{selectedOrder.paymentMethod === 'razorpay' ? 'Razorpay' : 'WhatsApp / COD'}</strong></p>
-                <p><span>Status</span>
-                  <strong style={{ color: PAY_COLORS[selectedOrder.paymentStatus]?.color || '#f0a54b' }}>
-                    {selectedOrder.paymentStatus === 'paid' ? '✅ Paid' : '⏳ Pending'}
-                  </strong>
-                </p>
+                <p><span>Status</span> <strong style={{ color: selectedOrder.paymentStatus === 'paid' ? '#000' : '#ff69b4' }}>{selectedOrder.paymentStatus === 'paid' ? '✅ Paid' : '⏳ Pending'}</strong></p>
                 {selectedOrder.razorpayPaymentId && (
                   <p><span>Payment ID</span><strong className="ao-txn-id">{selectedOrder.razorpayPaymentId}</strong></p>
                 )}

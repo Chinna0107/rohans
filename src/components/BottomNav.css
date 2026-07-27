@@ -7,11 +7,11 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background: #0a0a0a;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  background: #ffc0cb;
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
   z-index: 1000;
   padding: 0.5rem 0 calc(1.2rem + env(safe-area-inset-bottom, 0px));
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .bottom-nav-item {
@@ -21,7 +21,7 @@
   justify-content: center;
   flex: 1;
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(0, 0, 0, 0.65);
   gap: 0.15rem;
   transition: color 0.25s ease, transform 0.2s ease;
   padding: 0.3rem 0;
@@ -29,7 +29,7 @@
 
 .bottom-nav-item:hover,
 .bottom-nav-item.active {
-  color: #e91e8c;
+  color: #000000;
 }
 
 .bottom-nav-item.active .bottom-nav-icon {
@@ -84,13 +84,13 @@
   bottom: -100%;
   left: 0;
   width: 100%;
-  background: #0a0a0a;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  background: #ffc0cb;
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   z-index: 1002;
   padding: 1.5rem;
-  box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.2);
   transition: bottom 0.3s cubic-bezier(0.1, 0.8, 0.2, 1);
   padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
 }
@@ -110,13 +110,13 @@
   font-family: var(--font-serif);
   font-size: 1.3rem;
   margin: 0;
-  color: #ffffff;
+  color: #000000;
 }
 
 .close-sheet-btn {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(0, 0, 0, 0.65);
   cursor: pointer;
   padding: 0;
   display: flex;
@@ -124,7 +124,7 @@
 }
 
 .close-sheet-btn:hover {
-  color: #e91e8c;
+  color: #000000;
 }
 
 .sheet-menu {
@@ -138,20 +138,20 @@
   padding: 1rem;
   font-size: 1rem;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 10px;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(0, 0, 0, 0.88);
   transition: background 0.2s, color 0.2s;
 }
 
 .sheet-menu button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: rgba(0, 0, 0, 0.1);
+  color: #000000;
 }
 
 .sheet-divider {
   height: 1px;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(0, 0, 0, 0.07);
   margin: 0.5rem 0;
 }
 
