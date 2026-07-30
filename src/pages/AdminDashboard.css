@@ -154,3 +154,50 @@
   .ad-stat-info p { font-size: 0.65rem; }
   .ad-table-wrap { overflow-x: auto; display: block; white-space: nowrap; }
 }
+
+/* ── Shiprocket Shipment ── */
+.ad-ship-btn {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.45rem 0.9rem;
+  background: #0a0a0a; color: #fff;
+  border: none; border-radius: 50px;
+  font-size: 0.75rem; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  white-space: nowrap;
+}
+.ad-ship-btn:hover:not(:disabled) {
+  background: #e91e8c;
+  box-shadow: 0 6px 16px rgba(233,30,140,0.3);
+  transform: translateY(-2px);
+}
+.ad-ship-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ad-ship-spinner {
+  width: 12px; height: 12px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+.ad-awb-info {
+  display: flex; flex-direction: column; gap: 0.2rem;
+}
+
+.ad-awb-badge {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.3rem 0.7rem;
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.3);
+  border-radius: 20px;
+  font-size: 0.72rem; font-weight: 700;
+  color: #059669; white-space: nowrap;
+}
+
+.ad-courier-name {
+  font-size: 0.68rem; color: var(--text-muted);
+  padding-left: 0.2rem;
+}

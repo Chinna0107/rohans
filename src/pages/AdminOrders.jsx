@@ -46,6 +46,7 @@ const AdminOrders = () => {
   const [search, setSearch] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [updatingId, setUpdatingId] = useState(null);
+  const [shipmentLoading, setShipmentLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -101,6 +102,41 @@ const AdminOrders = () => {
 
   const totalRevenue = orders.reduce((s, o) => s + (Number(o.finalTotal || o.subtotal) || 0), 0);
   const paidRevenue = orders.filter(o => o.paymentStatus === 'paid').reduce((s, o) => s + (Number(o.finalTotal || o.subtotal) || 0), 0);
+
+  const createShipment = async (orderId) => {
+    setShipmentLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.post(`${config.API_URL}/api/shiprocket/create/${orderId}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.data.success) {
+        toast.success('Shipment created! AWB: ' + (res.data.awb_code || 'Assigned'));
+        await fetchOrders();
+        // update modal with fresh data
+        const fresh = await axios.get(`${config.API_URL}/api/orders`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const list = fresh.data.success ? fresh.data.orders : Array.isArray(fresh.data) ? fresh.data : [];
+        const updated = list.find(o => (o._id || o.id) === orderId);
+        if (updated) setSelectedOrder(updated);
+      } else {
+        toast.error(res.data.message || 'Failed to create shipment');
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Shiprocket error');
+    } finally {
+      setShipmentLoading(false);
+    }
+  };
+
+  const printLabel = (awbCode) => {
+    window.open(`https://app.shiprocket.in/label/print?awb=${awbCode}`, '_blank');
+  };
+
+  const trackShipment = (awbCode) => {
+    window.open(`https://shiprocket.co/tracking/${awbCode}`, '_blank');
+  };
 
   const getNextStatus = (current) => {
     const idx = STAGE_FLOW.indexOf(current || 'pending');
@@ -302,18 +338,42 @@ const AdminOrders = () => {
                 <h2>Order Details</h2>
                 <span className="ao-modal-date">{formatDate(selectedOrder)}</span>
               </div>
-              <button 
-                className="ao-print-btn" 
-                onClick={() => {
-                  const invoiceWindow = window.open("", "_blank");
-                  if (invoiceWindow) {
-                    invoiceWindow.document.open();
-                    invoiceWindow.document.write(generateInvoiceHtml(selectedOrder));
-                    invoiceWindow.document.close();
-                  }
-                }} 
-                title="Print Order"
-              >🖨️ Print Invoice</button>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <button 
+                  className="ao-print-btn" 
+                  onClick={() => {
+                    const invoiceWindow = window.open("", "_blank");
+                    if (invoiceWindow) {
+                      invoiceWindow.document.open();
+                      invoiceWindow.document.write(generateInvoiceHtml(selectedOrder));
+                      invoiceWindow.document.close();
+                    }
+                  }} 
+                >🖨️ Invoice</button>
+                {!selectedOrder.awb_code && !selectedOrder.awbCode ? (
+                  <button
+                    className="ao-print-btn"
+                    style={{ background: '#1a1a2e', color: '#fff' }}
+                    onClick={() => createShipment(selectedOrder._id || selectedOrder.id)}
+                    disabled={shipmentLoading}
+                  >
+                    {shipmentLoading ? '⏳ Creating...' : '🚀 Create Shipment'}
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      className="ao-print-btn"
+                      style={{ background: '#0f3460', color: '#fff' }}
+                      onClick={() => printLabel(selectedOrder.awb_code || selectedOrder.awbCode)}
+                    >🏷️ Print Label</button>
+                    <button
+                      className="ao-print-btn"
+                      style={{ background: '#16213e', color: '#fff' }}
+                      onClick={() => trackShipment(selectedOrder.awb_code || selectedOrder.awbCode)}
+                    >📍 Track</button>
+                  </>
+                )}
+              </div>
             </div>
 
             {/* Status Pipeline */}
@@ -353,6 +413,23 @@ const AdminOrders = () => {
                     : selectedOrder.customer?.address || '—'
                 }</strong></p>
               </div>
+
+              {/* Shipment Info */}
+              {(selectedOrder.awb_code || selectedOrder.awbCode) && (
+                <div className="ao-modal-section" style={{ gridColumn: '1 / -1' }}>
+                  <h4>🚚 Shipment</h4>
+                  <p><span>AWB Code</span><strong>{selectedOrder.awb_code || selectedOrder.awbCode}</strong></p>
+                  {(selectedOrder.courier_name || selectedOrder.courierName) && (
+                    <p><span>Courier</span><strong>{selectedOrder.courier_name || selectedOrder.courierName}</strong></p>
+                  )}
+                  {(selectedOrder.shipment_id || selectedOrder.shipmentId) && (
+                    <p><span>Shipment ID</span><strong>{selectedOrder.shipment_id || selectedOrder.shipmentId}</strong></p>
+                  )}
+                  {(selectedOrder.shiprocket_order_id || selectedOrder.shiprocketOrderId) && (
+                    <p><span>Shiprocket Order ID</span><strong>{selectedOrder.shiprocket_order_id || selectedOrder.shiprocketOrderId}</strong></p>
+                  )}
+                </div>
+              )}
 
               {/* Payment */}
               <div className="ao-modal-section">

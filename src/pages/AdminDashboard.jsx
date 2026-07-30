@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import AdminHeader from '../components/AdminHeader';
-import { LuShoppingBag, LuUsers, LuTrendingUp, LuMessageCircle, LuPackage, LuClock } from 'react-icons/lu';
+import { LuShoppingBag, LuUsers, LuTrendingUp, LuMessageCircle, LuPackage, LuClock, LuTruck } from 'react-icons/lu';
 import config from '../config';
 import './AdminDashboard.css';
 
@@ -12,6 +12,8 @@ const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [productsCount, setProductsCount] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const [shippingLoading, setShippingLoading] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -46,6 +48,29 @@ const AdminDashboard = () => {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const createShipment = async (order) => {
+    const id = order._id || order.id;
+    setShippingLoading(prev => ({ ...prev, [id]: true }));
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.post(
+        `${config.API_URL}/api/shiprocket/create/${id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (res.data.success) {
+        toast.success(`Shipment created! AWB: ${res.data.awb_code || 'Assigned'}`);
+        fetchData();
+      } else {
+        toast.error(res.data.message || 'Failed to create shipment');
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Shipment creation failed');
+    } finally {
+      setShippingLoading(prev => ({ ...prev, [id]: false }));
     }
   };
 
@@ -123,6 +148,7 @@ const AdminDashboard = () => {
                         <th>Customer</th>
                         <th>Total</th>
                         <th>Status</th>
+                        <th>Shipment</th>
                         <th>Notify</th>
                       </tr>
                     </thead>
@@ -144,6 +170,27 @@ const AdminDashboard = () => {
                               <span className={`ad-status-badge ${status}`}>
                                 {status.charAt(0).toUpperCase() + status.slice(1)}
                               </span>
+                            </td>
+                            <td>
+                              {order.awb_code ? (
+                                <div className="ad-awb-info">
+                                  <span className="ad-awb-badge"><LuTruck size={12} /> {order.awb_code}</span>
+                                  {order.courier_name && <span className="ad-courier-name">{order.courier_name}</span>}
+                                </div>
+                              ) : (
+                                <button
+                                  className="ad-ship-btn"
+                                  onClick={() => createShipment(order)}
+                                  disabled={shippingLoading[id] || status === 'cancelled'}
+                                  title="Create Shiprocket Shipment"
+                                >
+                                  {shippingLoading[id] ? (
+                                    <span className="ad-ship-spinner" />
+                                  ) : (
+                                    <><LuTruck size={14} /> Ship</>  
+                                  )}
+                                </button>
+                              )}
                             </td>
                             <td>
                               <button 

@@ -21,6 +21,11 @@ const Login = () => {
     try {
       const response = await axios.post(`${config.API_URL}/api/users/login`, { email, password });
       if (response.data.success && response.data.token) {
+        if (!response.data.isAdmin) {
+          toast.error('Access denied. Not an admin account.');
+          setLoading(false);
+          return;
+        }
         localStorage.setItem('user', JSON.stringify(response.data.user));
         localStorage.setItem('token', response.data.token);
         toast.success('Login successful!');
