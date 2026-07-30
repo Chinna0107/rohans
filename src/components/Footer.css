@@ -278,3 +278,20 @@
 .footer-branch-link:hover .footer-branch-ext {
   opacity: 0.9;
 }
+
+.footer-dev {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.35);
+  white-space: nowrap;
+}
+
+.footer-dev a {
+  color: #e91e8c;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.25s ease;
+}
+
+.footer-dev a:hover {
+  opacity: 0.8;
+}

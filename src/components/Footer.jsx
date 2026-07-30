@@ -97,6 +97,7 @@ const Footer = () => (
           <li><Link to="/cancellation-policy">Cancellation Policy</Link></li>
           <li><Link to="/shipping-policy">Shipping Policy</Link></li>
         </ul>
+        <p className="footer-dev">Developed by <a href="https://ordix.in" target="_blank" rel="noopener noreferrer">Ordix</a></p>
       </div>
     </div>
   </footer>
