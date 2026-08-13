@@ -28,7 +28,7 @@ const POLICIES = {
       },
       {
         heading: '6. Grievance Officer and Contact Us',
-        content: 'In accordance with the Information Technology Act 2000 and rules made thereunder, the name and contact details of the Grievance Officer are provided below. If you have any questions or comments about this notice, you may email us at rohansmatchingcentre143@gmail.com, call us at +91 7396083412, or contact us by post at: ROHANS MATCHING CENTRE, 13-6-586, P.K.Layout, Tirupati-517501, Andhra Pradesh, India.',
+        content: 'In accordance with the Information Technology Act 2000 and rules made thereunder, the name and contact details of the Grievance Officer are provided below. If you have any questions or comments about this notice, you may email us at rohansmatchingcentre143@gmail.com, call us at +91 7396083412, or contact us by post at: ROHANS MATCHING CENTER, 13-6-586, P.K.Layout, Tirupati-517501, Andhra Pradesh, India.',
       },
     ],
   },
@@ -38,7 +38,7 @@ const POLICIES = {
     sections: [
       {
         heading: '1. Shipping Areas and Partners',
-        content: 'ROHANS MATCHING CENTRE delivers products across India using reliable courier partners. For deliveries to remote locations or outside our standard delivery zones, please contact us directly via WhatsApp or phone to confirm service availability before placing an order.',
+        content: 'ROHANS MATCHING CENTER delivers products across India using reliable courier partners. For deliveries to remote locations or outside our standard delivery zones, please contact us directly via WhatsApp or phone to confirm service availability before placing an order.',
       },
       {
         heading: '2. Processing and Dispatch Time',
@@ -66,28 +66,28 @@ const POLICIES = {
     title: '↩️ Refund & Return Policy',
     lastUpdated: 'July 2026',
     sections: [
+      // {
+      //   heading: '1. Return Eligibility',
+      //   content: 'We have a strict 7-day return policy, which means you have 7 days after receiving your item to request a return. To be eligible for a return, your item must be in the same condition that you received it, unworn or unused, with tags, and in its original packaging. You’ll also need the receipt or proof of purchase. Custom-stitched items and customized Maggam work products are strictly non-returnable and non-refundable.',
+      // },
       {
-        heading: '1. Return Eligibility',
-        content: 'We have a strict 7-day return policy, which means you have 7 days after receiving your item to request a return. To be eligible for a return, your item must be in the same condition that you received it, unworn or unused, with tags, and in its original packaging. You’ll also need the receipt or proof of purchase. Custom-stitched items and customized Maggam work products are strictly non-returnable and non-refundable.',
-      },
-      {
-        heading: '2. Mandatory Unboxing Video',
+        heading: '1. Mandatory Unboxing Video',
         content: 'To claim a return, exchange, or refund for damaged, missing, or incorrect items, a clear, uncut, and unedited unboxing video of the parcel is mandatory. The video must show the parcel being opened from its original sealed state. Without a valid unboxing video, we will not be able to process any claims for damages or missing items.',
       },
       {
-        heading: '3. Non-Returnable Exceptions',
+        heading: '2. Non-Returnable Exceptions',
         content: 'Certain types of items cannot be returned, including custom products (such as special orders or personalized stitching). We also do not accept returns on sale items, clearance items, or gift cards. Returns are not accepted for issues related to minor color variations (due to screen resolution differences) or change of mind.',
       },
       {
-        heading: '4. Exchange Policy',
+        heading: '3. Exchange Policy',
         content: 'We only replace items if they are defective, damaged, or if the wrong size was shipped. If you need to exchange an item for a different size, please contact us within 3 days of delivery. Exchanges are subject to product availability. If the desired size is unavailable, a store credit or refund will be issued.',
       },
       {
-        heading: '5. Refund Processing',
+        heading: '4. Refund Processing',
         content: 'Once we receive and inspect your return, we will notify you of the approval or rejection of your refund. If approved, the refund will be processed and a credit will automatically be applied to your original method of payment within 5 to 7 business days. Please remember it can take some time for your bank or credit card company to process and post the refund.',
       },
       {
-        heading: '6. How to Initiate a Return',
+        heading: '5. How to Initiate a Return',
         content: 'To start a return, you can contact us at rohansmatchingcentre143@gmail.com or WhatsApp us at +91 7396083412. Please include your order number, reason for return, and the mandatory unboxing video/photos. If your return is accepted, we will send you a return shipping label, as well as instructions on how and where to send your package.',
       },
     ],
@@ -113,7 +113,7 @@ const POLICIES = {
         content: 'For successfully cancelled prepaid orders, the refund will be initiated immediately upon confirmation of the cancellation. The refund amount will be credited back to your original payment method (bank account, credit/debit card, or UPI) within 5 to 7 business days, depending on your bank’s processing time.',
       },
       {
-        heading: '5. Cancellation by ROHANS MATCHING CENTRE',
+        heading: '5. Cancellation by ROHANS MATCHING CENTER',
         content: 'We reserve the right to refuse or cancel any order for any reason at our sole discretion. Situations that may result in your order being cancelled include limitations on quantities available for purchase, inaccuracies or errors in product or pricing information, or problems identified by our credit and fraud avoidance department. If your prepaid order is cancelled by us, a full refund will be issued within 5-7 business days.',
       },
     ],
@@ -124,7 +124,7 @@ const POLICIES = {
     sections: [
       {
         heading: '1. Introduction and Acceptance',
-        content: 'Welcome to ROHANS MATCHING CENTRE. These Terms and Conditions outline the rules and regulations for the use of ROHANS MATCHING CENTRE’s Website, located at houseoframya.com and houseoframya.in. By accessing this website, we assume you accept these terms and conditions in full. Do not continue to use ROHANS MATCHING CENTRE if you do not agree to take all of the terms and conditions stated on this page.',
+        content: 'Welcome to ROHANS MATCHING CENTER. These Terms and Conditions outline the rules and regulations for the use of ROHANS MATCHING CENTER’s Website, located at houseoframya.com and houseoframya.in. By accessing this website, we assume you accept these terms and conditions in full. Do not continue to use ROHANS MATCHING CENTER if you do not agree to take all of the terms and conditions stated on this page.',
       },
       {
         heading: '2. Products, Accuracy, and Pricing',
@@ -136,15 +136,15 @@ const POLICIES = {
       },
       {
         heading: '4. Intellectual Property Rights',
-        content: 'Unless otherwise stated, ROHANS MATCHING CENTRE and/or its licensors own the intellectual property rights for all material on ROHANS MATCHING CENTRE. All intellectual property rights are reserved. You may access this from ROHANS MATCHING CENTRE for your own personal use subjected to restrictions set in these terms and conditions. You must not republish, sell, rent, reproduce, duplicate, or copy material from ROHANS MATCHING CENTRE.',
+        content: 'Unless otherwise stated, ROHANS MATCHING CENTER and/or its licensors own the intellectual property rights for all material on ROHANS MATCHING CENTER. All intellectual property rights are reserved. You may access this from ROHANS MATCHING CENTER for your own personal use subjected to restrictions set in these terms and conditions. You must not republish, sell, rent, reproduce, duplicate, or copy material from ROHANS MATCHING CENTER.',
       },
       {
         heading: '5. User Comments and Feedback',
-        content: 'Certain parts of this website offer the opportunity for users to post and exchange opinions and information. ROHANS MATCHING CENTRE reserves the right to monitor all Comments and to remove any Comments which can be considered inappropriate, offensive, or causes breach of these Terms and Conditions.',
+        content: 'Certain parts of this website offer the opportunity for users to post and exchange opinions and information. ROHANS MATCHING CENTER reserves the right to monitor all Comments and to remove any Comments which can be considered inappropriate, offensive, or causes breach of these Terms and Conditions.',
       },
       {
         heading: '6. Limitation of Liability and Indemnification',
-        content: 'In no event shall ROHANS MATCHING CENTRE, nor any of its officers, directors, and employees, be held liable for anything arising out of or in any way connected with your use of this Website. You hereby indemnify to the fullest extent ROHANS MATCHING CENTRE from and against any and/or all liabilities, costs, demands, causes of action, damages, and expenses arising in any way related to your breach of any of the provisions of these Terms.',
+        content: 'In no event shall ROHANS MATCHING CENTER, nor any of its officers, directors, and employees, be held liable for anything arising out of or in any way connected with your use of this Website. You hereby indemnify to the fullest extent ROHANS MATCHING CENTER from and against any and/or all liabilities, costs, demands, causes of action, damages, and expenses arising in any way related to your breach of any of the provisions of these Terms.',
       },
       {
         heading: '7. Governing Law and Jurisdiction',

@@ -173,8 +173,8 @@ const CustomerLogin = () => {
         {/* Left Card - Branding */}
         <div className="auth-left-card">
           <div className="auth-brand-content">
-            <img src={logo} alt="ROHANS MATCHING CENTRE" className="auth-logo-img" />
-            <h1><span className="l-alpha">Rohans</span> <span className="l-zone" style={{ fontSize: '1.2rem', display: 'block', marginTop: '0.2rem' }}>Matching Centre</span></h1>
+            <img src={logo} alt="ROHANS MATCHING CENTER" className="auth-logo-img" />
+            <h1><span className="l-alpha">Rohans</span> <span className="l-zone" style={{ fontSize: '1.2rem', display: 'block', marginTop: '0.2rem' }}>Matching Center</span></h1>
             <p>Your premium luxury fashion destination.</p>
           </div>
         </div>
@@ -194,7 +194,7 @@ const CustomerLogin = () => {
           {mode === 'signup' ? 'Create Account' : mode === 'forgot' ? 'Reset Password' : 'Welcome Back'}
         </h2>
         <p className="auth-subtitle">
-          {mode === 'signup' ? 'Join ROHANS MATCHING CENTRE for exclusive benefits.' : mode === 'forgot' ? 'Enter your email to receive a reset code.' : 'Sign in to access your luxury shopping experience.'}
+          {mode === 'signup' ? 'Join ROHANS MATCHING CENTER for exclusive benefits.' : mode === 'forgot' ? 'Enter your email to receive a reset code.' : 'Sign in to access your luxury shopping experience.'}
         </p>
 
         {error && <div className="auth-error">{error}</div>}

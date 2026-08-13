@@ -173,7 +173,11 @@ const ProductDetail = () => {
 
   const handleDragEnd = () => setIsDragging(false);
 
-  const handleWishlist = async () => {
+  const handleWishlist = async (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
     if (!customer) {
       toast.info('Please log in to save to your wishlist.');
       return;
@@ -458,9 +462,9 @@ const ProductDetail = () => {
               <div className="pd-meters-selector" style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
                 <span style={{ fontWeight: '500' }}>Length:</span>
                 <div className="pd-qty-control" style={{ margin: 0 }}>
-                  <button onClick={() => setLocalMeters(Math.max(1, localMeters - 1))}>−</button>
+                  <button onClick={() => setLocalMeters(Math.max(0.25, localMeters - 0.25))}>−</button>
                   <span>{localMeters}</span>
-                  <button onClick={() => setLocalMeters(localMeters + 1)}>+</button>
+                  <button onClick={() => setLocalMeters(localMeters + 0.25)}>+</button>
                 </div>
                 <span style={{ fontWeight: '500', color: '#666' }}>Meters</span>
                 <span style={{ fontWeight: 'bold', marginLeft: 'auto', fontSize: '1.2rem', color: '#e1782d' }}>
@@ -481,10 +485,10 @@ const ProductDetail = () => {
               ) : (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                   <div className="pd-qty-control">
-                    <button onClick={() => updateQuantity(product.id, selectedSize, -1, activeColor)}>−</button>
+                    <button onClick={() => updateQuantity(product.id, selectedSize, isMeters ? -0.25 : -1, activeColor)}>−</button>
                     <span>{getCartQuantity(product.id, selectedSize, activeColor)}</span>
                     <button
-                      onClick={() => updateQuantity(product.id, selectedSize, 1, activeColor)}
+                      onClick={() => updateQuantity(product.id, selectedSize, isMeters ? 0.25 : 1, activeColor)}
                       disabled={!canAddMore}
                       title={!canAddMore ? 'Max stock reached' : ''}
                     >+</button>
@@ -524,7 +528,7 @@ const ProductDetail = () => {
                 </button>
                 <button 
                   className="pd-instagram-customization-btn" 
-                  onClick={() => window.open(`https://instagram.com/houseoframya`, '_blank')}
+                  onClick={() => window.open(`https://www.instagram.com/rohans_matchings_fabrics?igsh=YTM5MHl6M3Z1MTg%3D&utm_source=qr`, '_blank')}
                 >
                   <FaInstagram className="pd-social-icon ig-icon" />
                   <div className="pd-social-text">
@@ -545,10 +549,10 @@ const ProductDetail = () => {
                 <MdVerified />
                 <div><strong>100% Genuine</strong><span>Quality assured</span></div>
               </div>
-              <div className="pd-del-item">
-                <span className="pd-del-icon">↩️</span>
-                <div><strong>Easy Returns</strong><span>7-day exchange</span></div>
-              </div>
+              {/* <div className="pd-del-item"> */}
+                {/* <span className="pd-del-icon">↩️</span> */}
+                {/* <div><strong>Easy Returns</strong><span>7-day exchange</span></div> */}
+              {/* </div> */}
             </div>
 
             {/* Accordions */}

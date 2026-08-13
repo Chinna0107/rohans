@@ -179,6 +179,7 @@
   transition: all 0.25s ease !important;
   font-family: inherit;
   flex-shrink: 0;
+  pointer-events: auto !important;
 }
 .pd-icon-btn:hover {
   background: #111 !important;

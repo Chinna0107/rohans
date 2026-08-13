@@ -63,12 +63,12 @@ const Header = () => {
         <div className="header-left">
           <Link to="/" className="brand-logo">
             <div className="brand-logo-circle">
-              <img src={logo} alt="ROHANS MATCHING CENTRE" className="brand-logo-img" />
+              <img src={logo} alt="ROHANS MATCHING CENTER" className="brand-logo-img" />
             </div>
             <div className="brand-text">
               <span className="brand-title">
                 <span className="brand-title-main">ROHANS</span>
-                <span className="brand-title-accent">MATCHING CENTRE</span>
+                <span className="brand-title-accent">MATCHING CENTER</span>
               </span>
               <span className="brand-subtitle">QUALITY MEETS STYLE, EVERY DAY</span>
             </div>

@@ -18,10 +18,10 @@ const Footer = () => (
       {/* Column 1: Brand & Social */}
       <div className="footer-col brand-col">
         <div className="footer-brand-wrap">
-          <img src={logo} alt="ROHANS MATCHING CENTRE" className="footer-logo" />
+          <img src={logo} alt="ROHANS MATCHING CENTER" className="footer-logo" />
           <h3 className="footer-brand">
             <span>ROHANS</span><br />
-            <span className="footer-brand-accent">MATCHING CENTRE</span>
+            <span className="footer-brand-accent">MATCHING CENTER</span>
           </h3>
         </div>
         <p className="brand-bio">
@@ -29,8 +29,8 @@ const Footer = () => (
         </p>
         <div className="social-icons">
           <a href="https://www.instagram.com/rohans_matchings_fabrics?igsh=YTM5MHl6M3Z1MTg%3D&utm_source=qr" target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
-          <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook"><FaFacebookF /></a>
-          <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter"><FaTwitter /></a>
+          {/* <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook"><FaFacebookF /></a> */}
+          {/* <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter"><FaTwitter /></a> */}
           <a href="https://youtube.com/@rohansmatchingcenter?si=U3VJAKhfmYtdtS7V" target="_blank" rel="noreferrer" aria-label="YouTube"><FaYoutube /></a>
         </div>
       </div>
@@ -68,7 +68,7 @@ const Footer = () => (
         <h4>Help</h4>
         <ul>
           <li><Link to="/faq">Track Order</Link></li>
-          <li><Link to="/refund-policy">Returns & Exchanges</Link></li>
+          {/* <li><Link to="/refund-policy">Returns & Exchanges</Link></li> */}
           <li><Link to="/shipping-policy">Shipping Policy</Link></li>
           <li><Link to="/faq">FAQ</Link></li>
         </ul>
@@ -89,12 +89,12 @@ const Footer = () => (
     {/* Bottom Bar */}
     <div className="footer-bottom">
       <div className="bottom-content">
-        <p>&copy; {new Date().getFullYear()} Rohans Matching Centre. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Rohans Matching Center. All rights reserved.</p>
         <ul className="policy-links">
           <li><Link to="/privacy-policy">Privacy Policy</Link></li>
           <li><Link to="/terms">Terms & Conditions</Link></li>
-          <li><Link to="/refund-policy">Refund Policy</Link></li>
-          <li><Link to="/cancellation-policy">Cancellation Policy</Link></li>
+          {/* <li><Link to="/refund-policy">Refund Policy</Link></li> */}
+          {/* <li><Link to="/cancellation-policy">Cancellation Policy</Link></li> */}
           <li><Link to="/shipping-policy">Shipping Policy</Link></li>
         </ul>
         <p className="footer-dev">Developed by <a href="https://ordix.in" target="_blank" rel="noopener noreferrer">Ordix</a></p>

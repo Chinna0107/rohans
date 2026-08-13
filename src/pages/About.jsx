@@ -60,7 +60,7 @@ const About = () => {
 
           <h1>
             <Typewriter options={{
-              strings: ['Rohans Matching Centre', 'Your Fashion Destination', 'Every Style. Every Occasion.'],
+              strings: ['Rohans Matching Center', 'Your Fashion Destination', 'Every Style. Every Occasion.'],
               autoStart: true, loop: true, delay: 60, deleteSpeed: 30,
               wrapperClassName: 'about-typewriter', cursorClassName: 'about-typewriter-cursor',
             }} />
@@ -106,8 +106,8 @@ const About = () => {
           <motion.div className="about-who-text" {...fadeRight(0.15)}>
             <span className="about-section-tag">Who We Are</span>
             <h2>More Than a Store.<br />A Fashion Destination.</h2>
-            <p><strong>Rohans Matching Centre</strong> was founded with one simple belief — every woman deserves to look and feel her best, without compromise. What started as a small boutique in Hyderabad has grown into a beloved fashion destination with three thriving showrooms across the city.</p>
-            <p>We are a <strong>matching centre</strong> in the truest sense — we match you with the perfect saree, the right fabric, the ideal blouse design, and the most fitting stitch. Whether you walk in for a casual kurti or a bridal ensemble, we ensure every piece is a perfect match for your personality and occasion.</p>
+            <p><strong>Rohans Matching Center</strong> was founded with one simple belief — every woman deserves to look and feel her best, without compromise. What started as a small boutique in Hyderabad has grown into a beloved fashion destination with three thriving showrooms across the city.</p>
+            <p>We are a <strong>matching center</strong> in the truest sense — we match you with the perfect saree, the right fabric, the ideal blouse design, and the most fitting stitch. Whether you walk in for a casual kurti or a bridal ensemble, we ensure every piece is a perfect match for your personality and occasion.</p>
             <p>From everyday cotton sarees to grand silk Kanjivarams, from readymade kurties to fully custom-stitched outfits with intricate Maggam work — everything is under one roof, curated with love and expertise.</p>
           </motion.div>
         </div>
@@ -180,14 +180,14 @@ const About = () => {
             <span className="about-section-tag">A Note from the Founder</span>
             <h2>Built on Passion,<br />Driven by You.</h2>
             <motion.blockquote initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.3, duration: 0.7 }}>
-              "I started Rohans Matching Centre because I wanted every woman in Hyderabad to have access to beautiful, quality fashion — without having to travel far or spend a fortune. A matching centre is not just a shop; it is a place where your vision comes to life. You bring your dream, we make it real."
+              "I started Rohans Matching Center because I wanted every woman in Hyderabad to have access to beautiful, quality fashion — without having to travel far or spend a fortune. A matching center is not just a shop; it is a place where your vision comes to life. You bring your dream, we make it real."
             </motion.blockquote>
             <motion.blockquote initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.5, duration: 0.7 }}>
               "Over the years, watching our customers walk out with confidence — in a saree we helped them pick, a blouse we stitched, a look we put together — that is what drives us every single day. This is not just our business. It is our passion."
             </motion.blockquote>
             <motion.p className="about-founder-sig"
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.7 }}>
-              — Rohan, Founder
+              — Shravan, Founder
             </motion.p>
           </motion.div>
         </div>
@@ -281,7 +281,7 @@ const About = () => {
             <div className="about-social-links">
               {[
                 { icon: <FaInstagram />, href: 'https://www.instagram.com/rohans_matchings_fabrics?igsh=YTM5MHl6M3Z1MTg%3D&utm_source=qr', label: 'Instagram' },
-                { icon: <FaFacebookF />, href: '#', label: 'Facebook' },
+                // { icon: <FaFacebookF />, href: '#', label: 'Facebook' },
                 { icon: <FaYoutube />,   href: 'https://youtube.com/@rohansmatchingcenter?si=U3VJAKhfmYtdtS7V',   label: 'YouTube' },
               ].map((s, i) => (
                 <motion.a key={i} href={s.href} target="_blank" rel="noreferrer" aria-label={s.label}

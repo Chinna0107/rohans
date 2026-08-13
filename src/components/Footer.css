@@ -205,9 +205,9 @@
 
 @media (max-width: 600px) {
   .footer-container {
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    padding: 3rem 1.25rem;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding: 3rem 1.5rem;
   }
 
   .brand-col {
@@ -220,22 +220,24 @@
 
   .bottom-content {
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.2rem;
     text-align: center;
   }
 
   .policy-links {
     justify-content: center;
     gap: 1rem;
+    flex-wrap: wrap;
+    flex-direction: row;
   }
 
   .footer-brand {
-    font-size: 1.25rem;
+    font-size: 1.35rem;
   }
 
   .footer-logo {
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
   }
 }
 

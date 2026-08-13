@@ -70,10 +70,10 @@ export const generateInvoiceHtml = (order) => {
       <div class="invoice-box">
         <div class="header">
           <div class="brand-info">
-            <h1>ROHANS MATCHING CENTRE</h1>
+            <h1>ROHANS MATCHING CENTER</h1>
             <p class="tagline">Luxury Authentic Clothing</p>
             <div class="brand-details">
-              <strong>ROHANS MATCHING CENTRE Pvt Ltd</strong><br>
+              <strong>ROHANS MATCHING CENTER Pvt Ltd</strong><br>
               Reg No.: HOR-2026-99381<br>
               Phone: +91 7396083412 | Email: rohansmatchingcentre143@gmail.com<br>
               Website: www.houseoframya.com
@@ -93,7 +93,7 @@ export const generateInvoiceHtml = (order) => {
               <td class="from-box">
                 <h3 class="box-title">From Address</h3>
                 <div class="address-text">
-                  <strong>ROHANS MATCHING CENTRE</strong><br>
+                  <strong>ROHANS MATCHING CENTER</strong><br>
                   13-6-586, P.K.Layout,<br>
                   Tirupati - 517501, Andhra Pradesh, India<br>
                   <strong>Phone:</strong> +91 7396083412

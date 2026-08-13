@@ -181,7 +181,7 @@ const UserDashboard = () => {
             <div className="ud-section profile-section">
               <div className="profile-header">
                 <h2>THE ACCOUNT PROFILE</h2>
-                <p>Manage your ROHANS MATCHING CENTRE credentials and preferences.</p>
+                <p>Manage your ROHANS MATCHING CENTER credentials and preferences.</p>
               </div>
               
               <div className="ud-profile-detail">

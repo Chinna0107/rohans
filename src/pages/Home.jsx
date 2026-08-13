@@ -128,12 +128,12 @@ const Home = () => {
   return (
     <div className="luxury-home">
       
-      {/* Hero Section - Rohan's Matching Centre Banner */}
+      {/* Hero Section - Rohan's Matching Center Banner */}
       <section className="rmc-hero-section">
         <div className="rmc-hero-inner">
           <img
             src="/images/rohans-matching-centre-banner.png"
-            alt="Rohan's Matching Centre - Sarees, Blouses, Men's Collection"
+            alt="Rohan's Matching Center - Sarees, Blouses, Men's Collection"
             className="rmc-hero-img"
           />
           <div className="rmc-hero-overlay">
@@ -157,7 +157,7 @@ const Home = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.3 }}
               >
-                ROHAN'S MATCHING CENTRE
+                ROHAN'S MATCHING CENTER
               </motion.h1>
               <motion.div
                 className="rmc-category-chips"
@@ -190,7 +190,7 @@ const Home = () => {
       {/* Mobile Marquee Strip */}
       <div className="mobile-marquee-strip">
         <div className="mobile-marquee-track">
-          {['Free Shipping ₹499+', 'New Arrivals', 'Premium Quality', 'Best Sellers', '7-Day Returns', 'Trending Now', 'Free Shipping ₹499+', 'New Arrivals', 'Premium Quality', 'Best Sellers', '7-Day Returns', 'Trending Now'].map((t, i) => (
+          {['Free Shipping ₹2499+', 'New Arrivals', 'Premium Quality', 'Best Sellers', 'Trending Now', 'Free Shipping ₹2499+', 'New Arrivals', 'Premium Quality', 'Best Sellers', '7-Day Returns', 'Trending Now'].map((t, i) => (
             <span key={i}>{t} <span className="marquee-dot">✦</span></span>
           ))}
         </div>
@@ -348,10 +348,10 @@ const Home = () => {
             {[
               { name: 'Anjali R.', text: 'The Maggam work on my blouse was incredibly detailed and perfect. Truly exquisite craftsmanship!' },
               { name: 'Priya S.', text: 'I ordered a premium saree for a wedding, and the fabric quality is simply outstanding.' },
-              { name: 'Divya K.', text: 'The custom stitching for my kurti fit flawlessly. ROHANS MATCHING CENTRE never disappoints!' },
+              { name: 'Divya K.', text: 'The custom stitching for my kurti fit flawlessly. ROHANS MATCHING CENTER never disappoints!' },
               { name: 'Anjali R.', text: 'The Maggam work on my blouse was incredibly detailed and perfect. Truly exquisite craftsmanship!' },
               { name: 'Priya S.', text: 'I ordered a premium saree for a wedding, and the fabric quality is simply outstanding.' },
-              { name: 'Divya K.', text: 'The custom stitching for my kurti fit flawlessly. ROHANS MATCHING CENTRE never disappoints!' },
+              { name: 'Divya K.', text: 'The custom stitching for my kurti fit flawlessly. ROHANS MATCHING CENTER never disappoints!' },
             ].map((t, i) => (
               <div key={i} className="luxury-review-card">
                 <div className="stars">{[...Array(5)].map((_, j) => <MdStar key={j} />)}</div>
@@ -484,11 +484,11 @@ const Home = () => {
       <section className="luxury-highlights">
         <div className="highlight-item">
           <MdLocalShipping className="highlight-icon" />
-          <span>Free Shipping above ₹499</span>
+          <span>Free Shipping above ₹2499</span>
         </div>
         <div className="highlight-item">
           <MdOutlineAssignmentReturn className="highlight-icon" />
-          <span>7 Days Easy Returns</span>
+          {/* <span>7 Days Easy Returns</span> */}
         </div>
         <div className="highlight-item">
           <MdVerified className="highlight-icon" />

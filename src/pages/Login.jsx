@@ -53,8 +53,8 @@ const Login = () => {
         {/* Left panel */}
         <div className="login-left">
           <div className="login-left-content">
-            <img src={logo} alt="ROHANS MATCHING CENTRE" className="login-logo" />
-            <h1><span className="l-alpha">Rohans</span> <span className="l-zone" style={{ fontSize: '1.2rem', display: 'block', marginTop: '0.2rem' }}>Matching Centre</span></h1>
+            <img src={logo} alt="ROHANS MATCHING CENTER" className="login-logo" />
+            <h1><span className="l-alpha">Rohans</span> <span className="l-zone" style={{ fontSize: '1.2rem', display: 'block', marginTop: '0.2rem' }}>Matching Center</span></h1>
             <p>Your exclusive destination for premium sarees, elegant kurtas, and luxury ethnic wear.</p>
             <div className="login-features">
               <div className="lf-item"><span>🥻</span> Premium Sarees</div>
@@ -122,7 +122,7 @@ const Login = () => {
             </form>
 
             <div className="login-footer">
-              <span>ROHANS MATCHING CENTRE Admin Panel</span>
+              <span>ROHANS MATCHING CENTER Admin Panel</span>
             </div>
           </div>
         </div>

@@ -19,11 +19,11 @@ const AdminHeader = () => {
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar-brand">
-        <img src={logo} alt="ROHANS MATCHING CENTRE" className="admin-logo" />
+        <img src={logo} alt="ROHANS MATCHING CENTER" className="admin-logo" />
         <div className="admin-brand">
           <div className="admin-brand-title" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.1 }}>
             <span className="ab-ramya" style={{ fontSize: '1.2rem' }}>ROHANS</span>
-            <span className="ab-house" style={{ fontSize: '0.65rem', letterSpacing: '1px' }}>MATCHING CENTRE</span>
+            <span className="ab-house" style={{ fontSize: '0.65rem', letterSpacing: '1px' }}>MATCHING CENTER</span>
           </div>
           <span className="ab-tag">ADMIN</span>
         </div>
