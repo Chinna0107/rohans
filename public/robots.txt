@@ -1,5 +1,5 @@
-# TheAlphaZone - robots.txt
-# https://thealphazone.in
+# ROHANS MATCHING CENTER - robots.txt
+# https://rohansmatchingcenter.in
 
 User-agent: *
 Allow: /
@@ -12,4 +12,4 @@ Disallow: /login
 Disallow: /checkout
 
 # Sitemap location
-Sitemap: https://thealphazone.in/sitemap.xml
+Sitemap: https://rohansmatchingcenter.in/sitemap.xml

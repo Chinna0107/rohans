@@ -523,6 +523,14 @@
     color: #fff;
   }
 
+  .search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .search-icon {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
   /* Brand on mobile */
   .brand-logo-circle {
     width: 44px;

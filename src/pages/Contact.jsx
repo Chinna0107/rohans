@@ -6,8 +6,8 @@ import { FaWhatsapp } from 'react-icons/fa';
 import './Contact.css';
 
 import imgManikonda from '../Branches/Manikonda.JPG';
-import imgBanjara from '../Branches/Banjara hills.JPG';
-import imgAsrao from '../Branches/Asrao.JPG';
+import imgBanjara from '../Branches/banjara.png';
+import imgAsrao from '../Branches/asrao2.png';
 
 const BRANCHES = [
   {

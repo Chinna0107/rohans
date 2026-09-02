@@ -8,8 +8,9 @@ import { FaInstagram, FaFacebookF, FaYoutube } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.jpeg';
 import imgManikonda from '../Branches/Manikonda.JPG';
-import imgBanjara from '../Branches/Banjara hills.JPG';
-import imgAsrao from '../Branches/Asrao.JPG';
+import imgBanjara from '../Branches/banjara.png';
+import imgAsrao from '../Branches/asrao2.png';
+import ceo from '../Branches/ceo.png'
 
 const STATS = [
   { end: 15,     suffix: '+',  label: 'Years of Excellence',  decimals: 0 },
@@ -96,7 +97,7 @@ const About = () => {
       <section className="about-section about-who">
         <div className="about-who-grid">
           <motion.div className="about-who-img" {...fadeLeft(0)}>
-            <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop" alt="Showroom" />
+            <img src={ceo} alt="Showroom" />
             <motion.div className="about-who-img-badge"
               initial={{ scale: 0, rotate: -20 }} whileInView={{ scale: 1, rotate: 0 }}
               viewport={{ once: true }} transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}>
